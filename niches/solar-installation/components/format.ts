@@ -10,5 +10,5 @@ export const openingHoursSpecification = (hours: HoursRow[]) =>
 
 export const servicePath = (slug: string) => `/services/${slug}/`;
 
-/** Canonical paths always end in a slash, as on the original sites (/404/ included). */
+/** Canonical paths always end in a slash, /404/ included. */
 export const canonicalPath = (pathname: string) => (pathname.endsWith("/") ? pathname : `${pathname.replace(/\.html$/, "")}/`);

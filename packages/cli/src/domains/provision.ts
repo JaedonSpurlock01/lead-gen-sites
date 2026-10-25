@@ -210,7 +210,7 @@ type WorkerDomain = { hostname: string; service: string };
 type WorkerRoute = { pattern: string; script?: string };
 
 /**
- * The live sites answer on www with the Worker itself. If www is a Worker custom domain, its DNS
+ * www may still be served by a Worker. If www is a Worker custom domain, its DNS
  * record belongs to that custom domain and a placeholder record cannot be added beside it; the next
  * `wrangler deploy` (whose routes list only the apex) detaches it and removes that record. If www is
  * a Worker route, the existing proxied record stays and the redirect rule is all that is needed.

@@ -23,7 +23,7 @@ function digits(value: string) {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Single-line fields lose control characters (as the asphalt sites always did); textareas keep line breaks. */
+/** Single-line fields lose control characters; textareas keep line breaks. */
 function read(form: FormData, field: FormField): { value: string; tooLong: boolean } {
   let raw = String(form.get(field.name) ?? "");
   raw = field.kind === "textarea" ? raw.trim() : raw.replace(/[\r\n\t]+/g, " ").trim();
@@ -62,8 +62,8 @@ function present(field: FormField, value: string): string {
 }
 
 /**
- * The one lead handler. Honeypot, field validation and every redirect follow the asphalt
- * original; which fields exist and how strict each one is comes from niche.json `form`.
+ * The one lead handler. The honeypot and redirects are the same for every site; which fields
+ * exist and how strict each one is comes from niche.json `form`.
  */
 export async function handleLead(request: Request, options: LeadHandlerOptions): Promise<Response> {
   let form: FormData;

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { formSchema, type FormConfig } from "@lead-gen/schema";
 import { handleLead, type LeadHandlerOptions } from "../src/handler";
 
-/** The asphalt-paving niche.json form: the original handler's exact rules. */
+/** The asphalt-paving niche.json form. */
 const asphaltForm: FormConfig = formSchema.parse({
   thankYouPath: "/thank-you",
   fields: [

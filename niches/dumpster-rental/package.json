@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Dumpster rental niche: roll-off container sites, ported from dumpster-rental-haines-city with its own design.",
+  "description": "Dumpster rental niche: roll-off container sites with their own design.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

@@ -23,7 +23,7 @@ Placement test: would a roofing niche use it unchanged? Then it belongs in `pack
 - `cloudflareProject` is the Worker name. It stays stable for the life of a site; renaming it orphans the live Worker.
 - `TRACER_FORM_KEY` reaches Workers through the Secrets Store binding (`await env.TRACER_FORM_KEY.get()`). `TRACER_FORMS_URL` comes from `config/environments.json`. Secrets live only in `.dev.vars` or env vars; a key or token in a tracked file is a bug.
 - Sibling sites link one way: if A links to B, B never links to A. `pnpm check` warns past the sibling-link budget in `config/cloudflare.json`.
-- Commands that would write to Cloudflare or Tracer (`deploy`, `domains provision`, `secrets rotate`) default to dry-run. The owner runs real cutovers; an agent never deploys, buys domains, creates zones, changes DNS, sets secrets, or attaches domains.
+- Commands that would write to Cloudflare or Tracer (`deploy`, `domains provision`, `secrets rotate`) default to dry-run. The owner runs every real deploy and Cloudflare change; an agent never deploys, buys domains, creates zones, changes DNS, sets secrets, or attaches domains.
 - Verify Cloudflare config keys, limits, rate limits and API endpoints against current Cloudflare docs before relying on them (the Cloudflare docs MCP tool is available).
 - Code style matches the asphalt source: double quotes, semicolons, trailing commas, 2-space indent, TypeScript strict, zod for every schema, Vitest with mocked Cloudflare and Tracer.
 

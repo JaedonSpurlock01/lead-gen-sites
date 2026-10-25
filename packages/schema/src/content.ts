@@ -23,7 +23,7 @@ export const serviceIdentitySchema = z.object({
   formValue: z.string().min(1),
 });
 
-/** One service page: the same shape the asphalt repo's services.ts used, now parsed from Markdown. */
+/** One Markdown service page, with its identity from niche.json. */
 export const servicePageSchema = serviceFrontmatterSchema.extend(serviceIdentitySchema.shape).extend({
   sections: z.array(serviceSectionSchema).min(1),
 });

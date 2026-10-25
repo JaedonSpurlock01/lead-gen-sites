@@ -16,7 +16,7 @@ async function get(fetchImpl: typeof fetch, url: string, timeoutMs: number, init
 
 /**
  * Read-only HTTP checks for one site: `/` returns 200 and `www` redirects to the apex.
- * `domains check` (phase 5) adds the zone and certificate checks through the API.
+ * `domains check` adds the zone and certificate checks through the API.
  */
 export async function httpChecks(ref: SiteRef, domain: string, options: HttpCheckOptions = {}): Promise<DomainCheckResult> {
   const fetchImpl = options.fetch ?? fetch;

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Solar panel installation niche, ported from solar-panel-sites with its own design.",
+  "description": "Solar panel installation niche with its own design.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
