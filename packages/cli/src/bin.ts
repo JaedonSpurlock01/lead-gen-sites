@@ -8,6 +8,10 @@ import { CliError, consoleLogger } from "./log";
 import { runNewSite } from "./new-site";
 import { runSecretsRotate } from "./secrets";
 import { runVerifyLocal } from "./local/verify";
+import { createCloudflareApi, credentialsFromEnv, throttled } from "./domains/api";
+import { runDomainsCheck } from "./domains/check";
+import { runDomainsProvision } from "./domains/provision";
+import { loadCloudflareConfig } from "@lead-gen/engine/load";
 
 const usage = `Usage:
   pnpm new-site <niche> <id> --domain <apex> [--name ..] [--city ..] [--region ID --region-name Idaho] [--phone +1...] [--canary]
@@ -143,8 +147,34 @@ async function main(argv: string[]): Promise<number> {
       return results.every((result) => result.ok) ? 0 : 1;
     }
     case "domains": {
-      // Phase 5 wires provision and check up.
-      throw new CliError("domains is not implemented yet (phase 5)", 2);
+      const { values, positionals } = parseArgs({
+        args: rest,
+        allowPositionals: true,
+        options: { apply: { type: "boolean" }, "with-lead": { type: "boolean" } },
+      });
+      const [sub, target] = positionals;
+      const credentials = credentialsFromEnv();
+      const cloudflare = loadCloudflareConfig(root);
+      const api = credentials
+        ? throttled(createCloudflareApi(credentials.token), {
+            minIntervalMs: cloudflare.api.minIntervalMs,
+            rateLimitPauseMs: cloudflare.api.rateLimitPauseMs,
+            onPause: (ms) => logger.warn(`Cloudflare API rate limit hit; pausing ${Math.round(ms / 1000)}s`),
+          })
+        : null;
+      if (sub === "provision") {
+        if (!api || !credentials) {
+          throw new CliError("domains provision needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in the environment (it reads current state even in dry-run)");
+        }
+        const results = await runDomainsProvision(root, target, { api, accountId: credentials.accountId, apply: values.apply, logger });
+        return results.some((result) => result.steps.some((step) => step.status === "error" || step.status === "blocked")) ? 1 : 0;
+      }
+      if (sub === "check") {
+        if (values.apply) throw new CliError("domains check is read-only; --apply does nothing here");
+        const results = await runDomainsCheck(root, target, { api, accountId: credentials?.accountId, withLead: values["with-lead"], logger });
+        return results.every((result) => result.ok) ? 0 : 1;
+      }
+      throw new CliError(`domains supports: provision, check\n\n${usage}`);
     }
   }
 }

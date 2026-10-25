@@ -3,7 +3,9 @@ import { loadCloudflareConfig, loadSite } from "@lead-gen/engine/load";
 import { runBatched } from "./batch";
 import { runBuild, resolveTracerFormsUrl } from "./build";
 import { runCheck } from "./check";
-import { httpChecks, type DomainCheckResult } from "./domains/http-checks";
+import { type DomainCheckResult } from "./domains/http-checks";
+import { createCloudflareApi, credentialsFromEnv, throttled } from "./domains/api";
+import { checkOne } from "./domains/check";
 import { loadFailures, saveFailures } from "./failures";
 import { CliError, type Logger } from "./log";
 import { looksRateLimited, spawnRunner, tail, type Runner } from "./runner";
@@ -117,7 +119,7 @@ export async function runDeploy(root: string, target: string | undefined, option
       summarize(logger, results, rest.map((item) => item.ref));
       throw new CliError("canary deploy failed; stopping before the remaining sites");
     }
-    const domainsCheck = options.domainsCheck ?? ((items) => Promise.all(items.map((entry) => httpChecks(entry.ref, entry.domain))));
+    const domainsCheck = options.domainsCheck ?? defaultCanaryCheck(cloudflare);
     const checks = await domainsCheck(canaries.map((item) => ({ ref: item.ref, domain: item.domain })));
     for (const check of checks) {
       for (const line of check.checks) (line.ok ? logger.log : logger.warn)(`  ${check.ok ? "ok " : "FAIL"} ${refKey(check.ref)} ${line.name}: ${line.detail}`);
@@ -150,4 +152,13 @@ function summarize(logger: Logger, results: DeployResult[], notAttempted: SiteRe
   for (const result of failed) logger.log(`  FAIL  ${refKey(result.ref)}: ${result.message ?? "unknown error"}`);
   for (const ref of notAttempted) logger.log(`  skip  ${refKey(ref)} (not attempted)`);
   if (failed.length > 0 || notAttempted.length > 0) logger.log("Re-run only the failures with: pnpm deploy --retry-failed --apply");
+}
+
+/** `domains check` on the canaries: API checks when credentials are present, HTTP checks always. */
+function defaultCanaryCheck(cloudflare: ReturnType<typeof loadCloudflareConfig>) {
+  const credentials = credentialsFromEnv();
+  const api = credentials
+    ? throttled(createCloudflareApi(credentials.token), { minIntervalMs: cloudflare.api.minIntervalMs, rateLimitPauseMs: cloudflare.api.rateLimitPauseMs })
+    : null;
+  return (items: { ref: SiteRef; domain: string }[]) => Promise.all(items.map((entry) => checkOne(entry.ref, { api, accountId: credentials?.accountId })));
 }

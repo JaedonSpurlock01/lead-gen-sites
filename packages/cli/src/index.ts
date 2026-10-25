@@ -16,3 +16,6 @@ export { listAllSites, resolveTargets, refKey, type SiteRef } from "./targets";
 export { wranglerConfig, writeWranglerConfig, wranglerConfigPath } from "./wrangler-config";
 export { runVerifyLocal, type VerifyResult } from "./local/verify";
 export { startMockTracer, tracerSubmissionSchema, type MockTracer } from "./local/mock-tracer";
+export { createCloudflareApi, credentialsFromEnv, throttled, CloudflareApiError, type CloudflareApi } from "./domains/api";
+export { runDomainsProvision, wwwRedirectRule, type SiteProvision, type Step } from "./domains/provision";
+export { runDomainsCheck, apiChecks, checkOne } from "./domains/check";

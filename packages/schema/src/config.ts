@@ -27,6 +27,18 @@ export const cloudflareConfigSchema = z.strictObject({
     .refine((budget) => budget.warnAt <= budget.limit, "warnAt must not exceed limit"),
   deploy: z.strictObject({ concurrency: z.number().int().min(1).max(50) }),
   seo: z.strictObject({ outboundSiblingLinksWarnAt: z.number().int().min(0) }),
+  api: z.strictObject({
+    $comment: comment,
+    minIntervalMs: z.number().int().min(0),
+    rateLimitPauseMs: z.number().int().min(0),
+  }),
+  zones: z.strictObject({
+    $comment: comment,
+    createPerWindow: z.number().int().positive(),
+    windowMs: z.number().int().positive(),
+    pendingRuleAbove: z.number().int().min(0),
+  }),
+  wwwRecord: z.strictObject({ type: z.enum(["A", "AAAA"]), content: z.string().min(1) }),
 });
 
 /** config/zone-settings.json: Cloudflare zone setting id -> value, applied by `domains provision`. */

@@ -1,11 +1,10 @@
 {
-  "$comment": "Standard settings applied to every site zone by `pnpm domains provision`. Keys are Cloudflare zone setting IDs; values are the API values. Verified against the Zone Settings API before phase 5 wires them up.",
+  "$comment": "Standard settings applied to every site zone by `pnpm domains provision`. Keys are Cloudflare zone setting ids (PATCH /zones/{zone_id}/settings/{id}); values are the API values. Brotli is not listed: it is no longer a zone setting (compression is controlled by Compression Rules).",
   "settings": {
     "ssl": "strict",
     "always_use_https": "on",
     "min_tls_version": "1.2",
-    "automatic_https_rewrites": "on",
     "tls_1_3": "on",
-    "brotli": "on"
+    "automatic_https_rewrites": "on"
   }
 }
