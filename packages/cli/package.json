@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@lead-gen/engine": "workspace:*",
-    "@lead-gen/schema": "workspace:*"
+    "@lead-gen/schema": "workspace:*",
+    "zod": "^4.6.7"
   }
 }

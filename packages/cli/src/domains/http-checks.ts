@@ -50,7 +50,7 @@ export async function httpChecks(ref: SiteRef, domain: string, options: HttpChec
       });
       const response = await get(fetchImpl, `https://${domain}/api/lead`, timeoutMs, {
         method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded", referer: `https://${domain}/contact/` },
+        headers: { "content-type": "application/x-www-form-urlencoded", origin: `https://${domain}`, referer: `https://${domain}/contact/` },
         body,
       });
       const location = response.headers.get("location") ?? "";

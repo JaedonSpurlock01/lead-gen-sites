@@ -18,7 +18,8 @@
     "secrets": "tsx packages/cli/src/bin.ts secrets",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "pnpm -r --if-present typecheck"
+    "typecheck": "pnpm -r --if-present typecheck",
+    "verify-local": "tsx packages/cli/src/bin.ts verify-local"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",

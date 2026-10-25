@@ -1,4 +1,4 @@
-export const COMMANDS = ["new-site", "check", "build", "deploy", "domains", "secrets"] as const;
+export const COMMANDS = ["new-site", "check", "build", "deploy", "domains", "secrets", "verify-local"] as const;
 export type Command = (typeof COMMANDS)[number];
 
 export { runBatched, type BatchOptions, type BatchResult, type TaskOutcome } from "./batch";
@@ -14,3 +14,5 @@ export { looksRateLimited, spawnRunner, type Runner, type RunResult } from "./ru
 export { runSecretsRotate, type RotateOptions, type RotateResult } from "./secrets";
 export { listAllSites, resolveTargets, refKey, type SiteRef } from "./targets";
 export { wranglerConfig, writeWranglerConfig, wranglerConfigPath } from "./wrangler-config";
+export { runVerifyLocal, type VerifyResult } from "./local/verify";
+export { startMockTracer, tracerSubmissionSchema, type MockTracer } from "./local/mock-tracer";

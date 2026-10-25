@@ -7,6 +7,7 @@ import { runDeploy } from "./deploy";
 import { CliError, consoleLogger } from "./log";
 import { runNewSite } from "./new-site";
 import { runSecretsRotate } from "./secrets";
+import { runVerifyLocal } from "./local/verify";
 
 const usage = `Usage:
   pnpm new-site <niche> <id> --domain <apex> [--name ..] [--city ..] [--region ID --region-name Idaho] [--phone +1...] [--canary]
@@ -15,6 +16,7 @@ const usage = `Usage:
   pnpm deploy <target> [--apply] [--concurrency N] [--retry-failed] [--skip-build] [--env NAME]
   pnpm secrets rotate <NAME> [--apply] [--target T] [--concurrency N] [--retry-failed]   (value on stdin)
   pnpm domains provision|check [target] [--apply] [--with-lead]
+  pnpm verify-local [target] [--port 8801] [--skip-build]   (wrangler dev + mock Tracer; local only)
 
 Targets: a site id, a niche id, niche/site, or "all". Commands that write to Cloudflare are dry-run without --apply.`;
 
@@ -126,6 +128,19 @@ async function main(argv: string[]): Promise<number> {
         logger,
       });
       return result.ok ? 0 : 1;
+    }
+    case "verify-local": {
+      const { values, positionals } = parseArgs({
+        args: rest,
+        allowPositionals: true,
+        options: { port: { type: "string" }, "skip-build": { type: "boolean" } },
+      });
+      const results = await runVerifyLocal(root, positionals[0], {
+        logger,
+        basePort: values.port ? Number(values.port) : undefined,
+        skipBuild: values["skip-build"],
+      });
+      return results.every((result) => result.ok) ? 0 : 1;
     }
     case "domains": {
       // Phase 5 wires provision and check up.
