@@ -1,7 +1,7 @@
 {
   "id": "carson-city",
   "domain": "carsoncitysolarinstallation.com",
-  "cloudflareProject": "solar-panel-sites",
+  "cloudflareProject": "carson-city-solar-installation",
   "canary": false,
   "market": {
     "localContextLabel": "High-desert solar planning",
