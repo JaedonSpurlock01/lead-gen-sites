@@ -30,7 +30,6 @@ describe("domains provision", () => {
       "update setting automatic_https_rewrites",
       "create www record",
       "create redirect rule",
-      "manual manual",
     ]);
     expect(result!.steps[0]!.request).toEqual({ method: "POST", path: "/zones", body: { name: "asphaltpavingblackfoot.com", account: { id: "acct123" }, type: "full" } });
     expect(result!.steps.find((step) => step.name === "www record")!.request!.path).toBe("/zones/<new-zone-id>/dns_records");

@@ -74,4 +74,4 @@ Commit the site folder only, push the branch, and open the PR with `gh pr create
 - the site, domain and Worker name;
 - the dry-run provision plan, or a note that it still needs credentials;
 - the checklist results;
-- owner follow-ups, in this order: buy the domain with auto-renew on, `pnpm domains provision <id> --apply` and set the nameservers it prints, merge (CI deploys), link the site to its Workspace in Tracer, `pnpm domains check <id>` and one test lead, plus any missing photos or business details.
+- owner follow-ups, in this order: buy the domain with auto-renew on, `pnpm domains provision <id> --apply` and set the nameservers it prints, merge (CI deploys), `pnpm domains check <id>` and one test lead, plus any missing photos or business details.

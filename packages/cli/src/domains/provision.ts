@@ -93,7 +93,7 @@ async function zoneCounts(api: CloudflareApi, accountId: string) {
 
 /**
  * Idempotent per-site setup: zone, standard settings, proxied www record, www -> apex redirect,
- * and the Tracer step. Reads always run; writes run only with `apply`.
+ * all for one site. Reads always run; writes run only with `apply`.
  */
 export async function runDomainsProvision(root: string, target: string | undefined, options: ProvisionOptions): Promise<SiteProvision[]> {
   const { api, accountId, logger } = options;
@@ -185,9 +185,6 @@ export async function runDomainsProvision(root: string, target: string | undefin
       // 4. www -> apex redirect rule.
       await ensureRedirect(plan, api, zoneId, known, domain);
 
-      // 5. Tracer finds the site through its Cloudflare connection once the Worker has its custom
-      //    domain; it must then be linked to a Workspace by hand. Until then posts get 409.
-      plan.note("manual", "manual", `Tracer: after the first deploy, open Sites in Tracer and link ${domain} to its Workspace. Until it is linked, form posts are refused (409) and visitors see the send error.`);
     } catch (error) {
       plan.steps.push({ name: "error", status: "error", detail: (error as Error).message });
     }
