@@ -36,11 +36,14 @@ export type MockTracer = {
 };
 
 /**
- * A local stand-in for Tracer's POST /api/forms. It checks the bearer key and validates the body
- * against the contract; anything wrong answers 401/400 so the site redirects to the send error.
+ * A local stand-in for Tracer's POST /api/forms, answering like the real handler
+ * (tracer: data/forms-handler.ts): 201 for a new submission, 200 for a repeated submission id,
+ * 401 for a wrong key, 404 for a hostname that is not a known Site, 400 for a bad body.
+ * `sites` lists the known hostnames; when omitted every hostname is accepted.
  */
-export async function startMockTracer(formKey: string, port = 0): Promise<MockTracer> {
+export async function startMockTracer(formKey: string, port = 0, sites?: string[]): Promise<MockTracer> {
   const received: ReceivedLead[] = [];
+  const seen = new Set<string>();
   const state = { respondWith: 200 };
   const server: Server = createServer((req, res) => {
     let raw = "";
@@ -62,7 +65,13 @@ export async function startMockTracer(formKey: string, port = 0): Promise<MockTr
       }
       if (!authorized) problems.push("bearer key mismatch");
       received.push({ path: req.url ?? "", authorized, contentType, valid: problems.length === 0, problems, body });
-      const status = !authorized ? 401 : problems.length > 0 ? 400 : state.respondWith;
+      const submission = body as Partial<TracerSubmission>;
+      const known = !sites || (typeof submission?.site === "string" && sites.includes(submission.site));
+      if (authorized && problems.length === 0 && !known) problems.push(`unknown site ${submission.site}`);
+      const key = `${submission?.site}:${submission?.submissionId}`;
+      const repeat = seen.has(key);
+      const status = !authorized ? 401 : !known ? 404 : problems.length > 0 ? 400 : state.respondWith !== 200 ? state.respondWith : repeat ? 200 : 201;
+      if (status === 201) seen.add(key);
       res.writeHead(status, { "content-type": "application/json" }).end(JSON.stringify({ ok: status < 300 }));
     });
   });

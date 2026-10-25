@@ -34,9 +34,10 @@ Nothing writes to Cloudflare without `--apply`. The `domains` commands need `CLO
    pnpm new-site asphalt-paving twin-falls --domain twinfallsasphaltpaving.com --city "Twin Falls"
    ```
 3. **Write the content.** Fill in `site.json`. Use the niche's `prompts/` to research the city and write each page in `content/services/`. Add photos to `assets/`. Run `pnpm check twin-falls` until it passes.
-4. **Set up Cloudflare.** Run `pnpm domains provision twin-falls`, read the plan, then run it again with `--apply`. Set the nameservers it prints at the registrar. Add the site in Tracer.
+4. **Set up Cloudflare.** Run `pnpm domains provision twin-falls`, read the plan, then run it again with `--apply`. Set the nameservers it prints at the registrar.
 5. **Deploy.** Merge the pull request and CI deploys the site. You can also run `pnpm deploy twin-falls --apply`.
-6. **Check it.** Run `pnpm domains check twin-falls`. A new zone can take a while to go active, so re-run until it passes.
+6. **Link it in Tracer.** Tracer finds the new Worker through its Cloudflare connection. Open Sites in Tracer and link the site to its Workspace. Until you do, the form fails and visitors see the "could not send" message.
+7. **Check it.** Run `pnpm domains check twin-falls`. A new zone can take a while to go active, so re-run until it passes. Then send one test lead from the contact form.
 
 ## Add a niche
 
@@ -51,17 +52,19 @@ Nothing writes to Cloudflare without `--apply`. The `domains` commands need `CLO
 
 Every site reads `TRACER_FORM_KEY` from one secret in the Cloudflare Secrets Store. You change it in one place.
 
-Follow these steps so forms never break:
+Tracer keeps only one key. Making a new one turns the old one off right away. Forms fail between those two moments, so keep the gap short:
 
-1. Make a new key in Tracer, and have Tracer accept **both** the old key and the new key.
-2. Update the secret:
+1. Pick a quiet time.
+2. Find the secret id and have the update command ready:
    ```
    pnpm wrangler secrets-store secret list <STORE_ID> --remote
    pnpm wrangler secrets-store secret update <STORE_ID> --secret-id <ID> --remote
    ```
    Wrangler asks for the value. Do not use `--value`.
-3. Send a test lead from one site. Confirm in Tracer that it arrived with the new key.
-4. Remove the old key in Tracer.
+3. Generate the new key in Tracer (Integrations), then paste it into the waiting command right away.
+4. Send a test lead from one site and confirm it shows up in Tracer.
+
+A visitor who submits during the gap sees "We could not send that request. Try again in a few minutes or call us."
 
 **Backup plan.** If the Secrets Store cannot be used, set the key as a normal secret on every Worker:
 
@@ -78,24 +81,27 @@ The live sites keep their Worker names, so deploys replace the current Workers i
 - The key moves from a plain variable to the Secrets Store binding.
 - `www` stops showing the site and redirects to the apex instead.
 
+The sites also move from the staging Tracer to production (`https://tracer.spurlocklabs.com/api/forms`). The new URL and the new key arrive in the same deploy, so each site switches cleanly.
+
 Today, `www` on all three sites serves the same pages as the apex. It is probably attached to each Worker as a second custom domain. The first deploy will remove it, because Wrangler makes a Worker's domains match its config. The order below covers that.
 
-Run these steps from your machine, not from CI. If the repo is already on GitHub, disable the Deploy workflow until step 8. Steps 1 and 2 change files that would otherwise start a deploy.
+Run these steps from your machine, not from CI. If the repo is already on GitHub, disable the Deploy workflow until step 9. Steps 2 and 3 change files that would otherwise start a deploy.
 
-1. **Create the token and secret.** Make the deploy token below. Create the secret with the **current** key, so nothing changes yet:
+1. **Get production Tracer ready.** In production Tracer, connect Cloudflare so it finds the three Workers. Link each site to its Workspace. Copy the Forms key from Integrations, and generate one if none exists.
+2. **Create the token and secret.** Make the deploy token below. Create the secret with the **production** Forms key:
    ```
    pnpm wrangler secrets-store secret create <STORE_ID> --name TRACER_FORM_KEY --scopes workers --remote
    ```
-   Put the store id in `config/cloudflare.json` as `secretsStore.storeId`.
-2. **Pick a canary.** Set `"canary": true` in one site's `site.json`, for example Pocatello. Commit the change.
-3. **Plan.** Run `pnpm domains provision all` and read the plan. It lists the settings it will change and the redirect rule it will add. It also reports how `www` is attached today.
-4. **Apply the zone changes.** Run `pnpm domains provision all --apply`. Then run `curl -I https://www.<domain>/` on each site. It should return `301` to the apex. If it still returns `200`, stop. The redirect rule does not override a `www` custom domain, so detach `www` from each Worker in the dashboard, then re-run provision with `--apply`.
-5. **Deploy the canary.** Run `pnpm deploy pocatello --apply`. In the new version the key comes from the binding and the old variable is gone. Both changes land in one step, so there is no gap.
-6. **Test the canary form.** Run `pnpm domains check pocatello --with-lead`. This sends one real test lead, so check that it shows up in Tracer. Also submit the contact form once by hand.
-7. **Re-run provision.** Run `pnpm domains provision pocatello --apply`. If the deploy removed the `www` custom domain, this adds the `www` DNS record the redirect needs.
-8. **Deploy the rest.** Run `pnpm deploy all --apply`, then `pnpm domains provision all --apply`, then `pnpm domains check all`.
+   Put the store id in `config/cloudflare.json` as `secretsStore.storeId`. The live sites keep using the staging key until they are deployed.
+3. **Pick a canary.** Set `"canary": true` in one site's `site.json`, for example Pocatello. Commit the change.
+4. **Plan.** Run `pnpm domains provision all` and read the plan. It lists the settings it will change and the redirect rule it will add. It also reports how `www` is attached today.
+5. **Apply the zone changes.** Run `pnpm domains provision all --apply`. Then run `curl -I https://www.<domain>/` on each site. It should return `301` to the apex. If it still returns `200`, stop. The redirect rule does not override a `www` custom domain, so detach `www` from each Worker in the dashboard, then re-run provision with `--apply`.
+6. **Deploy the canary.** Run `pnpm deploy pocatello --apply`. In the new version the key comes from the binding, the old variable is gone, and leads go to production Tracer. It all lands in one step, so there is no gap.
+7. **Test the canary form.** Submit the contact form once by hand and check that the lead shows up in production Tracer.
+8. **Re-run provision.** Run `pnpm domains provision pocatello --apply`. If the deploy removed the `www` custom domain, this adds the `www` DNS record the redirect needs.
+9. **Deploy the rest.** Run `pnpm deploy all --apply`, then `pnpm domains provision all --apply`, then `pnpm domains check all`.
 
-To undo a bad deploy, run `pnpm wrangler rollback --name <worker>`. The old version still has the old key variable.
+To undo a bad deploy, run `pnpm wrangler rollback --name <worker>`. The old version still has the staging URL and the old key variable.
 
 ## CI setup
 
@@ -133,25 +139,19 @@ Creating a brand-new Worker needs Workers access at the account level, not for o
 
 **Read-only token** (`CLOUDFLARE_READ_API_TOKEN`, for the nightly check): Zone: Read, SSL and Certificates: Read, and Workers Scripts: Read.
 
-## Email
+## How Tracer fits
 
-Tracer sends each lead from the site's `info@<domain>` address. The SPF, DKIM and DMARC records go in `config/email-dns.json`, which is empty until Tracer's mail provider is known. Provision shows this as a TODO.
-
-To receive mail at `info@`, use Email Routing and forward every site to **one** inbox. An account can have at most 200 verified destination addresses, so one address per site will not scale.
-
-## Questions for Tracer
-
-1. Which provider sends the `info@` emails? We need its SPF, DKIM and DMARC records for `config/email-dns.json`.
-2. Is there an API to register a new site (hostname and sender address)? If so, `domains provision` can do that step.
-3. Can Tracer accept two form keys at once? Key rotation needs this to avoid downtime.
-4. What is the production Tracer URL? All three sites post to the staging URL today. It is set once in `config/environments.json`.
-5. Does Tracer drop duplicate `submissionId` values? If so, retries are safe.
-6. What does Tracer return for a hostname it does not know? It should not be a 2xx.
-7. Can a test lead be marked so it does not count? `domains check --with-lead` sends one per site.
+- Sites only POST each lead to Tracer. Tracer stores it, emails the business, and counts it. Nothing in this repo sends email or needs email DNS records.
+- One Forms key serves every site. The production URL is set once in `config/environments.json`.
+- Tracer finds sites through its Cloudflare connection. You link each one to a Workspace in the Tracer UI. An unlinked site gets `409`, and a hostname Tracer does not know gets `404`. Both show the visitor the send error.
+- Tracer drops a repeated `submissionId`, so a retried post never makes a second lead.
+- If you want mail sent to `info@` to reach you, use Email Routing and forward every site to **one** inbox. An account can have at most 200 verified destination addresses.
 
 ## Not yet verified
 
 These were not tested against the real Cloudflare account. Check each one during the first cutover.
+
+- **Key gap length.** It depends on how fast a new Secrets Store value reaches the Workers. See the next item.
 
 - **Secret updates.** Docs do not say whether a new Secrets Store value reaches running Workers without a redeploy. After rotating, send a test lead. If the old key is still used, run `pnpm deploy all --apply`. A redeploy is safe.
 - **How www is attached.** I could not see this without a token. Provision reports it.

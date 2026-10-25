@@ -5,7 +5,6 @@ import {
   applyTokensDeep,
   cloudflareConfigSchema,
   copySchema,
-  emailDnsConfigSchema,
   environmentsConfigSchema,
   nicheSchema,
   parseServicePage,
@@ -17,7 +16,6 @@ import {
   zoneSettingsConfigSchema,
   type CloudflareConfig,
   type Copy,
-  type EmailDnsConfig,
   type EnvironmentsConfig,
   type Niche,
   type ResolvedSite,
@@ -193,6 +191,3 @@ export function loadZoneSettings(root: string): ZoneSettingsConfig {
   return parseWith(zoneSettingsConfigSchema, readJson(join(root, "config", "zone-settings.json")), "config/zone-settings.json");
 }
 
-export function loadEmailDns(root: string): EmailDnsConfig {
-  return parseWith(emailDnsConfigSchema, readJson(join(root, "config", "email-dns.json")), "config/email-dns.json");
-}

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { cloudflareConfigSchema, emailDnsConfigSchema, environmentsConfigSchema, zoneSettingsConfigSchema } from "../src/config";
+import { cloudflareConfigSchema, environmentsConfigSchema, zoneSettingsConfigSchema } from "../src/config";
 
 const configDir = join(import.meta.dirname, "../../../config");
 const read = (name: string) => JSON.parse(readFileSync(join(configDir, name), "utf8"));
@@ -18,9 +18,8 @@ describe("config files", () => {
     expect(config.secretsStore.binding).toBe("TRACER_FORM_KEY");
   });
 
-  it("zone-settings.json and email-dns.json parse", () => {
+  it("zone-settings.json parses", () => {
     expect(zoneSettingsConfigSchema.parse(read("zone-settings.json")).settings.ssl).toBe("strict");
-    expect(emailDnsConfigSchema.parse(read("email-dns.json")).records).toEqual([]);
   });
 
   it("rejects a default that names no environment", () => {

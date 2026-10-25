@@ -1,12 +1,12 @@
 {
-  "$comment": "Global, non-secret settings per Tracer environment. TRACER_FORMS_URL is set here once, never per site. The three live asphalt sites currently post to the staging Tracer, so production points there too until Tracer has a production host.",
+  "$comment": "Global, non-secret settings per Tracer environment. TRACER_FORMS_URL is set here once, never per site. `pnpm build --env staging` targets staging; the default is production.",
   "default": "production",
   "environments": {
     "staging": {
       "tracerFormsUrl": "https://tracer-staging.jaedonaspurlock.workers.dev/api/forms"
     },
     "production": {
-      "tracerFormsUrl": "https://tracer-staging.jaedonaspurlock.workers.dev/api/forms"
+      "tracerFormsUrl": "https://tracer.spurlocklabs.com/api/forms"
     }
   }
 }

@@ -17,10 +17,12 @@ const post = (url: string, body: unknown, key = "k") =>
   fetch(url, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${key}` }, body: JSON.stringify(body) });
 
 describe("mock Tracer", () => {
-  it("accepts a contract-shaped lead with the right key", async () => {
-    tracer = await startMockTracer("k");
-    expect((await post(tracer.url, lead)).status).toBe(200);
+  it("answers 201 for a new lead, 200 for a repeat, and 404 for an unknown site, like Tracer", async () => {
+    tracer = await startMockTracer("k", 0, ["asphaltpavingblackfoot.com"]);
+    expect((await post(tracer.url, lead)).status).toBe(201);
     expect(tracer.received[0]).toMatchObject({ authorized: true, valid: true, problems: [] });
+    expect((await post(tracer.url, lead)).status).toBe(200);
+    expect((await post(tracer.url, { ...lead, site: "not-a-site.com" })).status).toBe(404);
   });
 
   it("rejects a wrong key, a bad body, and can simulate a Tracer failure", async () => {

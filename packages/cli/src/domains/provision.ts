@@ -1,5 +1,5 @@
-import { loadCloudflareConfig, loadEmailDns, loadSite, loadZoneSettings } from "@lead-gen/engine/load";
-import { applyTokens, type CloudflareConfig, type EmailDnsConfig, type ZoneSettingsConfig } from "@lead-gen/schema";
+import { loadCloudflareConfig, loadSite, loadZoneSettings } from "@lead-gen/engine/load";
+import type { CloudflareConfig, ZoneSettingsConfig } from "@lead-gen/schema";
 import { CliError, type Logger } from "../log";
 import { refKey, resolveTargets, type SiteRef } from "../targets";
 import { CloudflareApiError, getOrNull, must, type CloudflareApi } from "./api";
@@ -93,7 +93,7 @@ async function zoneCounts(api: CloudflareApi, accountId: string) {
 
 /**
  * Idempotent per-site setup: zone, standard settings, proxied www record, www -> apex redirect,
- * email DNS, and the Tracer step. Reads always run; writes run only with `apply`.
+ * and the Tracer step. Reads always run; writes run only with `apply`.
  */
 export async function runDomainsProvision(root: string, target: string | undefined, options: ProvisionOptions): Promise<SiteProvision[]> {
   const { api, accountId, logger } = options;
@@ -101,7 +101,6 @@ export async function runDomainsProvision(root: string, target: string | undefin
   const sleep = options.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
   const cloudflare = loadCloudflareConfig(root);
   const zoneSettings = loadZoneSettings(root);
-  const emailDns = loadEmailDns(root);
   const budget = new ZoneCreationBudget(root, cloudflare.zones.createPerWindow, cloudflare.zones.windowMs, options.now);
   const refs = resolveTargets(root, target);
   if (refs.length === 0) throw new CliError("no sites match the target");
@@ -186,11 +185,9 @@ export async function runDomainsProvision(root: string, target: string | undefin
       // 4. www -> apex redirect rule.
       await ensureRedirect(plan, api, zoneId, known, domain);
 
-      // 5. Email DNS for Tracer's sender.
-      await ensureEmailDns(plan, api, zoneId, known, domain, emailDns);
-
-      // 6. Tracer.
-      plan.note("manual", "manual", `Tracer: register ${domain} as a Site with sender info@${domain} (Tracer has no registration API yet; see README Tracer follow-ups)`);
+      // 5. Tracer finds the site through its Cloudflare connection once the Worker has its custom
+      //    domain; it must then be linked to a Workspace by hand. Until then posts get 409.
+      plan.note("manual", "manual", `Tracer: after the first deploy, open Sites in Tracer and link ${domain} to its Workspace. Until it is linked, form posts are refused (409) and visitors see the send error.`);
     } catch (error) {
       plan.steps.push({ name: "error", status: "error", detail: (error as Error).message });
     }
@@ -285,28 +282,6 @@ async function ensureRedirect(plan: SitePlanner, api: CloudflareApi, zoneId: str
   }
 }
 
-async function ensureEmailDns(plan: SitePlanner, api: CloudflareApi, zoneId: string, known: boolean, domain: string, config: EmailDnsConfig) {
-  if (config.records.length === 0) {
-    plan.note("email dns", "todo", "TODO (Tracer follow-up): no SPF/DKIM/DMARC records configured in config/email-dns.json; skipped");
-    return;
-  }
-  for (const template of config.records) {
-    const tokens = { domain };
-    const record = { ...template, name: applyTokens(template.name, tokens), content: applyTokens(template.content, tokens) };
-    const fqdn = record.name === "@" ? domain : record.name.endsWith(domain) ? record.name : `${record.name}.${domain}`;
-    const existing = known ? (await must<DnsRecord[]>(api, "GET", `/zones/${zoneId}/dns_records`, { query: { "name.exact": fqdn, type: record.type } })).result : [];
-    const clean = (value: string) => value.replace(/^"|"$/g, "");
-    if (existing.some((item) => clean(item.content) === clean(record.content))) {
-      plan.ok(`email ${record.type}`, `${fqdn}`);
-      continue;
-    }
-    await plan.write(`email ${record.type}`, "create", `${record.type} ${fqdn} ${record.content}`, {
-      method: "POST",
-      path: `/zones/${zoneId}/dns_records`,
-      body: { type: record.type, name: fqdn, content: record.content, ttl: record.ttl ?? 1, proxied: record.proxied ?? false, ...(record.priority !== undefined ? { priority: record.priority } : {}), comment: "lead-gen: Tracer email" },
-    });
-  }
-}
 
 const marks: Record<StepStatus, string> = { ok: "ok    ", create: "CREATE", update: "UPDATE", todo: "TODO  ", manual: "MANUAL", blocked: "BLOCK ", error: "ERROR " };
 

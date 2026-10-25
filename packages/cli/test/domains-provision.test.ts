@@ -30,7 +30,6 @@ describe("domains provision", () => {
       "update setting automatic_https_rewrites",
       "create www record",
       "create redirect rule",
-      "todo email dns",
       "manual manual",
     ]);
     expect(result!.steps[0]!.request).toEqual({ method: "POST", path: "/zones", body: { name: "asphaltpavingblackfoot.com", account: { id: "acct123" }, type: "full" } });
@@ -110,25 +109,6 @@ describe("domains provision", () => {
     expect(result!.steps.find((step) => /route/.test(step.detail))?.detail).toMatch(/by route www\.asphaltpavingblackfoot\.com\/\*/);
   });
 
-  it("creates configured email DNS records once", async () => {
-    editConfig(fixture.root, "email-dns.json", (config) => {
-      config.provider = "example-mailer";
-      config.records = [
-        { type: "TXT", name: "@", content: "v=spf1 include:_spf.example-mailer.test ~all" },
-        { type: "TXT", name: "_dmarc", content: "v=DMARC1; p=quarantine; rua=mailto:dmarc@{{domain}}" },
-      ];
-    });
-    cf.addLiveSite("asphaltpavingstgeorge.com", "asphalt-paving-st-george");
-    await provision("st-george", true);
-    const created = cf.writes.filter((request) => request.path.endsWith("/dns_records")).map((request) => request.body);
-    expect(created).toMatchObject([
-      { type: "TXT", name: "asphaltpavingstgeorge.com", content: "v=spf1 include:_spf.example-mailer.test ~all" },
-      { type: "TXT", name: "_dmarc.asphaltpavingstgeorge.com", content: "v=DMARC1; p=quarantine; rua=mailto:dmarc@asphaltpavingstgeorge.com" },
-    ]);
-    const before = cf.writes.length;
-    await provision("st-george", true);
-    expect(cf.writes.length).toBe(before);
-  });
 
   it("stops creating zones when more are pending than active above 50 zones", async () => {
     for (let i = 0; i < 30; i++) cf.addZone(`pending${i}.com`, "pending");

@@ -87,7 +87,7 @@ export async function runVerifyLocal(root: string, target: string | undefined, o
 
   const formKey = `local-test-${randomUUID()}`;
   const persist = mkdtempSync(join(tmpdir(), "lead-gen-verify-"));
-  const tracer: MockTracer = await startMockTracer(formKey);
+  const tracer: MockTracer = await startMockTracer(formKey, 0, refs.map((ref) => loadSite(ref.nicheDir, ref.id).site.hostname));
   logger.log(`mock Tracer on ${tracer.url}; local Secrets Store in ${persist} (test key, never a real one)`);
 
   const results: VerifyResult[] = [];

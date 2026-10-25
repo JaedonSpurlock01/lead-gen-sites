@@ -47,25 +47,7 @@ export const zoneSettingsConfigSchema = z.strictObject({
   settings: z.record(z.string().min(1), z.union([z.string(), z.number(), z.boolean()])),
 });
 
-export const dnsRecordTypes = ["TXT", "CNAME", "MX", "A", "AAAA"] as const;
-
-/** config/email-dns.json: SPF/DKIM/DMARC records for Tracer's sending provider. `{{domain}}` tokens allowed. */
-export const emailDnsConfigSchema = z.strictObject({
-  $comment: comment,
-  provider: z.string().min(1).nullable(),
-  records: z.array(
-    z.strictObject({
-      type: z.enum(dnsRecordTypes),
-      name: z.string().min(1),
-      content: z.string().min(1),
-      priority: z.number().int().min(0).optional(),
-      ttl: z.number().int().min(1).optional(),
-      proxied: z.boolean().optional(),
-    }),
-  ),
-});
 
 export type EnvironmentsConfig = z.output<typeof environmentsConfigSchema>;
 export type CloudflareConfig = z.output<typeof cloudflareConfigSchema>;
 export type ZoneSettingsConfig = z.output<typeof zoneSettingsConfigSchema>;
-export type EmailDnsConfig = z.output<typeof emailDnsConfigSchema>;
