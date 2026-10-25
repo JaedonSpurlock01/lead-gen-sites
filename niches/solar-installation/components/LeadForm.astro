@@ -1,0 +1,58 @@
+---
+import copy from "virtual:copy";
+import niche from "virtual:niche";
+import site from "virtual:site";
+
+const details = niche.form.fields.find((field) => field.name === "projectDetails")!;
+---
+
+<div id="error-fields" class="error" role="alert">Please complete every required field with valid contact information.</div>
+<div id="error-bind" class="error" role="alert">The form is temporarily unavailable. Please call or email us instead.</div>
+<div id="error-config" class="error" role="alert">Lead delivery is not configured. Please call or email us instead.</div>
+<div id="error-send" class="error" role="alert">We could not send your request. Please call or email us instead.</div>
+
+<form class="form" action="/api/lead" method="POST">
+  <div class="form__grid">
+    <label>
+      Name
+      <input type="text" name="name" autocomplete="name" required maxlength="100" />
+    </label>
+    <label>
+      Phone
+      <input type="tel" name="phone" autocomplete="tel" required maxlength="30" />
+    </label>
+  </div>
+  <label>
+    Email
+    <input type="email" name="email" autocomplete="email" required maxlength="200" />
+  </label>
+  <label>
+    Service
+    <select name="service" required>
+      <option value="">Choose a service</option>
+      {niche.services.map((service) => <option value={service.formValue}>{service.nav}</option>)}
+    </select>
+  </label>
+  <label>
+    {details.label}
+    <textarea
+      name="projectDetails"
+      required
+      minlength="1"
+      maxlength={details.maxLength}
+      title="Enter a brief description of your property or project."
+    ></textarea>
+  </label>
+  <label class="honeypot" aria-hidden="true">
+    Company website
+    <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+  </label>
+  <button class="button" type="submit">{copy.strings?.primaryCta}</button>
+  <p class="legal-note">By submitting this form, you ask {site.business.name} to contact you about your project. Standard phone or email rates may apply.</p>
+</form>
+
+<script is:inline>
+  const error = new URLSearchParams(location.search).get("error");
+  const targets = { "1": "error-fields", bind: "error-bind", config: "error-config", send: "error-send" };
+  if (error && targets[error] && !location.hash) location.hash = targets[error];
+</script>

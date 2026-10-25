@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./load": "./src/load.ts",
     "./schema": "./src/schema.ts",
-    "./*": "./src/*"
+    "./*": "./src/*",
+    "./inline": "./src/inline.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"

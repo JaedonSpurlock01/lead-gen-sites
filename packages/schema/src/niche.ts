@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { blockTypes } from "./blocks";
+import { formSchema } from "./form";
 import { hexColor, identifier, slug } from "./primitives";
 
 export const nicheServiceSchema = z.strictObject({
@@ -33,8 +35,11 @@ export const themeColorsSchema = z.strictObject({
 });
 
 export const themeSchema = z.strictObject({
-  /** Exposed as --theme-<slot> CSS variables that the engine's @theme block maps to Tailwind colors. */
-  colors: themeColorsSchema,
+  /**
+   * Named colors. Niches that use the shared @lead-gen/ui components must define the five
+   * semantic slots (themeColorsSchema); other niches name colors for their own CSS.
+   */
+  colors: z.record(identifier, hexColor),
   fontSans: z.string().min(1).optional(),
   /** <meta name="theme-color">. */
   themeColor: hexColor,
@@ -66,6 +71,16 @@ export const nicheSchema = z.strictObject({
   layout: nicheLayoutSchema.default({ heroVariants: ["default"], sections: [], optionalSections: [] }),
   /** Regex sources; `pnpm check` fails a site whose data or content matches any of them. */
   placeholderPatterns: z.array(z.string().min(1)).default(defaultPlaceholderPatterns),
+  /** The lead form this niche collects; see form.ts. */
+  form: formSchema,
+  /** Block-based pages every site must provide as content/pages/<name>.yaml. */
+  pages: z.array(slug).default([]),
+  /** "markdown" (content/services/<slug>.md) or "blocks" (content/services/<slug>.yaml). */
+  serviceContent: z.enum(["markdown", "blocks"]).default("markdown"),
+  /** Block types this niche's pages can render. */
+  blocks: z.array(z.enum(blockTypes as [string, ...string[]])).default([]),
+  /** Paths left out of the sitemap, e.g. "/thank-you/". */
+  sitemapExclude: z.array(z.string().startsWith("/")).default([]),
 });
 
 export type NicheInput = z.input<typeof nicheSchema>;

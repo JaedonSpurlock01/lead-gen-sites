@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+import siteAssets from "virtual:site-assets";
+import niche from "virtual:niche";
+import site from "virtual:site";
+import { telHref } from "./format";
+
+const { business } = site;
+const servicePath = (slug: string) => `/services/${slug}/`;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label={`${business.name} home`}>
+      <Image class="brand-logo" src={siteAssets.logo!} alt="" width={52} height={52} loading="eager" quality={85} />
+      <span>Dumpster Rentals<br />{business.city}</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="/">Home</a>
+      <div class="services-dropdown">
+        <a class="services-dropdown__trigger" href="/#services-heading" aria-haspopup="true">Services</a>
+        <div class="services-dropdown__menu">
+          {niche.services.map((service) => <a href={servicePath(service.slug)}>{service.nav}</a>)}
+          <a href="/dumpster-sizes/">Dumpster Size Guide</a>
+        </div>
+      </div>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a class="button" href={telHref(site)}>Call {business.phoneDisplay}</a>
+    </nav>
+
+    <details class="mobile-menu">
+      <summary>Menu</summary>
+      <nav aria-label="Mobile navigation">
+        <a href="/">Home</a>
+        <details class="mobile-services">
+          <summary>Services</summary>
+          <div>
+            {niche.services.map((service) => <a href={servicePath(service.slug)}>{service.nav}</a>)}
+            <a href="/dumpster-sizes/">Dumpster Size Guide</a>
+          </div>
+        </details>
+        <a href="/about/">About</a>
+        <a href="/contact/">Request an Estimate</a>
+        <a href={telHref(site)}>Call {business.phoneDisplay}</a>
+      </nav>
+    </details>
+  </div>
+</header>

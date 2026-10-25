@@ -1,0 +1,79 @@
+---
+import { getImage } from "astro:assets";
+import siteAssets from "virtual:site-assets";
+import site from "virtual:site";
+import theme from "virtual:theme";
+import "../styles/global.css";
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+import InternalLinks from "./InternalLinks.astro";
+import { dashedPhone, openingHours } from "./format";
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+  hideInternalLinks?: boolean;
+}
+
+const { title, description, noindex = false, schema = [], hideInternalLinks = false } = Astro.props;
+const { business } = site;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const socialImage = new URL(siteAssets.hero!.src, site.url).toString();
+const [favicon32, favicon64, appleTouchIcon] = await Promise.all([
+  getImage({ src: siteAssets.logo!, width: 32, height: 32, format: "png", fit: "contain" }),
+  getImage({ src: siteAssets.logo!, width: 64, height: 64, format: "png", fit: "contain" }),
+  getImage({ src: siteAssets.logo!, width: 180, height: 180, format: "png", fit: "contain" }),
+]);
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${site.url}/#business`,
+  name: business.name,
+  image: socialImage,
+  telephone: dashedPhone(business.phoneTel),
+  email: business.email,
+  url: site.url,
+  openingHours: openingHours(site.hours),
+  areaServed: {
+    "@type": "City",
+    name: business.serviceAreaLabel,
+  },
+  priceRange: business.priceRange,
+  sameAs: site.socials.map((social) => social.href),
+};
+const schemas = [localBusinessSchema, ...schema];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content={theme.themeColor} />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32.src} />
+    <link rel="icon" type="image/png" sizes="64x64" href={favicon64.src} />
+    <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIcon.src} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(schemas)} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    {!hideInternalLinks && <InternalLinks />}
+    <Footer />
+  </body>
+</html>

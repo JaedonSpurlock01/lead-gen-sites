@@ -45,7 +45,7 @@ Done when every page has a primary keyword.
 
 ## 5. Service pages
 
-For each service in `niche.json`, run `prompts/service-page.md` and replace `content/services/<slug>.md` with original copy built from the research brief and keyword map. Write each page fresh. Treat sibling sites as a reference for shape and voice only.
+For each service in `niche.json`, run `prompts/service-page.md` and replace the service's content file with original copy built from the research brief and keyword map. Niches with `serviceContent: "blocks"` use `content/services/<slug>.yaml` plus one `content/pages/<name>.yaml` per page in `niche.json` `pages`; the block types are in `packages/schema/src/blocks.ts`. Write each page fresh. Treat sibling sites as a reference for shape and voice only.
 
 Done when every content file is rewritten, `pnpm check <id>` passes, and no paragraph matches a sibling site. Spot-check with `grep -rF "<distinctive phrase>" niches/<niche>/sites/`.
 

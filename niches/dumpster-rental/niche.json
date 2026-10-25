@@ -1,0 +1,131 @@
+{
+  "id": "dumpster-rental",
+  "name": "Dumpster Rental",
+  "schemaOrgType": "LocalBusiness",
+  "services": [
+    {
+      "slug": "residential-dumpster-rental",
+      "nav": "Residential Dumpsters",
+      "formValue": "Residential Dumpster Rental",
+      "imageSlot": "residential"
+    },
+    {
+      "slug": "construction-dumpster-rental",
+      "nav": "Construction Dumpsters",
+      "formValue": "Construction Dumpster Rental",
+      "imageSlot": "construction"
+    },
+    {
+      "slug": "commercial-dumpster-rental",
+      "nav": "Commercial Dumpsters",
+      "formValue": "Commercial Dumpster Rental",
+      "imageSlot": "commercial"
+    }
+  ],
+  "imageSlots": [
+    {
+      "name": "logo",
+      "description": "Square logo for the header; also the favicon source"
+    },
+    {
+      "name": "hero",
+      "description": "Home hero and social share image"
+    },
+    {
+      "name": "delivery",
+      "description": "Delivery truck photo used beside prose sections"
+    },
+    {
+      "name": "residential",
+      "description": "Residential dumpster photo"
+    },
+    {
+      "name": "construction",
+      "description": "Construction dumpster photo"
+    },
+    {
+      "name": "commercial",
+      "description": "Commercial dumpster photo"
+    }
+  ],
+  "marketFields": [],
+  "extraServiceOptions": [],
+  "theme": {
+    "colors": {
+      "forest": "#0d2a21",
+      "orange": "#d96525",
+      "cream": "#fffdf7"
+    },
+    "themeColor": "#0d2a21"
+  },
+  "layout": {
+    "heroVariants": [
+      "image",
+      "plain"
+    ],
+    "sections": [],
+    "optionalSections": []
+  },
+  "form": {
+    "thankYouPath": "/thank-you/",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Name",
+        "kind": "text",
+        "maxLength": 100
+      },
+      {
+        "name": "phone",
+        "label": "Phone",
+        "kind": "phone",
+        "maxLength": 30,
+        "minDigits": 10,
+        "maxDigits": 15
+      },
+      {
+        "name": "email",
+        "label": "Email",
+        "kind": "email",
+        "maxLength": 254,
+        "lowercase": true
+      },
+      {
+        "name": "service",
+        "label": "Service",
+        "kind": "service",
+        "maxLength": 100
+      },
+      {
+        "name": "details",
+        "label": "Project details",
+        "kind": "textarea",
+        "maxLength": 2000,
+        "minLength": 3
+      }
+    ]
+  },
+  "pages": [
+    "index",
+    "about",
+    "contact",
+    "dumpster-sizes",
+    "thank-you",
+    "404"
+  ],
+  "serviceContent": "blocks",
+  "blocks": [
+    "trust",
+    "prose",
+    "columns",
+    "cards",
+    "steps",
+    "services",
+    "faq",
+    "cta",
+    "form"
+  ],
+  "sitemapExclude": [
+    "/thank-you/"
+  ]
+}

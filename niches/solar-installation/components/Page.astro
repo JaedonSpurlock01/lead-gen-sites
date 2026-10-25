@@ -1,0 +1,42 @@
+---
+import { faqPageSchema } from "@lead-gen/engine/schema";
+import niche from "virtual:niche";
+import site from "virtual:site";
+import type { BlockPage } from "@lead-gen/schema";
+import Blocks from "./Blocks.astro";
+import Hero from "./Hero.astro";
+import Layout from "./Layout.astro";
+import { servicePath } from "./format";
+
+interface Props {
+  page: BlockPage;
+  /** Set on service pages: adds the Service schema and hides the current service from related links. */
+  serviceSlug?: string;
+}
+
+const { page, serviceSlug } = Astro.props;
+const { business } = site;
+const schema: Record<string, unknown>[] = [];
+const service = serviceSlug ? niche.services.find((item) => item.slug === serviceSlug) : undefined;
+if (service) {
+  schema.push({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.nav,
+    description: page.description,
+    url: new URL(servicePath(service.slug), site.url).toString(),
+    provider: { "@type": niche.schemaOrgType, name: business.name, url: site.url, telephone: business.phoneTel },
+    areaServed: { "@type": "City", name: `${business.city}, ${business.regionName}` },
+    serviceType: service.nav,
+  });
+} else {
+  const faqs = page.blocks.flatMap((block) => (block.type === "faq" ? block.items : []));
+  if (faqs.length > 0) schema.push(faqPageSchema(faqs));
+}
+schema.push(...(page.jsonLd ?? []));
+---
+
+<Layout title={page.title} description={page.description} noindex={page.noindex} schema={schema}>
+  {page.hero && <Hero hero={page.hero} />}
+  <Blocks blocks={page.blocks} currentSlug={serviceSlug} />
+</Layout>

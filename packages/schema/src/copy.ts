@@ -12,6 +12,8 @@ export const copySchema = z.strictObject({
     .optional(),
   steps: z.array(z.strictObject({ title: z.string().min(1), text: z.string().min(1) })).optional(),
   faqs: z.array(z.strictObject({ question: z.string().min(1), answer: z.string().min(1) })).optional(),
+  /** Named snippets a niche's templates use, e.g. a call-to-action label. Sites may override them in copy.yaml. */
+  strings: z.record(z.string(), z.string().min(1)).optional(),
   /** Footer paragraph listing what the business does. */
   footerBlurb: z.string().min(1).optional(),
   /** Lead form labels; each falls back to the shared default in LeadForm.astro. */

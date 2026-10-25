@@ -1,0 +1,16 @@
+# TEMPLATE: copied from sites/carson-city as a structure reference. Rewrite every value for the new city
+# with niche prompts/, then delete these two lines. pnpm check fails while they remain.
+title: Page Not Found | Carson City Solar Installation
+description: The requested page could not be found.
+noindex: true
+hero:
+  variant: plain
+  eyebrow: 404 error
+  h1: That page is not available
+  lede: Use the homepage to explore solar panel installation information, or contact us about your project.
+  actions:
+    - text: Return home
+      href: /
+    - text: Contact us
+      href: /contact/
+      style: secondary

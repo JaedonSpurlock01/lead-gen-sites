@@ -1,0 +1,24 @@
+---
+import site from "virtual:site";
+import { telHref } from "./format";
+
+interface Props {
+  title: string;
+  text: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<section class="cta-band">
+  <div class="container cta-band__inner">
+    <div>
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="cta-actions">
+      <a class="button" href="/contact/">Request an Estimate</a>
+      <a class="button button--secondary" href={telHref(site)}>Call {site.business.phoneDisplay}</a>
+    </div>
+  </div>
+</section>

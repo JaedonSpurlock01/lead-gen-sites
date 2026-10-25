@@ -1,0 +1,20 @@
+---
+import niche from "virtual:niche";
+import site from "virtual:site";
+
+const { city } = site.business;
+---
+
+<section class="section section--cream internal-links" aria-labelledby="explore-services">
+  <div class="container">
+    <p class="eyebrow">Keep exploring</p>
+    <h2 id="explore-services">Plan your {city} dumpster rental</h2>
+    <nav aria-label="Related pages">
+      <a href="/">Dumpster Rental {city}</a>
+      {niche.services.map((service) => <a href={`/services/${service.slug}/`}>{service.formValue}</a>)}
+      <a href="/dumpster-sizes/">Dumpster Size Guide</a>
+      <a href="/about/">About Our Service</a>
+      <a href="/contact/">Get a Free Estimate</a>
+    </nav>
+  </div>
+</section>

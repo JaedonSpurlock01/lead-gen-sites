@@ -7,6 +7,7 @@ const modules = {
   "virtual:content": "\0virtual:content",
   "virtual:copy": "\0virtual:copy",
   "virtual:site-assets": "\0virtual:site-assets",
+  "virtual:theme": "\0virtual:theme",
 } as const;
 
 /** Exposes the loaded site, niche, content, copy and image imports to pages and components. */
@@ -20,12 +21,18 @@ export function virtualModulesPlugin(loaded: LoadedSite): Plugin {
       switch (id) {
         case modules["virtual:site"]:
           return `export default ${JSON.stringify(loaded.site)};`;
+        case modules["virtual:theme"]: {
+          const colors = { ...loaded.niche.theme.colors, ...(loaded.site.theme?.colors ?? {}) };
+          return `export default ${JSON.stringify({ ...loaded.niche.theme, colors })};`;
+        }
         case modules["virtual:niche"]:
           return `export default ${JSON.stringify(loaded.niche)};`;
         case modules["virtual:content"]:
           return [
             `export const services = ${JSON.stringify(loaded.services)};`,
             "export function getService(slug) { return services.find((service) => service.slug === slug); }",
+            `export const pages = ${JSON.stringify(loaded.pages)};`,
+            "export function getPage(name) { const page = pages[name]; if (!page) throw new Error(`no content page \"${name}\"`); return page; }",
           ].join("\n");
         case modules["virtual:copy"]:
           return `export default ${JSON.stringify(loaded.copy)};`;

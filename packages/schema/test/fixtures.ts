@@ -23,6 +23,15 @@ export const nicheFixture: NicheInput = {
     themeColor: "#242423",
   },
   layout: { heroVariants: ["default", "split"], sections: ["intro", "services", "faq"], optionalSections: ["form"] },
+  form: {
+    fields: [
+      { name: "name", label: "Name", kind: "text", maxLength: 80, minLength: 2 },
+      { name: "phone", label: "Phone", kind: "phone", maxLength: 30, minDigits: 10 },
+      { name: "email", label: "Email", kind: "email", maxLength: 120 },
+      { name: "service", label: "Service", kind: "service", maxLength: 80 },
+      { name: "size", label: "Approx. size", kind: "number", maxLength: 12, greaterThan: 0, lessThan: 10000000, format: "{n} sq ft" },
+    ],
+  },
 };
 
 export const siteFixture: SiteInput = {

@@ -1,0 +1,18 @@
+# TEMPLATE: copied from sites/haines-city as a structure reference. Rewrite every value for the new city
+# with niche prompts/, then delete these two lines. pnpm check fails while they remain.
+title: Thank You | Dumpster Rentals Haines City
+description: Thank you for contacting Dumpster Rentals Haines City.
+noindex: true
+hero:
+  variant: plain
+  eyebrow: Request received
+  h1: Thank you for reaching out
+  lede: Your estimate request has been sent. We will review the details you provided and follow up using your contact information.
+  actions:
+    - text: Return Home
+      href: /
+      style: primary
+    - text: Call (863) 695-2087
+      href: tel:+18636952087
+      style: secondary
+blocks: []

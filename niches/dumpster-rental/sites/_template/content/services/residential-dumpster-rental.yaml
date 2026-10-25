@@ -1,0 +1,82 @@
+# TEMPLATE: copied from sites/haines-city as a structure reference. Rewrite every value for the new city
+# with niche prompts/, then delete these two lines. pnpm check fails while they remain.
+title: Residential Dumpster Rental Haines City, FL
+description: Plan a home cleanout or renovation with residential dumpster rental in Haines City. Call for clear guidance and a free estimate.
+jsonLd:
+  - "@context": https://schema.org
+    "@type": Service
+    name: Residential Dumpster Rental
+    serviceType: Residential roll-off dumpster rental
+    url: "{{url}}/services/residential-dumpster-rental/"
+    provider:
+      "@id": "{{url}}/#business"
+    areaServed:
+      "@type": City
+      name: Haines City, Florida
+hero:
+  variant: image
+  eyebrow: Home cleanup support
+  h1: Residential Dumpster Rental in Haines City
+  lede: Create one convenient place for household clutter, renovation debris, and other approved project waste. We will help you plan the container, placement, and timing.
+  image: residential
+  imageAlt: Residential roll-off dumpster beside a Haines City home during a cleanout
+blocks:
+  - type: prose
+    eyebrow: Clear space at home
+    heading: Spend more time on the project and less time hauling
+    paragraphs:
+      - Home projects create debris in bursts. A garage cleanout may begin with boxes and old furniture, then uncover broken shelving, worn flooring, and years of forgotten items. A renovation can fill a pickup bed before the real work even starts. Residential dumpster rental gives your Haines City project a central place for approved waste.
+      - A roll-off container stays at the property during the agreed rental period, so you can work at a practical pace. Carry material out once, load it into the container, and keep the driveway or work area from turning into a scattered pile. When the project is finished and the container is ready, coordinate pickup.
+      - We help you think through the rental before delivery. Share the approximate project area, the types of items you expect to remove, and the amount of space available. We can discuss the details that influence an appropriate container recommendation and estimate.
+    link:
+      text: Request a free residential dumpster estimate →
+      href: /contact/
+    image: delivery
+    imageAlt: Dumpster delivery for a residential project in Haines City
+  - type: cards
+    tone: alt
+    eyebrow: Common uses
+    heading: One container can simplify many home projects
+    columns: 3
+    cards:
+      - heading: Garage, Attic, and Estate Cleanouts
+        text: Gather household goods, furniture, move-out clutter, and other approved items in one place while you reclaim rooms, garages, attics, or storage areas.
+      - heading: Home Renovation Dumpsters
+        text: Keep approved drywall, cabinetry, flooring, fixtures, and packaging close to the work zone rather than stacking material around entrances and walkways.
+      - heading: Yard Waste and Storm Cleanup
+        text: Collect approved branches, brush, landscaping debris, and storm cleanup material. Confirm current yard-waste rules and every questionable item before loading.
+  - type: columns
+    columns:
+      - eyebrow: Before delivery
+        heading: Choose a placement area with loading and pickup in mind
+        paragraphs:
+          - The most convenient spot for you must also work for the delivery truck. Look for a firm, level surface with a clear approach and enough overhead room. Move cars, trailers, basketball hoops, and loose equipment before the scheduled arrival. Unlock gates and trim or identify low branches that may affect access.
+          - Tell us about decorative pavers, existing cracks, soft ground, septic components, irrigation, or steep grades. These conditions can influence where a loaded container should sit. If someone else owns the property or controls the driveway, get permission before scheduling.
+      - eyebrow: While you load
+        heading: Keep debris contained and ask about restricted items
+        paragraphs:
+          - Load material evenly when possible. Keep every item inside the container walls and at or below the fill line. Do not leave material leaning against the outside, and keep children and pets away from the container and delivery area.
+          - Paint, liquids, chemicals, batteries, propane tanks, tires, electronics, appliances, and hazardous or regulated materials may need a different disposal route. Acceptance rules depend on the item and current facility requirements. Describe your material in advance and ask before loading anything uncertain.
+  - type: steps
+    tone: dark
+    eyebrow: How it works
+    heading: Plan your home dumpster rental in four steps
+    steps:
+      - heading: Describe the cleanup
+        text: Tell us what you are removing, the approximate square footage, and when you want to work.
+      - heading: Review the recommendation
+        text: Discuss container capacity, accepted material, rental timing, placement, and your free estimate.
+      - heading: Clear the delivery area
+        text: Make the route accessible and mark the exact spot if you will not be present.
+      - heading: Finish and request pickup
+        text: Keep debris within the fill line, clear access to the container, and coordinate removal.
+  - type: prose
+    eyebrow: Local rental guidance
+    heading: Get answers before cleanup day
+    paragraphs:
+      - A useful estimate depends on accurate information. Take a quick inventory and mention bulky items, dense material, and anything that could face disposal restrictions. If the scope may grow, say so. It is easier to compare options before delivery than to change the plan after a container is full.
+      - Our [Haines City dumpster rental service](/) also supports active job sites and business projects. If your work is contractor-led or connected to a commercial property, review our construction and commercial options. Not sure which category fits? The service label matters less than the project details.
+      - Call [(863) 695-2087](tel:+18636952087) during business hours or use the contact form. Your estimate is free, and you can ask questions before deciding whether to schedule.
+  - type: cta
+    heading: Make your home cleanup easier to manage
+    text: Tell us what you are clearing and where you want the container. Get a free residential dumpster rental estimate today.

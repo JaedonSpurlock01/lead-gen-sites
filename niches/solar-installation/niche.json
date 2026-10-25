@@ -1,0 +1,159 @@
+{
+  "id": "solar-installation",
+  "name": "Solar Panel Installation",
+  "schemaOrgType": "HomeAndConstructionBusiness",
+  "services": [
+    {
+      "slug": "solar-panel-installation",
+      "nav": "Solar Panel Installation",
+      "formValue": "Solar Panel Installation",
+      "imageSlot": "installation"
+    },
+    {
+      "slug": "solar-panel-repair",
+      "nav": "Solar Panel Repair",
+      "formValue": "Solar Panel Repair",
+      "imageSlot": "repair"
+    },
+    {
+      "slug": "solar-panel-cleaning",
+      "nav": "Solar Panel Cleaning",
+      "formValue": "Solar Panel Cleaning",
+      "imageSlot": "cleaning"
+    }
+  ],
+  "imageSlots": [
+    {
+      "name": "logo",
+      "description": "Square logo; header mark and favicon"
+    },
+    {
+      "name": "hero",
+      "description": "Home hero image, also the business schema image"
+    },
+    {
+      "name": "process",
+      "description": "Process / planning image"
+    },
+    {
+      "name": "installation",
+      "description": "Solar panel installation photo"
+    },
+    {
+      "name": "repair",
+      "description": "Solar panel repair photo"
+    },
+    {
+      "name": "cleaning",
+      "description": "Solar panel cleaning photo"
+    },
+    {
+      "name": "section1",
+      "description": "Home section image 1"
+    },
+    {
+      "name": "section2",
+      "description": "Home section image 2"
+    },
+    {
+      "name": "section3",
+      "description": "Home section image 3"
+    }
+  ],
+  "marketFields": [
+    {
+      "name": "localContextLabel",
+      "description": "Short label for the local solar conditions"
+    },
+    {
+      "name": "localContextSummary",
+      "description": "One or two sentences on local climate, utility and permit context"
+    },
+    {
+      "name": "serviceSeasonality",
+      "description": "When estimates and field work happen; shown in the home fact strip"
+    }
+  ],
+  "extraServiceOptions": [],
+  "theme": {
+    "colors": {
+      "primary": "#176452",
+      "primaryDark": "#0b3028",
+      "accent": "#f2b84b",
+      "ink": "#15231f",
+      "paper": "#f3f6f1"
+    },
+    "themeColor": "#0b3028"
+  },
+  "layout": {
+    "heroVariants": [
+      "split",
+      "content",
+      "plain"
+    ],
+    "sections": [],
+    "optionalSections": []
+  },
+  "form": {
+    "thankYouPath": "/thank-you/",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Name",
+        "kind": "text",
+        "maxLength": 100,
+        "overflow": "reject"
+      },
+      {
+        "name": "phone",
+        "label": "Phone",
+        "kind": "phone",
+        "maxLength": 30,
+        "overflow": "reject",
+        "minDigits": 10
+      },
+      {
+        "name": "email",
+        "label": "Email",
+        "kind": "email",
+        "maxLength": 200,
+        "overflow": "reject"
+      },
+      {
+        "name": "service",
+        "label": "Service",
+        "kind": "service",
+        "maxLength": 100
+      },
+      {
+        "name": "projectDetails",
+        "label": "Tell us about your property and the solar service you need",
+        "kind": "textarea",
+        "maxLength": 3000,
+        "overflow": "reject"
+      }
+    ]
+  },
+  "pages": [
+    "index",
+    "about",
+    "contact",
+    "thank-you",
+    "404"
+  ],
+  "serviceContent": "blocks",
+  "blocks": [
+    "trust",
+    "prose",
+    "cards",
+    "steps",
+    "services",
+    "faq",
+    "article",
+    "form",
+    "links"
+  ],
+  "sitemapExclude": [
+    "/thank-you/"
+  ]
+}

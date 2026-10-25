@@ -3,6 +3,7 @@ import { getImage } from "astro:assets";
 import siteAssets from "virtual:site-assets";
 import niche from "virtual:niche";
 import site from "virtual:site";
+import theme from "virtual:theme";
 
 const { business, hours } = site;
 const faviconSource = siteAssets.favicon ?? siteAssets.logoDark!;
@@ -34,6 +35,9 @@ const time24 = (value: string) => {
   return `${String(hour).padStart(2, "0")}:${match[2] || "00"}`;
 };
 const openingHoursSpecification = hours.flatMap((row) => {
+  if (row.dayOfWeek && row.opens && row.closes) {
+    return [{ "@type": "OpeningHoursSpecification", dayOfWeek: row.dayOfWeek, opens: row.opens, closes: row.closes }];
+  }
   if (row.time.toLowerCase() === "closed") return [];
   const [opens = "", closes = ""] = row.time.split("–");
   return [{
@@ -57,19 +61,20 @@ const schema = {
     addressRegion: business.region,
     addressCountry: business.country,
   },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: business.latitude,
-    longitude: business.longitude,
-  },
+  ...(business.latitude && business.longitude
+    ? { geo: { "@type": "GeoCoordinates", latitude: business.latitude, longitude: business.longitude } }
+    : {}),
   url: site.url,
   openingHoursSpecification,
   areaServed: [{ "@type": "City", name: business.city }],
   priceRange: business.priceRange,
 };
 
-const { colors } = niche.theme;
-const fontSans = niche.theme.fontSans ?? 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+const { colors } = theme;
+for (const slot of ["surface", "surfaceAlt", "accent", "ink", "inkSoft"]) {
+  if (!colors[slot]) throw new Error(`niche ${niche.id}: BaseHead needs theme.colors.${slot}`);
+}
+const fontSans = theme.fontSans ?? 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 const themeCss = `:root{--theme-surface:${colors.surface};--theme-surface-alt:${colors.surfaceAlt};--theme-accent:${colors.accent};--theme-ink:${colors.ink};--theme-ink-soft:${colors.inkSoft};--theme-font-sans:${fontSans}}`;
 ---
 
@@ -81,7 +86,7 @@ const themeCss = `:root{--theme-surface:${colors.surface};--theme-surface-alt:${
 <link rel="icon" href={favicon256.src} type="image/png" sizes="256x256" />
 <link rel="icon" href={favicon32.src} type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href={appleTouchIcon.src} />
-<meta name="theme-color" content={niche.theme.themeColor} />
+<meta name="theme-color" content={theme.themeColor} />
 <meta name="robots" content={noindex ? "noindex, follow" : "index, follow"} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />

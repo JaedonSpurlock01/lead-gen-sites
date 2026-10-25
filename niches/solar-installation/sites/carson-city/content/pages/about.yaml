@@ -1,0 +1,36 @@
+title: About Carson City Solar Installation | Carson City, NV
+description: Learn how Carson City Solar Installation approaches solar estimates, clear written plans, local conditions, and practical next steps.
+hero:
+  variant: content
+  breadcrumb: About
+  eyebrow: Carson City Solar Installation
+  h1: A Practical Starting Point for Carson City Solar Projects
+  lede: Carson City Solar Installation connects local property owners with a focused solar panel installation inquiry process. We publish useful planning information, ask for the details that shape a project, and avoid promises that require a site-specific review.
+blocks:
+  - type: article
+    image: process
+    imageAlt: Solar Panel Installation planning materials for Carson City, Nevada
+    imagePosition: side
+    sections:
+      - heading: Why property details come first
+        paragraphs:
+          - "A solar project sits at the intersection of a building, an electrical system, local review, utility requirements, and the owner’s goals. No business history or project count was provided for publication, so this page does not invent one. Instead, it explains the standard we want each inquiry to support: a clear conversation grounded in the property."
+          - Recent energy use, roof or land conditions, shade, access, and electrical equipment help shape the plan. The final design, permits, equipment, and schedule must fit the actual property. Starting with the right questions helps owners compare written estimates.
+      - heading: Local information without inflated promises
+        paragraphs:
+          - Carson City’s sunshine makes solar worth a look, but cold winters, snow, wind, roof conditions, local permits, and the NV Energy grid connection still matter. We explain those issues without promising exact savings, a payback date, or a set amount of power.
+          - Incentives also change. Current IRS guidance ended the federal residential credit for new property placed in service after December 31, 2025. We encourage every customer to check official sources and obtain qualified financial or tax advice rather than treating an installer’s marketing page as tax guidance.
+  - type: cards
+    tone: alt
+    eyebrow: What guides the work
+    heading: Four practical project values
+    cards:
+      - heading: Integrity
+        text: Explain assumptions, exclusions, and unknowns instead of hiding them behind a simplified headline.
+      - heading: Quality
+        text: Treat the panels, mounts, electrical work, permits, inspection, and final steps as one complete project.
+      - heading: Excellence
+        text: Use clear updates and a written plan that property owners can understand and compare.
+      - heading: Safety
+        text: Follow the approved design, protect the property, work safely, and meet city and utility rules.
+  - type: links

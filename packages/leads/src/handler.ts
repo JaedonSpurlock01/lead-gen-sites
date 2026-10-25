@@ -1,58 +1,89 @@
+import type { FormConfig, FormField } from "@lead-gen/schema";
 import type { TracerEnv } from "./env";
 
 export type LeadHandlerOptions = {
   /** The canonical hostname Tracer matches the site by. */
   hostname: string;
-  /** Allowed values of the `service` field (site.json serviceOptions). */
+  /** Allowed values of `service` fields (site.json serviceOptions). */
   serviceOptions: readonly string[];
+  /** The niche's form: which fields exist, how each is validated, and how Tracer labels it. */
+  form: FormConfig;
   /** Resolves Tracer's URL and key from the Worker bindings. */
   env: () => Promise<TracerEnv>;
   fetch?: typeof fetch;
 };
 
-function clean(value: ReturnType<FormData["get"]>, max: number) {
-  return String(value ?? "")
-    .replace(/[\r\n\t]+/g, " ")
-    .trim()
-    .slice(0, max);
+function redirect(location: string, status = 303): Response {
+  return new Response(null, { status, headers: { Location: location } });
 }
 
 function digits(value: string) {
   return value.replace(/\D/g, "");
 }
 
-function redirect(location: string, status = 303): Response {
-  return new Response(null, { status, headers: { Location: location } });
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Single-line fields lose control characters (as the asphalt sites always did); textareas keep line breaks. */
+function read(form: FormData, field: FormField): { value: string; tooLong: boolean } {
+  let raw = String(form.get(field.name) ?? "");
+  raw = field.kind === "textarea" ? raw.trim() : raw.replace(/[\r\n\t]+/g, " ").trim();
+  if (field.lowercase) raw = raw.toLowerCase();
+  const tooLong = raw.length > field.maxLength;
+  return { value: field.overflow === "truncate" ? raw.slice(0, field.maxLength) : raw, tooLong: field.overflow === "reject" && tooLong };
+}
+
+function check(field: FormField, value: string, serviceOptions: readonly string[]): boolean {
+  if (value.length < field.minLength) return false;
+  switch (field.kind) {
+    case "email":
+      return emailPattern.test(value);
+    case "phone": {
+      const count = digits(value).length;
+      return count >= (field.minDigits ?? 0) && count <= (field.maxDigits ?? Infinity);
+    }
+    case "service":
+      return serviceOptions.includes(value);
+    case "number": {
+      const number = Number(value);
+      return (
+        Number.isFinite(number) &&
+        (field.greaterThan === undefined || number > field.greaterThan) &&
+        (field.lessThan === undefined || number < field.lessThan)
+      );
+    }
+    default:
+      return true;
+  }
+}
+
+function present(field: FormField, value: string): string {
+  if (field.kind === "number" && field.format) return field.format.replace("{n}", Number(value).toLocaleString("en-US"));
+  return value;
 }
 
 /**
- * Ported from the asphalt repo's src/pages/api/lead.ts. Validation, honeypot and every redirect
- * target are unchanged; only where the key comes from differs (see env.ts).
+ * The one lead handler. Honeypot, field validation and every redirect follow the asphalt
+ * original; which fields exist and how strict each one is comes from niche.json `form`.
  */
 export async function handleLead(request: Request, options: LeadHandlerOptions): Promise<Response> {
-  const form = await request.formData();
-
-  if (clean(form.get("company_website"), 200)) {
-    return redirect("/thank-you", 303);
+  let form: FormData;
+  try {
+    form = await request.formData();
+  } catch {
+    return redirect("/contact/?error=1#error-fields", 303);
   }
 
-  const name = clean(form.get("name"), 80);
-  const phone = clean(form.get("phone"), 30);
-  const email = clean(form.get("email"), 120);
-  const size = clean(form.get("size"), 12);
-  const service = clean(form.get("service"), 80);
+  if (String(form.get(options.form.honeypot) ?? "").trim()) {
+    return redirect(options.form.thankYouPath, 303);
+  }
 
-  const sizeNumber = Number(size);
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const serviceOk = options.serviceOptions.includes(service);
-  const valid =
-    name.length > 1 &&
-    digits(phone).length >= 10 &&
-    emailOk &&
-    serviceOk &&
-    Number.isFinite(sizeNumber) &&
-    sizeNumber > 0 &&
-    sizeNumber < 10000000;
+  const fields: Record<string, string> = {};
+  let valid = true;
+  for (const field of options.form.fields) {
+    const { value, tooLong } = read(form, field);
+    if (tooLong || !check(field, value, options.serviceOptions)) valid = false;
+    fields[field.label] = present(field, value);
+  }
 
   if (!valid) {
     return redirect("/contact/?error=1#error-fields", 303);
@@ -70,13 +101,7 @@ export async function handleLead(request: Request, options: LeadHandlerOptions):
     site: options.hostname,
     submissionId: crypto.randomUUID(),
     page: new URL(request.headers.get("referer") ?? "/contact/", request.url).pathname,
-    fields: {
-      Name: name,
-      Phone: phone,
-      Email: email,
-      Service: service,
-      "Approx. size": `${sizeNumber.toLocaleString("en-US")} sq ft`,
-    },
+    fields,
   };
 
   const doFetch = options.fetch ?? fetch;
@@ -95,5 +120,5 @@ export async function handleLead(request: Request, options: LeadHandlerOptions):
     return redirect("/contact/?error=send#error-send", 303);
   }
 
-  return redirect("/thank-you", 303);
+  return redirect(options.form.thankYouPath, 303);
 }

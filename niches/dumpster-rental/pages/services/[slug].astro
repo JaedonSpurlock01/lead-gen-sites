@@ -1,0 +1,13 @@
+---
+import { getPage } from "virtual:content";
+import niche from "virtual:niche";
+import Page from "../../components/Page.astro";
+
+export function getStaticPaths() {
+  return niche.services.map((service) => ({ params: { slug: service.slug } }));
+}
+
+const { slug } = Astro.params;
+---
+
+<Page page={getPage(`services/${slug}`)} />

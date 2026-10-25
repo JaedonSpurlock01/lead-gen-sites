@@ -4,6 +4,7 @@ import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadCloudflareConfig, loadSite } from "@lead-gen/engine/load";
+import type { FormConfig } from "@lead-gen/schema";
 import { runBuild } from "../build";
 import { wranglerBin } from "../deploy";
 import { CliError, type Logger } from "../log";
@@ -114,8 +115,29 @@ export async function runVerifyLocal(root: string, target: string | undefined, o
   return results;
 }
 
+/** A valid submission for the niche's form, and the field values Tracer should receive. */
+export function sampleLead(form: FormConfig, serviceOptions: string[]): { form: Record<string, string>; expected: Record<string, string> } {
+  const values: Record<string, string> = {};
+  const expected: Record<string, string> = {};
+  for (const field of form.fields) {
+    const value = {
+      text: "Local Verify",
+      textarea: "Local verify test lead: property details",
+      email: "verify@example.com",
+      phone: "(208) 555-0100",
+      number: "1200",
+      service: serviceOptions[0] ?? "Other",
+    }[field.kind];
+    values[field.name] = value;
+    expected[field.label] = field.kind === "number" && field.format ? field.format.replace("{n}", Number(value).toLocaleString("en-US")) : value;
+  }
+  return { form: values, expected };
+}
+
 async function verifySite(root: string, ref: SiteRef, port: number, persist: string, tracer: MockTracer, logger: Logger): Promise<VerifyResult> {
-  const { site, services } = loadSite(ref.nicheDir, ref.id);
+  const { site, niche } = loadSite(ref.nicheDir, ref.id);
+  const thankYou = niche.form.thankYouPath;
+  const pagePath = (name: string) => (name === "index" ? "/" : name === "404" ? null : `/${name}/`);
   const devVars = join(ref.siteDir, ".dev.vars");
   if (existsSync(devVars)) throw new CliError(`${devVars} already exists; move it aside so verify-local can write its own`);
   writeFileSync(devVars, `# Written by pnpm verify-local; removed when it finishes.\nTRACER_FORMS_URL="${tracer.url}"\n`);
@@ -137,7 +159,8 @@ async function verifySite(root: string, ref: SiteRef, port: number, persist: str
   try {
     await waitForReady(`${base}/`, child);
 
-    const pages = ["/", "/about/", "/contact/", "/thank-you/", "/robots.txt", "/sitemap-index.xml", ...services.map((service) => `/services/${service.slug}/`)];
+    const basePages = niche.pages.length > 0 ? niche.pages.map(pagePath).filter((path): path is string => path !== null) : ["/", "/about/", "/contact/", "/thank-you/"];
+    const pages = [...basePages, "/robots.txt", "/sitemap-index.xml", ...niche.services.map((service) => `/services/${service.slug}/`)];
     for (const path of pages) {
       const response = await fetch(`${base}${path}`, { redirect: "manual" });
       const text = await response.text();
@@ -150,27 +173,29 @@ async function verifySite(root: string, ref: SiteRef, port: number, persist: str
     const canonical = await (await fetch(`${base}/`)).text();
     add("canonical uses domain", canonical.includes(`<link rel="canonical" href="https://${site.domain}/">`), `https://${site.domain}/`);
 
-    const service = site.serviceOptions[0] ?? "Other";
-    const good = { name: "Local Verify", phone: "(208) 555-0100", email: "verify@example.com", size: "1200", service };
+    const sample = sampleLead(niche.form, site.serviceOptions);
+    const good = sample.form;
+    const emailField = niche.form.fields.find((field) => field.kind === "email")?.name ?? "email";
 
     const before = tracer.received.length;
     let response = await postLead(base, good, "/services/");
     const lead = tracer.received.slice(before);
     const body = lead[0]?.body as { site?: string; page?: string; fields?: Record<string, string> } | undefined;
-    add("lead -> /thank-you", response.status === 303 && response.location === "/thank-you", `${response.status} ${response.location}`);
+    add(`lead -> ${thankYou}`, response.status === 303 && response.location === thankYou, `${response.status} ${response.location}`);
     add("Tracer got one lead", lead.length === 1, `${lead.length} request(s)`);
     add("bearer key from Secrets Store", lead[0]?.authorized === true, lead[0]?.authorized ? "matches local test key" : "missing or wrong");
     add("body matches contract", lead[0]?.valid === true, lead[0]?.problems.join("; ") || "ok");
     add("site is the hostname", body?.site === site.hostname, String(body?.site));
     add("page from referer", body?.page === "/services/", String(body?.page));
-    add("size formatted", body?.fields?.["Approx. size"] === "1,200 sq ft", String(body?.fields?.["Approx. size"]));
+    const fieldsMatch = JSON.stringify(body?.fields) === JSON.stringify(sample.expected);
+    add("fields match the niche form", fieldsMatch, fieldsMatch ? Object.keys(sample.expected).join(", ") : `${JSON.stringify(body?.fields)} != ${JSON.stringify(sample.expected)}`);
 
     let count = tracer.received.length;
-    response = await postLead(base, { ...good, email: "not-an-email" });
+    response = await postLead(base, { ...good, [emailField]: "not-an-email" });
     add("invalid -> field error", response.status === 303 && response.location === "/contact/?error=1#error-fields" && tracer.received.length === count, `${response.status} ${response.location}`);
 
     response = await postLead(base, { ...good, company_website: "https://spam.example" });
-    add("honeypot -> thank-you, not sent", response.status === 303 && response.location === "/thank-you" && tracer.received.length === count, `${response.status} ${response.location}, Tracer calls +${tracer.received.length - count}`);
+    add("honeypot -> thank-you, not sent", response.status === 303 && response.location === thankYou && tracer.received.length === count, `${response.status} ${response.location}, Tracer calls +${tracer.received.length - count}`);
 
     tracer.respondWith = 500;
     count = tracer.received.length;

@@ -1,0 +1,4 @@
+# Shared solar copy. Sites can override any string in their own copy.yaml.
+strings:
+  primaryCta: Request a Free Solar Estimate
+  ctaBandText: Tell us about your property and energy goals. We’ll follow up about the next step.

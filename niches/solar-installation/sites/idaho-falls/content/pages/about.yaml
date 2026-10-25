@@ -1,0 +1,36 @@
+title: About Idaho Falls Solar Installation | Idaho Falls, ID
+description: Learn how Idaho Falls Solar Installation approaches solar estimates, cold-weather planning, clear written plans, permits, and utility steps.
+hero:
+  variant: content
+  breadcrumb: About
+  eyebrow: Idaho Falls Solar Installation
+  h1: A Clear Starting Point for Idaho Falls Solar Projects
+  lede: Idaho Falls Solar Installation helps local property owners begin a focused conversation about installation, repair, or cleaning. We start with the property and avoid promises that require an inspection, final design, or confirmed system test.
+blocks:
+  - type: article
+    image: process
+    imageAlt: Solar Panel Installation planning materials for Idaho Falls, Idaho
+    imagePosition: side
+    sections:
+      - heading: Useful details before sales claims
+        paragraphs:
+          - A solar project connects a roof or piece of land, electrical equipment, city review, utility rules, weather, and the owner’s goals. That is why we ask about power use, roof condition, shade, access, and existing equipment before treating an early idea as a final plan.
+          - No company history, project count, license, insurance policy, certification, or award was provided for publication. This page does not invent those claims. It focuses on the information property owners need to ask better questions and compare written estimates.
+      - heading: Local planning in plain language
+        paragraphs:
+          - Idaho Falls winters, snow, wind, seasonal sunlight, and spring dust all affect solar conversations. City permits and Idaho Falls Power review also belong in the project schedule. We explain those topics without promising a certain amount of power, savings, or a finish date.
+          - Repair and cleaning calls need the same honest approach. A monitoring alert does not prove which part failed, and visible dirt does not prove how much power was lost. The right first step is to gather safe details and choose the service that fits the concern.
+  - type: cards
+    tone: alt
+    eyebrow: What guides the work
+    heading: Four practical project values
+    cards:
+      - heading: Integrity
+        text: State what is known, what still needs review, and what the written price does or does not include.
+      - heading: Quality
+        text: Treat panels, mounts, wiring, electrical equipment, permits, inspection, and utility steps as one system.
+      - heading: Excellence
+        text: Use clear updates and written plans that property owners can read, compare, and question.
+      - heading: Safety
+        text: Protect people and property by following approved plans, equipment instructions, and safe roof practices.
+  - type: links

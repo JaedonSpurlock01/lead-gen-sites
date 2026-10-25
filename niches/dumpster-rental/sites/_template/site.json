@@ -1,0 +1,67 @@
+{
+  "id": "city-name",
+  "domain": "example.com",
+  "cloudflareProject": "dumpster-rental-city-name",
+  "canary": false,
+  "market": {},
+  "assets": {
+    "logo": "assets/logo.png",
+    "hero": "assets/hero.jpg",
+    "delivery": "assets/delivery.jpg",
+    "residential": "assets/residential.jpg",
+    "construction": "assets/construction.jpg",
+    "commercial": "assets/commercial.jpg"
+  },
+  "business": {
+    "name": "City Business Name",
+    "phoneDisplay": "(000) 000-0000",
+    "phoneTel": "+10000000000",
+    "email": "info@example.com",
+    "city": "City",
+    "region": "ST",
+    "regionName": "State",
+    "country": "US",
+    "priceRange": "$$",
+    "serviceAreaLabel": "City, State"
+  },
+  "socials": [
+    {
+      "name": "Facebook",
+      "href": "https://facebook.com"
+    },
+    {
+      "name": "Instagram",
+      "href": "https://instagram.com"
+    },
+    {
+      "name": "Twitter",
+      "href": "https://x.com"
+    },
+    {
+      "name": "YouTube",
+      "href": "https://youtube.com"
+    }
+  ],
+  "hours": [
+    {
+      "days": "Mon - Sat",
+      "time": "7am - 7pm",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "07:00",
+      "closes": "19:00"
+    }
+  ],
+  "serviceOptions": [
+    "Residential Dumpster Rental",
+    "Construction Dumpster Rental",
+    "Commercial Dumpster Rental"
+  ],
+  "outboundLinks": []
+}

@@ -1,0 +1,21 @@
+---
+// One block page: layout, hero, blocks, and FAQ structured data from any FAQ block.
+import { faqPageSchema } from "@lead-gen/engine/schema";
+import type { BlockPage } from "@lead-gen/schema";
+import Blocks from "./Blocks.astro";
+import Hero from "./Hero.astro";
+import Layout from "./Layout.astro";
+
+interface Props {
+  page: BlockPage;
+}
+
+const { page } = Astro.props;
+const faqs = page.blocks.flatMap((block) => (block.type === "faq" ? block.items : []));
+const schema = [...(faqs.length > 0 ? [faqPageSchema(faqs)] : []), ...(page.jsonLd ?? [])];
+---
+
+<Layout title={page.title} description={page.description} noindex={page.noindex} schema={schema}>
+  {page.hero && <Hero hero={page.hero} />}
+  <Blocks blocks={page.blocks} />
+</Layout>

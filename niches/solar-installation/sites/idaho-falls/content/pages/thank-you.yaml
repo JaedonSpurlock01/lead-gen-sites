@@ -1,0 +1,11 @@
+title: Thank You | Idaho Falls Solar Installation
+description: Your project request has been received.
+noindex: true
+hero:
+  variant: plain
+  eyebrow: Request received
+  h1: Thank you for telling us about your project
+  lede: Your form was submitted. If you need to add a detail, call [(208) 497-5539](tel:+12084975539) during business hours.
+  actions:
+    - text: Return home
+      href: /

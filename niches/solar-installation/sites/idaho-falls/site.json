@@ -1,0 +1,81 @@
+{
+  "id": "idaho-falls",
+  "domain": "idahofallssolarinstallation.com",
+  "cloudflareProject": "idaho-falls-solar-installation",
+  "canary": false,
+  "market": {
+    "localContextLabel": "Cold-climate solar planning",
+    "localContextSummary": "Idaho Falls has sunny high-elevation conditions, snowy winters, strong seasonal temperature changes, wind, and a city-owned electric utility with its own permit and grid-connection process.",
+    "serviceSeasonality": "Estimates and planning are available year-round; rooftop work depends on snow, ice, wind, roof conditions, permits, and utility review."
+  },
+  "assets": {
+    "logo": "assets/logo.png",
+    "hero": "assets/hero.webp",
+    "process": "assets/process.webp",
+    "installation": "assets/solar-panel-installation.webp",
+    "repair": "assets/solar-panel-repair.webp",
+    "cleaning": "assets/solar-panel-cleaning.webp",
+    "section1": "assets/site-review.webp",
+    "section2": "assets/winter-design.webp",
+    "section3": "assets/permit-plans.webp"
+  },
+  "business": {
+    "name": "Idaho Falls Solar Installation",
+    "phoneDisplay": "(208) 497-5539",
+    "phoneTel": "+12084975539",
+    "email": "info@idahofallssolarinstallation.com",
+    "city": "Idaho Falls",
+    "region": "ID",
+    "regionName": "Idaho",
+    "country": "US",
+    "latitude": "43.4917",
+    "longitude": "-112.03396",
+    "priceRange": "Varies by project",
+    "serviceAreaLabel": "Idaho Falls, Idaho"
+  },
+  "socials": [],
+  "hours": [
+    {
+      "days": "Monday, Tuesday, Wednesday, Thursday, Friday",
+      "time": "9 AM–5 PM",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "17:00"
+    },
+    {
+      "days": "Saturday, Sunday",
+      "time": "Closed",
+      "dayOfWeek": [
+        "Saturday",
+        "Sunday"
+      ]
+    }
+  ],
+  "serviceOptions": [
+    "Solar Panel Installation",
+    "Solar Panel Repair",
+    "Solar Panel Cleaning"
+  ],
+  "outboundLinks": [
+    {
+      "id": "carson-city-solar",
+      "href": "https://carsoncitysolarinstallation.com/",
+      "text": "Solar Panel Installation"
+    }
+  ],
+  "theme": {
+    "colors": {
+      "primary": "#155e75",
+      "primaryDark": "#083344",
+      "accent": "#f59e0b",
+      "ink": "#17252b",
+      "paper": "#f3f7f8"
+    }
+  }
+}

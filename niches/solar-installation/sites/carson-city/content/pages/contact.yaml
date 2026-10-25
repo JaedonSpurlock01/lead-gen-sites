@@ -1,0 +1,22 @@
+title: Free Solar Estimate in Carson City, NV | Contact Us
+description: Contact Carson City Solar Installation at (775) 306-4278 for a free installation estimate or to request solar panel repair or cleaning.
+hero:
+  variant: content
+  breadcrumb: Contact
+  eyebrow: Carson City, Nevada
+  h1: Request a Free Solar Estimate or Service
+  lede: Tell us whether you need solar panel installation, repair, or cleaning in Carson City. Share what you know about the property and system. You do not need every detail to get started.
+blocks:
+  - type: form
+    eyebrow: Helpful details
+    heading: What to include with your request
+    bullets:
+      - Share the property type and whether you are considering a roof or ground installation.
+      - Mention the roof material and approximate age if you know them.
+      - Describe shade, recent electricity use, and future loads such as an electric vehicle.
+      - Ask which design, permit, installation, inspection, and utility steps the estimate includes.
+    formHeading: Request a Free Solar Estimate
+    aside:
+      heading: Call or email
+  - type: links
+    tone: alt

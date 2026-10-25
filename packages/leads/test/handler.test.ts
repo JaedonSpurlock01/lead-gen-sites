@@ -1,5 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { formSchema, type FormConfig } from "@lead-gen/schema";
 import { handleLead, type LeadHandlerOptions } from "../src/handler";
+
+/** The asphalt-paving niche.json form: the original handler's exact rules. */
+const asphaltForm: FormConfig = formSchema.parse({
+  thankYouPath: "/thank-you",
+  fields: [
+    { name: "name", label: "Name", kind: "text", maxLength: 80, minLength: 2 },
+    { name: "phone", label: "Phone", kind: "phone", maxLength: 30, minDigits: 10 },
+    { name: "email", label: "Email", kind: "email", maxLength: 120 },
+    { name: "service", label: "Service", kind: "service", maxLength: 80 },
+    { name: "size", label: "Approx. size", kind: "number", maxLength: 12, greaterThan: 0, lessThan: 10000000, format: "{n} sq ft" },
+  ],
+});
 
 const serviceOptions = ["Asphalt Driveway Paving", "Asphalt Repair", "Other"];
 
@@ -16,6 +29,7 @@ function options(overrides: Partial<LeadHandlerOptions> = {}): LeadHandlerOption
   return {
     hostname: "asphaltpavingblackfoot.com",
     serviceOptions,
+    form: asphaltForm,
     env: async () => ({ ok: true, formsUrl: "https://tracer.test/api/forms", formKey: "secret-key" }),
     fetch: vi.fn(async () => new Response("ok", { status: 200 })),
     ...overrides,
@@ -98,5 +112,56 @@ describe("handleLead", () => {
     expect(refused.headers.get("location")).toBe("/contact/?error=send#error-send");
     const down = await handleLead(post(good), options({ fetch: async () => { throw new Error("ECONNRESET"); } }));
     expect(down.headers.get("location")).toBe("/contact/?error=send#error-send");
+  });
+});
+
+describe("handleLead with other niche forms", () => {
+  const dumpsterForm = formSchema.parse({
+    thankYouPath: "/thank-you/",
+    fields: [
+      { name: "name", label: "Name", kind: "text", maxLength: 100 },
+      { name: "phone", label: "Phone", kind: "phone", maxLength: 30, minDigits: 10, maxDigits: 15 },
+      { name: "email", label: "Email", kind: "email", maxLength: 254, lowercase: true },
+      { name: "service", label: "Service", kind: "service", maxLength: 100 },
+      { name: "details", label: "Project details", kind: "textarea", maxLength: 2000, minLength: 3 },
+    ],
+  });
+  const dumpsterServices = ["Residential Dumpster Rental", "Construction Dumpster Rental"];
+  const dumpsterLead = { name: "Pat", phone: "(863) 555-0100", email: "Pat@Example.com", service: "Residential Dumpster Rental", details: "Garage cleanout\nDriveway placement" };
+
+  it("sends the niche's fields in order with their labels, keeps textarea line breaks, lowercases email", async () => {
+    const opts = options({ form: dumpsterForm, serviceOptions: dumpsterServices });
+    const response = await handleLead(post(dumpsterLead), opts);
+    expect(response.headers.get("location")).toBe("/thank-you/");
+    const body = JSON.parse(((opts.fetch as ReturnType<typeof vi.fn>).mock.calls[0] as [string, RequestInit])[1].body as string);
+    expect(Object.keys(body.fields)).toEqual(["Name", "Phone", "Email", "Service", "Project details"]);
+    expect(body.fields).toMatchObject({ Email: "pat@example.com", "Project details": "Garage cleanout\nDriveway placement" });
+  });
+
+  it.each([
+    ["details too short", { details: "ok" }],
+    ["too many phone digits", { phone: "1234567890123456" }],
+    ["unknown service", { service: "Asphalt Repair" }],
+  ])("rejects %s", async (_label, bad) => {
+    const opts = options({ form: dumpsterForm, serviceOptions: dumpsterServices });
+    expect((await handleLead(post({ ...dumpsterLead, ...bad }), opts)).headers.get("location")).toBe("/contact/?error=1#error-fields");
+  });
+
+  it("rejects instead of truncating when a field says overflow: reject", async () => {
+    const solarForm = formSchema.parse({
+      thankYouPath: "/thank-you/",
+      fields: [
+        { name: "name", label: "Name", kind: "text", maxLength: 5, overflow: "reject" },
+        { name: "service", label: "Service", kind: "service", maxLength: 100 },
+      ],
+    });
+    const opts = options({ form: solarForm, serviceOptions: ["Solar Panel Repair"] });
+    expect((await handleLead(post({ name: "Patricia", service: "Solar Panel Repair" }), opts)).headers.get("location")).toBe("/contact/?error=1#error-fields");
+    expect((await handleLead(post({ name: "Pat", service: "Solar Panel Repair" }), opts)).headers.get("location")).toBe("/thank-you/");
+  });
+
+  it("treats an unreadable body as a field error", async () => {
+    const bad = new Request("https://x.test/api/lead", { method: "POST", headers: { "content-type": "multipart/form-data; boundary=x" }, body: "garbage" });
+    expect((await handleLead(bad, options())).headers.get("location")).toBe("/contact/?error=1#error-fields");
   });
 });

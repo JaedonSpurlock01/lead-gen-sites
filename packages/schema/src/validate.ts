@@ -34,6 +34,13 @@ export function validateSiteForNiche(site: Site, niche: Niche): string[] {
     if (!allowedSections.has(section)) issues.push(`layout.sections entry "${section}" is not declared by the niche`);
   }
 
+  for (const key of Object.keys(site.theme?.colors ?? {})) {
+    if (!(key in niche.theme.colors)) issues.push(`theme.colors.${key} is not a color in niche.json theme`);
+  }
+
+  const ids = site.outboundLinks.map((item) => item.id).filter(Boolean);
+  if (new Set(ids).size !== ids.length) issues.push("outboundLinks ids must be unique");
+
   return issues;
 }
 

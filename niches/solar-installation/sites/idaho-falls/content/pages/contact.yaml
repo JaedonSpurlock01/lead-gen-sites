@@ -1,0 +1,23 @@
+title: Free Solar Estimate in Idaho Falls, ID | Contact Us
+description: Call (208) 497-5539 or request a free estimate for solar panel installation, repair, or cleaning in Idaho Falls, Idaho.
+hero:
+  variant: content
+  breadcrumb: Contact
+  eyebrow: Idaho Falls, Idaho
+  h1: Request a Free Idaho Falls Solar Estimate
+  lede: Tell us whether you need solar panel installation, repair, or cleaning in Idaho Falls. Share what you know about the property and system. You do not need every detail to get started.
+blocks:
+  - type: form
+    eyebrow: Helpful details
+    heading: What to include with your request
+    bullets:
+      - Choose installation, repair, or cleaning.
+      - Describe the property, roof or ground area, and safe access details.
+      - For installation, mention power use, shade, roof age, and future electrical needs.
+      - For repair, include symptoms, error codes, system age, and recent weather or roof work.
+      - For cleaning, include panel count, roof height and slope, buildup, and water access.
+    formHeading: Request a Free Solar Estimate
+    aside:
+      heading: Call or email
+  - type: links
+    tone: alt

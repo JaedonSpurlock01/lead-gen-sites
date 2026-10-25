@@ -21,5 +21,8 @@ describe("nicheSchema", () => {
     expect(
       nicheSchema.safeParse({ ...nicheFixture, theme: { colors: { ...nicheFixture.theme.colors, ink: "beige" }, themeColor: "#000" } }).success,
     ).toBe(false);
+    expect(
+      nicheSchema.safeParse({ ...nicheFixture, blocks: ["not-a-block"] }).success,
+    ).toBe(false);
   });
 });

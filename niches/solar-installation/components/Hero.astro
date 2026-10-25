@@ -1,0 +1,67 @@
+---
+import { Image } from "astro:assets";
+import { renderInline } from "@lead-gen/engine/inline";
+import copy from "virtual:copy";
+import siteAssets from "virtual:site-assets";
+import site from "virtual:site";
+import type { Hero } from "@lead-gen/schema";
+
+interface Props {
+  hero: Hero;
+}
+
+const { hero } = Astro.props;
+const { business } = site;
+const primaryCta = copy.strings?.primaryCta;
+const image = hero.image ? siteAssets[hero.image] : undefined;
+const lede = hero.lede ? renderInline(hero.lede) : "";
+---
+
+{hero.variant === "split" && image && (
+  <section class="hero">
+    <div class="hero__grid">
+      <div class="hero__content">
+        {hero.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+        <h1>{hero.h1}</h1>
+        <p class="lede" set:html={lede} />
+        <div class="cta-row">
+          <a class="button button--light" href="/contact/">{primaryCta}</a>
+          <a class="button" href={`tel:${business.phoneTel}`}>Call {business.phoneDisplay}</a>
+        </div>
+      </div>
+      <div class="hero__image">
+        <Image src={image} alt={hero.imageAlt ?? ""} width={1600} height={900} loading="eager" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+)}
+{hero.variant === "content" && (
+  <header class="content-hero">
+    <div class="wrap">
+      {hero.breadcrumb && <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / {hero.breadcrumb}</nav>}
+      {hero.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+      <h1>{hero.h1}</h1>
+      <p class="lede narrow" set:html={lede} />
+      {hero.breadcrumb?.startsWith("Services") && (
+        <div class="cta-row">
+          <a class="button button--light" href="/contact/">{primaryCta}</a>
+          <a class="button" href={`tel:${business.phoneTel}`}>Call {business.phoneDisplay}</a>
+        </div>
+      )}
+    </div>
+  </header>
+)}
+{hero.variant === "plain" && (
+  <section class="content-hero">
+    <div class="wrap narrow">
+      {hero.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+      <h1>{hero.h1}</h1>
+      <p class="lede" set:html={lede} />
+      <div class="cta-row">
+        {hero.actions?.map((action) => (
+          <a class:list={["button", action.style === "primary" && "button--light"]} href={action.href}>{action.text}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

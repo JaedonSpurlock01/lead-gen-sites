@@ -1,0 +1,14 @@
+title: Page Not Found | Idaho Falls Solar Installation
+description: The requested page could not be found.
+noindex: true
+hero:
+  variant: plain
+  eyebrow: 404 error
+  h1: That page is not available
+  lede: Use the homepage to explore solar panel installation information, or contact us about your project.
+  actions:
+    - text: Return home
+      href: /
+    - text: Contact us
+      href: /contact/
+      style: secondary

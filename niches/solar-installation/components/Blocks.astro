@@ -1,0 +1,230 @@
+---
+// Renders block content with the original solar-panel-sites markup and classes.
+import { Image } from "astro:assets";
+import { renderInline } from "@lead-gen/engine/inline";
+import copy from "virtual:copy";
+import { getPage } from "virtual:content";
+import niche from "virtual:niche";
+import siteAssets from "virtual:site-assets";
+import site from "virtual:site";
+import type { Block } from "@lead-gen/schema";
+import InternalLinks from "./InternalLinks.astro";
+import LeadForm from "./LeadForm.astro";
+import { formattedHours, servicePath } from "./format";
+
+interface Props {
+  blocks: Block[];
+  currentSlug?: string;
+}
+
+const { blocks, currentSlug } = Astro.props;
+const { business } = site;
+const html = (text: string) => renderInline(text, { outboundLinks: site.outboundLinks, outboundClass: "outbound-link" });
+const tint = (tone: string) => tone === "alt" && "section--tint";
+---
+
+{blocks.map((block) => {
+  switch (block.type) {
+    case "trust":
+      return (
+        <div class="fact-strip">
+          <div class="wrap fact-strip__inner">{block.items.map((item) => <div class="fact">{item}</div>)}</div>
+        </div>
+      );
+    case "form":
+      return block.bullets ? (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class="wrap split" style="align-items:start">
+            <div>
+              {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+              <h2>{block.heading}</h2>
+              <ul>{block.bullets.map((item) => <li set:html={html(item)} />)}</ul>
+              <div class="card" style="margin-top:2rem">
+                <h3>{block.aside?.heading ?? "Call or email"}</h3>
+                <p><a class="text-link" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a></p>
+                <p><a class="text-link" href={`mailto:${business.email}`}>{business.email}</a></p>
+                <p>{formattedHours(site.hours)}</p>
+                <p>Service area: {business.serviceAreaLabel}</p>
+              </div>
+            </div>
+            <div class="card">
+              <h2>{block.formHeading ?? copy.strings?.primaryCta}</h2>
+              <LeadForm />
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class="wrap split" style="align-items:start">
+            <div>
+              {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+              <h2>{block.heading}</h2>
+              {block.intro && <p class="lede">{block.intro}</p>}
+              {block.paragraphs?.map((paragraph) => <p set:html={html(paragraph)} />)}
+            </div>
+            <div class="card">
+              <h3>{block.formHeading}</h3>
+              <LeadForm />
+            </div>
+          </div>
+        </section>
+      );
+    case "prose": {
+      const image = block.image ? siteAssets[block.image] : undefined;
+      if (block.cards) {
+        return (
+          <section class:list={["section", tint(block.tone)]}>
+            <div class="wrap">
+              <div class:list={["narrow", !block.lede && "prose"]}>
+                {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+                {block.heading && <h2>{block.heading}</h2>}
+                {block.paragraphs.map((paragraph) => <p class:list={[block.lede && "lede"]} set:html={html(paragraph)} />)}
+              </div>
+              <div class="grid-3" style="margin-top:3rem">
+                {block.cards.map((card, index) => (
+                  <article class="card">
+                    {block.numbered && <span class="card__number">{index + 1}</span>}
+                    <h3>{card.heading}</h3>
+                    {card.text && <p set:html={html(card.text)} />}
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      }
+      return (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class:list={["wrap", image && "split"]}>
+            <div class="prose">
+              {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+              {block.heading && <h2>{block.heading}</h2>}
+              {block.paragraphs.map((paragraph) => <p set:html={html(paragraph)} />)}
+              {block.bullets && <ul>{block.bullets.map((bullet) => <li set:html={html(bullet)} />)}</ul>}
+            </div>
+            {image && <Image src={image} alt={block.imageAlt ?? ""} width={1200} height={900} loading="lazy" decoding="async" />}
+          </div>
+        </section>
+      );
+    }
+    case "services":
+      return (
+        <section id="services" class:list={["section", tint(block.tone)]}>
+          <div class="wrap">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2>{block.heading}</h2>
+            {block.intro && <p class="lede narrow">{block.intro}</p>}
+            <div class="service-list" style="margin-top:2rem">
+              {niche.services.map((service) => {
+                const item = block.items?.find((entry) => entry.slug === service.slug);
+                return (
+                  <article class="service-card">
+                    <Image src={siteAssets[service.imageSlot ?? "hero"]!} alt={item?.imageAlt ?? service.nav} width={1600} height={900} loading="lazy" decoding="async" />
+                    <div class="service-card__body">
+                      <h3>{service.nav}</h3>
+                      <p>{item?.text ?? getPage(`services/${service.slug}`).hero?.lede}</p>
+                      <a class="text-link" href={servicePath(service.slug)}>Explore {service.nav} →</a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      );
+    case "steps":
+      return (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class="wrap split">
+            {block.image && <Image src={siteAssets[block.image]!} alt={block.imageAlt ?? ""} width={1600} height={900} loading="lazy" decoding="async" />}
+            <div>
+              {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+              <h2>{block.heading}</h2>
+              {block.intro && <p class="lede">{block.intro}</p>}
+            </div>
+          </div>
+          <div class="wrap timeline" style="margin-top:4rem">
+            {block.steps.map((step) => (
+              <article>
+                <h3>{step.heading}</h3>
+                <p>{step.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    case "faq":
+      return (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class="wrap split">
+            <div>
+              {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+              <h2>{block.heading}</h2>
+              {block.intro && <p class="lede">{block.intro}</p>}
+            </div>
+            <div class="faq">
+              {block.items.map((item) => (
+                <details>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    case "cards":
+      return (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class="wrap">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2>{block.heading}</h2>
+            <div class="grid-3" style="margin-top:2rem">
+              {block.cards.map((card) => (
+                <article class="card">
+                  <h3>{card.heading}</h3>
+                  {card.text && <p set:html={html(card.text)} />}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    case "article": {
+      const image = block.image ? siteAssets[block.image] : undefined;
+      const sections = block.sections.map((section) => (
+        <section>
+          <h2>{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => <p set:html={html(paragraph)} />)}
+          {section.bullets && <ul>{section.bullets.map((bullet) => <li set:html={html(bullet)} />)}</ul>}
+        </section>
+      ));
+      return block.imagePosition === "side" ? (
+        <section class="section">
+          <div class="wrap split">
+            <div class="prose">{sections}</div>
+            {image && <Image src={image} alt={block.imageAlt ?? ""} width={1600} height={900} loading="lazy" decoding="async" />}
+          </div>
+        </section>
+      ) : (
+        <article class="section">
+          <div class="wrap">
+            {image && <Image class="service-image" src={image} alt={block.imageAlt ?? ""} width={1600} height={900} loading="eager" fetchpriority="high" />}
+            <div class="prose narrow">
+              {sections}
+              {block.closing && <p set:html={html(block.closing)} />}
+            </div>
+          </div>
+        </article>
+      );
+    }
+    case "links":
+      return (
+        <section class:list={["section", tint(block.tone)]}>
+          <div class="wrap"><InternalLinks currentSlug={currentSlug} /></div>
+        </section>
+      );
+    default:
+      throw new Error(`solar-installation cannot render block "${block.type}"`);
+  }
+})}

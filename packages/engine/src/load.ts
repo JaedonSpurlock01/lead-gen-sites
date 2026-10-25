@@ -3,6 +3,8 @@ import { basename, dirname, join, resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
 import {
   applyTokensDeep,
+  blockPageSchema,
+  type BlockPage,
   cloudflareConfigSchema,
   copySchema,
   environmentsConfigSchema,
@@ -97,14 +99,30 @@ export function loadNiche(nicheDir: string): Niche {
   return niche;
 }
 
-export function loadCopy(nicheDir: string, site: ResolvedSite, tokens = tokenContext(site)): Copy {
-  const dir = join(nicheDir, "copy");
-  if (!existsSync(dir)) return {};
-  const merged: Record<string, unknown> = {};
-  for (const name of readdirSync(dir).filter((file) => /\.ya?ml$/.test(file)).sort()) {
-    const data = parseYaml(readFileSync(join(dir, name), "utf8")) as Record<string, unknown> | null;
-    Object.assign(merged, data ?? {});
+function readYaml(path: string): unknown {
+  try {
+    return parseYaml(readFileSync(path, "utf8"));
+  } catch (error) {
+    throw new LoadError(`${path} is not valid YAML: ${(error as Error).message}`);
   }
+}
+
+/**
+ * Niche copy (`copy/*.yaml`) with the site's optional `copy.yaml` on top: top-level keys from the
+ * site replace the niche's, except `strings`, which merge key by key.
+ */
+export function loadCopy(nicheDir: string, site: ResolvedSite, tokens = tokenContext(site), siteDir?: string): Copy {
+  const dir = join(nicheDir, "copy");
+  const merged: Record<string, unknown> = {};
+  if (existsSync(dir)) {
+    for (const name of readdirSync(dir).filter((file) => /\.ya?ml$/.test(file)).sort()) {
+      Object.assign(merged, (readYaml(join(dir, name)) as Record<string, unknown> | null) ?? {});
+    }
+  }
+  const siteCopy = siteDir && existsSync(join(siteDir, "copy.yaml")) ? ((readYaml(join(siteDir, "copy.yaml")) as Record<string, unknown> | null) ?? {}) : {};
+  const strings = { ...((merged.strings as object) ?? {}), ...((siteCopy.strings as object) ?? {}) };
+  Object.assign(merged, siteCopy);
+  if (Object.keys(strings).length > 0) merged.strings = strings;
   const copy = parseWith(copySchema, merged, `${dir}/*.yaml`);
   try {
     return applyTokensDeep(copy, tokens);
@@ -119,7 +137,10 @@ export type LoadedSite = {
   siteDir: string;
   niche: Niche;
   site: ResolvedSite;
+  /** Markdown service pages (niches with serviceContent "markdown"). */
   services: ServicePage[];
+  /** Block pages: niche.json `pages` by name, plus `services/<slug>` for niches with serviceContent "blocks". */
+  pages: Record<string, BlockPage>;
   copy: Copy;
   /** Image slot -> absolute file path. */
   assetPaths: Record<string, string>;
@@ -145,21 +166,51 @@ export function loadSite(nicheDir: string, siteId: string): LoadedSite {
   if (issues.length > 0) throw new LoadError(`${siteFile} does not fit niche ${niche.id}:\n${issues.map((issue) => `  ${issue}`).join("\n")}`);
 
   const servicesDir = join(siteDir, "content", "services");
+  const extension = niche.serviceContent === "blocks" ? ".yaml" : ".md";
   const present = existsSync(servicesDir)
-    ? readdirSync(servicesDir).filter((file) => file.endsWith(".md")).map((file) => file.slice(0, -3))
+    ? readdirSync(servicesDir).filter((file) => file.endsWith(extension)).map((file) => file.slice(0, -extension.length))
     : [];
   const pageIssues = validateServicePages(present, niche);
   if (pageIssues.length > 0) throw new LoadError(`${siteDir}:\n${pageIssues.map((issue) => `  ${issue}`).join("\n")}`);
   const tokens = tokenContext(site);
-  const services = niche.services.map((service) => {
-    const file = join(servicesDir, `${service.slug}.md`);
+
+  const loadBlockPage = (file: string): BlockPage => {
+    if (!existsSync(file)) throw new LoadError(`${file} is missing (niche.json requires it)`);
     try {
-      return applyTokensDeep(parseServicePage(readFileSync(file, "utf8"), service), tokens);
+      const page = applyTokensDeep(blockPageSchema.parse(readYaml(file)), tokens);
+      const unsupported = [...new Set(page.blocks.map((block) => block.type).filter((type) => !niche.blocks.includes(type)))];
+      if (unsupported.length > 0) throw new LoadError(`block type(s) ${unsupported.join(", ")} are not in niche.json blocks`);
+      const slots = new Set(niche.imageSlots.map((slot) => slot.name));
+      const images = [page.hero?.image, ...page.blocks.map((block) => ("image" in block ? block.image : undefined))].filter(Boolean) as string[];
+      for (const imageSlot of images) {
+        if (!slots.has(imageSlot)) throw new LoadError(`image "${imageSlot}" is not an image slot in niche.json`);
+        if (!site.assets[imageSlot]) throw new LoadError(`image "${imageSlot}" has no file in site.json assets`);
+      }
+      return page;
     } catch (error) {
       const message = error instanceof ZodError ? formatZod(error) : (error as Error).message;
       throw new LoadError(`${file}: ${message}`);
     }
-  });
+  };
+
+  const services =
+    niche.serviceContent === "blocks"
+      ? []
+      : niche.services.map((service) => {
+          const file = join(servicesDir, `${service.slug}.md`);
+          try {
+            return applyTokensDeep(parseServicePage(readFileSync(file, "utf8"), service), tokens);
+          } catch (error) {
+            const message = error instanceof ZodError ? formatZod(error) : (error as Error).message;
+            throw new LoadError(`${file}: ${message}`);
+          }
+        });
+
+  const pages: Record<string, BlockPage> = {};
+  for (const name of niche.pages) pages[name] = loadBlockPage(join(siteDir, "content", "pages", `${name}.yaml`));
+  if (niche.serviceContent === "blocks") {
+    for (const service of niche.services) pages[`services/${service.slug}`] = loadBlockPage(join(servicesDir, `${service.slug}.yaml`));
+  }
 
   const assetPaths: Record<string, string> = {};
   for (const [slot, relativePath] of Object.entries(site.assets)) {
@@ -169,7 +220,7 @@ export function loadSite(nicheDir: string, siteId: string): LoadedSite {
     assetPaths[slot] = absolute;
   }
 
-  return { root, nicheDir, siteDir, niche, site, services, copy: loadCopy(nicheDir, site, tokens), assetPaths };
+  return { root, nicheDir, siteDir, niche, site, services, pages, copy: loadCopy(nicheDir, site, tokens, siteDir), assetPaths };
 }
 
 export function requireSiteId(): string {

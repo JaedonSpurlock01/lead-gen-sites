@@ -1,0 +1,44 @@
+{
+  "id": "haines-city",
+  "domain": "dumpsterrentalshainescity.com",
+  "cloudflareProject": "dumpsterrentalhainescity",
+  "canary": false,
+  "market": {},
+  "assets": {
+    "logo": "assets/logo.png",
+    "hero": "assets/hero.jpg",
+    "delivery": "assets/delivery.jpg",
+    "residential": "assets/residential.jpg",
+    "construction": "assets/construction.jpg",
+    "commercial": "assets/commercial.jpg"
+  },
+  "business": {
+    "name": "Dumpster Rentals Haines City",
+    "phoneDisplay": "(863) 695-2087",
+    "phoneTel": "+18636952087",
+    "email": "info@dumpsterrentalshainescity.com",
+    "city": "Haines City",
+    "region": "FL",
+    "regionName": "Florida",
+    "country": "US",
+    "priceRange": "$$",
+    "serviceAreaLabel": "Haines City, Florida"
+  },
+  "socials": [
+    { "name": "Facebook", "href": "https://facebook.com" },
+    { "name": "Instagram", "href": "https://instagram.com" },
+    { "name": "Twitter", "href": "https://x.com" },
+    { "name": "YouTube", "href": "https://youtube.com" }
+  ],
+  "hours": [
+    {
+      "days": "Mon - Sat",
+      "time": "7am - 7pm",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "07:00",
+      "closes": "19:00"
+    }
+  ],
+  "serviceOptions": ["Residential Dumpster Rental", "Construction Dumpster Rental", "Commercial Dumpster Rental"],
+  "outboundLinks": []
+}

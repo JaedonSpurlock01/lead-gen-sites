@@ -43,9 +43,10 @@ Nothing writes to Cloudflare without `--apply`. Always type `pnpm run deploy`. W
 1. Copy the template: `cp -R niches/_template niches/roofing`.
 2. In `niche.json`, set the `id`, `name`, `schemaOrgType`, services, image slots, market fields and theme colors. Rename the package in `package.json` to `@niche/roofing`.
 3. Replace every `TEMPLATE` line in `copy/shared.yaml`. Rewrite the files in `prompts/` for this trade.
-4. Change the pages and sections in `pages/` and `components/` as needed. Code that only this niche uses stays in the niche.
-5. Update `sites/_template/` so new sites start with the right services and images.
-6. Run `pnpm install`, then add the first site with `pnpm new-site roofing <id> --domain <apex>`.
+4. Change the pages and sections in `pages/` and `components/` as needed. Code that only this niche uses stays in the niche. For a niche whose pages are mostly copy, use block pages like `dumpster-rental` and `solar-installation`: set `pages`, `serviceContent: "blocks"` and `blocks` in `niche.json`, and write each page as YAML.
+5. Set the lead form in `niche.json` under `form`: each field's name, the label Tracer receives, and its rules.
+6. Update `sites/_template/` so new sites start with the right services and images.
+7. Run `pnpm install`, then add the first site with `pnpm new-site roofing <id> --domain <apex>`.
 
 ## Rotate the Tracer key
 

@@ -68,7 +68,7 @@ export async function runBuild(root: string, target: string | undefined, options
       logger.log(`built   ${refKey(ref)}`);
       return { ok: true, message: `built\0${hash}\0${wranglerConfig}` };
     },
-    { concurrency: options.concurrency ?? 2, maxAttempts: 1 },
+    { concurrency: options.concurrency ?? 4, maxAttempts: 1 },
   );
 
   const out: BuildResult[] = results.map((result) => {

@@ -1,0 +1,229 @@
+---
+// Renders block content with the original dumpster-rental-haines-city markup and classes.
+import { Image } from "astro:assets";
+import { renderInline } from "@lead-gen/engine/inline";
+import { getPage } from "virtual:content";
+import siteAssets from "virtual:site-assets";
+import niche from "virtual:niche";
+import site from "virtual:site";
+import type { Block } from "@lead-gen/schema";
+import CtaBand from "./CtaBand.astro";
+import LeadForm from "./LeadForm.astro";
+import { hoursDisplay, telHref } from "./format";
+
+interface Props {
+  blocks: Block[];
+}
+
+const { blocks } = Astro.props;
+const { business } = site;
+const html = (text: string) => renderInline(text, { outboundLinks: site.outboundLinks });
+const sectionClass = (tone: string) => ["section", tone === "alt" && "section--cream", tone === "dark" && "section--dark"];
+const grid = (columns: number | undefined) => `grid grid--${columns ?? 3}`;
+const icons: Record<string, string> = {
+  shield: '<path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/>',
+  guidance: '<path d="m14 7 3-3 3 3-3 3"/><path d="M17 4v10a6 6 0 0 1-6 6H4"/><path d="m7 17-3 3 3 3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  home: '<path d="M4 20h16"/><path d="M6 20V9l6-5 6 5v11"/><path d="M9 20v-6h6v6"/>',
+};
+const serviceCard = (slug: string) => {
+  const service = niche.services.find((item) => item.slug === slug);
+  if (!service) throw new Error(`services block: unknown service ${slug}`);
+  return service;
+};
+---
+
+{blocks.map((block) => {
+  switch (block.type) {
+    case "trust":
+      return (
+        <div class="trust-strip" aria-label="Service highlights">
+          <div class="container trust-strip__inner">{block.items.map((item) => <span>{item}</span>)}</div>
+        </div>
+      );
+    case "prose": {
+      const image = block.image ? siteAssets[block.image] : undefined;
+      const body = (
+        <Fragment>
+          {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+          {block.heading && <h2>{block.heading}</h2>}
+          {block.paragraphs.map((paragraph) => <p set:html={html(paragraph)} />)}
+          {block.bullets && <ul class:list={[block.bulletStyle === "check" && "check-list"]}>{block.bullets.map((bullet) => <li set:html={html(bullet)} />)}</ul>}
+          {block.closing?.map((paragraph) => <p set:html={html(paragraph)} />)}
+          {block.link && <a class="text-link" href={block.link.href}>{block.link.text}</a>}
+        </Fragment>
+      );
+      if (image) {
+        return (
+          <section class:list={sectionClass(block.tone)}>
+            <div class="container media-grid">
+              <div class="prose">{body}</div>
+              <div class="media-frame">
+                <Image src={image} alt={block.imageAlt ?? ""} width={896} height={504} loading="lazy" decoding="async" quality={55} />
+              </div>
+            </div>
+          </section>
+        );
+      }
+      if (block.aside) {
+        return (
+          <section class:list={sectionClass(block.tone)}>
+            <div class="container media-grid">
+              <div>{body}</div>
+              <div class="card">
+                <h3>{block.aside.heading}</h3>
+                {block.aside.bullets && <ul class="check-list">{block.aside.bullets.map((bullet) => <li set:html={html(bullet)} />)}</ul>}
+                {block.aside.after?.map((paragraph) => <p set:html={html(paragraph)} />)}
+              </div>
+            </div>
+          </section>
+        );
+      }
+      return (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container prose">{body}</div>
+        </section>
+      );
+    }
+    case "columns": {
+      const column = (item: (typeof block.columns)[number]) => (
+        <div class="prose">
+          {item.eyebrow && <p class="eyebrow">{item.eyebrow}</p>}
+          {item.heading && <h2>{item.heading}</h2>}
+          {item.paragraphs.map((paragraph) => <p set:html={html(paragraph)} />)}
+          {item.bullets && <ul>{item.bullets.map((bullet) => <li set:html={html(bullet)} />)}</ul>}
+        </div>
+      );
+      return block.heading ? (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2>{block.heading}</h2>
+            <div class="grid grid--2">{block.columns.map(column)}</div>
+          </div>
+        </section>
+      ) : (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container grid grid--2">{block.columns.map(column)}</div>
+        </section>
+      );
+    }
+    case "cards":
+      return (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2>{block.heading}</h2>
+            {block.intro && <p class="section-intro">{block.intro}</p>}
+            <div class={grid(block.columns)}>
+              {block.cards.map((card) => (
+                <article class="card">
+                  {card.icon && (
+                    <span class="icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={icons[card.icon] ?? ""} />
+                    </span>
+                  )}
+                  <h3>{card.heading}</h3>
+                  {card.text && <p set:html={html(card.text)} />}
+                  {card.paragraphs?.map((paragraph) => <p set:html={html(paragraph)} />)}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    case "steps":
+      return (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2>{block.heading}</h2>
+            {block.intro && <p class="section-intro">{block.intro}</p>}
+            <ol class="timeline">
+              {block.steps.map((step) => (
+                <li>
+                  <h3>{step.heading}</h3>
+                  <p>{step.text}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      );
+    case "services":
+      return (
+        <section class:list={sectionClass(block.tone)} aria-labelledby="services-heading">
+          <div class="container">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2 id="services-heading">{block.heading}</h2>
+            {block.intro && <p class="section-intro">{block.intro}</p>}
+            <div class="grid grid--3">
+              {(block.items ?? niche.services.map((service) => ({ slug: service.slug, text: undefined, imageAlt: undefined }))).map((item) => {
+                const service = serviceCard(item.slug);
+                const text = item.text ?? getPage(`services/${item.slug}`).hero?.lede ?? "";
+                return (
+                  <article class="card service-card">
+                    <Image src={siteAssets[service.imageSlot ?? "hero"]!} alt={item.imageAlt ?? service.formValue} width={640} height={480} loading="lazy" decoding="async" quality={55} />
+                    <div class="service-card__body">
+                      <h3>{service.formValue}</h3>
+                      <p>{text}</p>
+                      <a class="text-link" href={`/services/${service.slug}/`}>Explore {service.nav} →</a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      );
+    case "faq":
+      return (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container">
+            {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+            <h2>{block.heading}</h2>
+            {block.intro && <p class="section-intro">{block.intro}</p>}
+            <div class="faq-list">
+              {block.items.map((faq) => (
+                <details>
+                  <summary>{faq.question}</summary>
+                  <div class="faq-answer">
+                    <p>{faq.answer}</p>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    case "form":
+      return (
+        <section class:list={sectionClass(block.tone)}>
+          <div class="container lead-layout">
+            <div>
+              {block.eyebrow && <p class="eyebrow">{block.eyebrow}</p>}
+              <h2>{block.heading}</h2>
+              {block.paragraphs?.map((paragraph) => <p set:html={html(paragraph)} />)}
+              <LeadForm />
+            </div>
+            {block.aside && (
+              <aside class="card">
+                <h2>{block.aside.heading}</h2>
+                {block.aside.paragraphs?.map((paragraph) => <p set:html={html(paragraph)} />)}
+                <p><strong>Phone</strong><br /><a href={telHref(site)}>{business.phoneDisplay}</a></p>
+                <p><strong>Email</strong><br /><a href={`mailto:${business.email}`}>{business.email}</a></p>
+                <p><strong>Service area</strong><br />{business.serviceAreaLabel}</p>
+                <p><strong>Hours</strong><br />{hoursDisplay(site.hours)}</p>
+                {block.aside.bulletsHeading && <h3>{block.aside.bulletsHeading}</h3>}
+                {block.aside.bullets && <ul class="check-list">{block.aside.bullets.map((bullet) => <li set:html={html(bullet)} />)}</ul>}
+              </aside>
+            )}
+          </div>
+        </section>
+      );
+    case "cta":
+      return <CtaBand title={block.heading} text={block.text} />;
+    default:
+      throw new Error(`dumpster-rental cannot render block "${block.type}"`);
+  }
+})}

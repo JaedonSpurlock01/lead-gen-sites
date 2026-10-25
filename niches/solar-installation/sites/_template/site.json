@@ -1,0 +1,64 @@
+{
+  "id": "city-name",
+  "domain": "example.com",
+  "cloudflareProject": "solar-installation-city-name",
+  "canary": false,
+  "market": {
+    "localContextLabel": "TEMPLATE: research this for the new city",
+    "localContextSummary": "TEMPLATE: research this for the new city",
+    "serviceSeasonality": "TEMPLATE: research this for the new city"
+  },
+  "assets": {
+    "logo": "assets/logo.png",
+    "hero": "assets/hero.webp",
+    "process": "assets/process.webp",
+    "installation": "assets/solar-panel-installation.webp",
+    "repair": "assets/solar-panel-repair.webp",
+    "cleaning": "assets/solar-panel-cleaning.webp",
+    "section1": "assets/site-assessment.webp",
+    "section2": "assets/system-design.webp",
+    "section3": "assets/permitting.webp"
+  },
+  "business": {
+    "name": "City Business Name",
+    "phoneDisplay": "(000) 000-0000",
+    "phoneTel": "+10000000000",
+    "email": "info@example.com",
+    "city": "City",
+    "region": "ST",
+    "regionName": "State",
+    "country": "US",
+    "priceRange": "Varies by project",
+    "serviceAreaLabel": "City, State"
+  },
+  "socials": [],
+  "hours": [
+    {
+      "days": "Monday, Tuesday, Wednesday, Thursday, Friday",
+      "time": "9 AM–5 PM",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "17:00"
+    },
+    {
+      "days": "Saturday, Sunday",
+      "time": "Closed",
+      "dayOfWeek": [
+        "Saturday",
+        "Sunday"
+      ]
+    }
+  ],
+  "serviceOptions": [
+    "Solar Panel Installation",
+    "Solar Panel Repair",
+    "Solar Panel Cleaning"
+  ],
+  "outboundLinks": []
+}

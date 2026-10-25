@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets";
+import copy from "virtual:copy";
+import niche from "virtual:niche";
+import siteAssets from "virtual:site-assets";
+import site from "virtual:site";
+import theme from "virtual:theme";
+import "../styles/solar.css";
+import { canonicalPath, formattedHours, openingHoursSpecification, servicePath } from "./format";
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+}
+
+const { title, description, noindex = false, schema = [] } = Astro.props;
+const { business } = site;
+const canonical = new URL(canonicalPath(Astro.url.pathname), site.url).toString();
+const hero = siteAssets.hero!;
+const logo = siteAssets.logo;
+const primaryCta = copy.strings?.primaryCta ?? "Request a Free Estimate";
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": niche.schemaOrgType,
+  name: business.name,
+  url: site.url,
+  image: new URL(hero.src, site.url).toString(),
+  ...(logo ? { logo: new URL(logo.src, site.url).toString() } : {}),
+  telephone: business.phoneTel,
+  email: business.email,
+  priceRange: business.priceRange,
+  openingHoursSpecification: openingHoursSpecification(site.hours),
+  areaServed: {
+    "@type": "City",
+    name: `${business.city}, ${business.regionName}`,
+  },
+};
+const schemas = [businessSchema, ...schema];
+const { colors } = theme;
+const vars = `:root{--primary:${colors.primary};--primaryDark:${colors.primaryDark};--accent:${colors.accent};--ink:${colors.ink};--paper:${colors.paper}}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {logo && <link rel="icon" type="image/png" href={logo.src} />}
+    <meta name="theme-color" content={colors.primaryDark} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <script type="application/ld+json" set:html={JSON.stringify(schemas)} />
+    <style is:inline set:html={vars}></style>
+  </head>
+  <body>
+    <header class="header header--sticky">
+      <div class="wrap header__inner">
+        <a class="brand" href="/" aria-label={`${business.name} home`}>
+          {logo && <Image class="brand__mark" src={logo} alt="" width={54} height={54} loading="eager" />}
+          <span>{business.name}<small>{business.serviceAreaLabel}</small></span>
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="/about/">About</a>
+          <div class="nav__services">
+            <a class="nav__services-trigger" href="/#services" aria-haspopup="true">
+              Services <span class="nav__arrow" aria-hidden="true"></span>
+            </a>
+            <div class="nav__drop">
+              {niche.services.map((service) => <a href={servicePath(service.slug)}>{service.nav}</a>)}
+            </div>
+          </div>
+          <a href="/contact/">Contact</a>
+          <a class="button" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+        </nav>
+        <details class="mobile-nav">
+          <summary>Menu</summary>
+          <nav class="mobile-nav__panel" aria-label="Mobile navigation">
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            {niche.services.map((service) => <a href={servicePath(service.slug)}>{service.nav}</a>)}
+            <a href="/contact/">Contact</a>
+            <a href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <section class="cta-band">
+      <div class="wrap cta-band__inner">
+        <div>
+          <p class="eyebrow">Plan your project</p>
+          <h2>{primaryCta}</h2>
+          <p>{copy.strings?.ctaBandText}</p>
+        </div>
+        <div class="cta-row">
+          <a class="button button--light" href="/contact/">{primaryCta}</a>
+          <a class="button" href={`tel:${business.phoneTel}`}>Call {business.phoneDisplay}</a>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__grid">
+          <div>
+            <h2>{business.name}</h2>
+            <p>{niche.name} inquiries for property owners in {business.serviceAreaLabel}.</p>
+          </div>
+          <div>
+            <h3>Contact</h3>
+            <p><a href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a><br /><a href={`mailto:${business.email}`}>{business.email}</a></p>
+          </div>
+          <div>
+            <h3>Hours</h3>
+            <p>{formattedHours(site.hours)}</p>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <p>Serving {business.serviceAreaLabel}. No street address is published for this service-area business.</p>
+          <p>&copy; {new Date().getFullYear()} {business.name}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

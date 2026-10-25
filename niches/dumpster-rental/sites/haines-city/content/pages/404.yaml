@@ -1,0 +1,16 @@
+title: Page Not Found | Dumpster Rentals Haines City
+description: The page you requested could not be found.
+noindex: true
+hero:
+  variant: plain
+  eyebrow: 404 error
+  h1: This page has been hauled away
+  lede: The address may be outdated or typed incorrectly. Return to the homepage or request a free dumpster rental estimate.
+  actions:
+    - text: Go to the Homepage
+      href: /
+      style: primary
+    - text: Request an Estimate
+      href: /contact/
+      style: secondary
+blocks: []

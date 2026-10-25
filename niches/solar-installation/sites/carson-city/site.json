@@ -1,0 +1,81 @@
+{
+  "id": "carson-city",
+  "domain": "carsoncitysolarinstallation.com",
+  "cloudflareProject": "carson-city-solar-installation",
+  "canary": false,
+  "market": {
+    "localContextLabel": "High-desert solar planning",
+    "localContextSummary": "Carson City combines abundant sunshine with cold winters, occasional snow, strong temperature swings, and local structural, electrical, permitting, and utility-interconnection requirements.",
+    "serviceSeasonality": "Consultations and planning are available year-round; field scheduling depends on roof, weather, permit, and utility conditions."
+  },
+  "assets": {
+    "logo": "assets/logo.png",
+    "hero": "assets/hero.webp",
+    "process": "assets/process.webp",
+    "installation": "assets/solar-panel-installation.webp",
+    "repair": "assets/solar-panel-repair.webp",
+    "cleaning": "assets/solar-panel-cleaning.webp",
+    "section1": "assets/site-assessment.webp",
+    "section2": "assets/system-design.webp",
+    "section3": "assets/permitting.webp"
+  },
+  "business": {
+    "name": "Carson City Solar Installation",
+    "phoneDisplay": "(775) 306-4278",
+    "phoneTel": "+17753064278",
+    "email": "info@carsoncitysolarinstallation.com",
+    "city": "Carson City",
+    "region": "NV",
+    "regionName": "Nevada",
+    "country": "US",
+    "latitude": "39.1638",
+    "longitude": "-119.7674",
+    "priceRange": "Varies by project",
+    "serviceAreaLabel": "Carson City, Nevada"
+  },
+  "socials": [],
+  "hours": [
+    {
+      "days": "Monday, Tuesday, Wednesday, Thursday, Friday",
+      "time": "9 AM–5 PM",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "17:00"
+    },
+    {
+      "days": "Saturday, Sunday",
+      "time": "Closed",
+      "dayOfWeek": [
+        "Saturday",
+        "Sunday"
+      ]
+    }
+  ],
+  "serviceOptions": [
+    "Solar Panel Installation",
+    "Solar Panel Repair",
+    "Solar Panel Cleaning"
+  ],
+  "outboundLinks": [
+    {
+      "id": "california-solar-exit",
+      "href": "https://www.californiasolarexit.com/",
+      "text": "Solar Panel Cancellation"
+    }
+  ],
+  "theme": {
+    "colors": {
+      "primary": "#176452",
+      "primaryDark": "#0b3028",
+      "accent": "#f2b84b",
+      "ink": "#15231f",
+      "paper": "#f3f6f1"
+    }
+  }
+}

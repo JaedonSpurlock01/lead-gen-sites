@@ -1,0 +1,13 @@
+# TEMPLATE: copied from sites/carson-city as a structure reference. Rewrite every value for the new city
+# with niche prompts/, then delete these two lines. pnpm check fails while they remain.
+title: Thank You | Carson City Solar Installation
+description: Your project request has been received.
+noindex: true
+hero:
+  variant: plain
+  eyebrow: Request received
+  h1: Thank you for telling us about your project
+  lede: Your form was submitted. If you need to add a detail, call [(775) 306-4278](tel:+17753064278) during business hours.
+  actions:
+    - text: Return home
+      href: /

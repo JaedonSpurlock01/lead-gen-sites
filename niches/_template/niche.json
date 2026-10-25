@@ -89,5 +89,41 @@
     "Niche Name",
     "Service One",
     "Service Two"
-  ]
+  ],
+  "form": {
+    "thankYouPath": "/thank-you/",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Name",
+        "kind": "text",
+        "maxLength": 100
+      },
+      {
+        "name": "phone",
+        "label": "Phone",
+        "kind": "phone",
+        "maxLength": 30,
+        "minDigits": 10
+      },
+      {
+        "name": "email",
+        "label": "Email",
+        "kind": "email",
+        "maxLength": 200
+      },
+      {
+        "name": "service",
+        "label": "Service",
+        "kind": "service",
+        "maxLength": 100
+      },
+      {
+        "name": "details",
+        "label": "Project details",
+        "kind": "textarea",
+        "maxLength": 2000
+      }
+    ]
+  }
 }

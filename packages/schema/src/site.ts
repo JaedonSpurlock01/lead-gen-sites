@@ -18,8 +18,8 @@ export const businessSchema = z.strictObject({
   /** Full region name used in JSON-LD, e.g. "Idaho". */
   regionName: z.string().min(1),
   country: z.string().length(2),
-  latitude: coordinate,
-  longitude: coordinate,
+  latitude: coordinate.optional(),
+  longitude: coordinate.optional(),
   priceRange: z.string().min(1),
   serviceAreaLabel: z.string().min(1),
 });
@@ -31,14 +31,23 @@ export const socialSchema = z.strictObject({
   href: z.url(),
 });
 
+const dayName = z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]);
+const clock = z.string().regex(/^\d{2}:\d{2}$/, "use HH:MM");
+
 export const hoursRowSchema = z.strictObject({
-  /** e.g. "Monday–Friday" (en dash), "Saturday". */
+  /** Display label, e.g. "Monday–Friday" (en dash), "Saturday". */
   days: z.string().min(1),
-  /** e.g. "8 AM–5 PM" (en dash) or "Closed". */
+  /** Display time, e.g. "8 AM–5 PM" (en dash) or "Closed". */
   time: z.string().min(1),
+  /** Structured data; when omitted, "Monday–Friday" style labels and "8 AM–5 PM" times are parsed. */
+  dayOfWeek: z.array(dayName).min(1).optional(),
+  opens: clock.optional(),
+  closes: clock.optional(),
 });
 
 export const outboundLinkSchema = z.strictObject({
+  /** Referenced from block text as {{outbound:<id>}}. */
+  id: slug.optional(),
   href: z.url(),
   text: z.string().min(1),
 });
@@ -74,6 +83,8 @@ export const siteSchema = z.strictObject({
   /** Links to other sites (siblings or external). Sibling links are one-way only; see `pnpm check`. */
   outboundLinks: z.array(outboundLinkSchema).default([]),
   layout: siteLayoutSchema.optional(),
+  /** Per-site color overrides; keys must exist in the niche theme. */
+  theme: z.strictObject({ colors: z.record(z.string(), z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/)) }).optional(),
 });
 
 export type SiteInput = z.input<typeof siteSchema>;

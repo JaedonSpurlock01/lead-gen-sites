@@ -1,0 +1,26 @@
+# TEMPLATE: copied from sites/haines-city as a structure reference. Rewrite every value for the new city
+# with niche prompts/, then delete these two lines. pnpm check fails while they remain.
+title: Free Dumpster Rental Estimate | Haines City
+description: Request a free dumpster rental estimate in Haines City. Send your project details or call Dumpster Rentals Haines City at (863) 695-2087.
+hero:
+  variant: plain
+  eyebrow: Free, no-obligation estimate
+  h1: Tell us about your Haines City cleanup
+  lede: Share the basic project details below. We will use them to understand your service needs and follow up about a dumpster rental estimate.
+blocks:
+  - type: form
+    eyebrow: Request an estimate
+    heading: Start with a few details
+    paragraphs:
+      - Choose the closest service, add your contact information, and describe the project. Your estimate is 100% free, and submitting this form does not require you to schedule.
+    aside:
+      heading: Prefer to talk?
+      paragraphs:
+        - Call during business hours and describe the project, debris, preferred timing, and placement area.
+      bulletsHeading: Helpful information to mention
+      bullets:
+        - Main debris types
+        - Bulky or dense material
+        - Target delivery date
+        - Driveway or site access limits
+        - Anything that may need special disposal

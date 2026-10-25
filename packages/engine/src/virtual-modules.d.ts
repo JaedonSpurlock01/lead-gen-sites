@@ -11,9 +11,18 @@ declare module "virtual:niche" {
 }
 
 declare module "virtual:content" {
-  import type { ServicePage } from "@lead-gen/schema";
+  import type { BlockPage, ServicePage } from "@lead-gen/schema";
   export const services: ServicePage[];
   export function getService(slug: string): ServicePage | undefined;
+  export const pages: Record<string, BlockPage>;
+  export function getPage(name: string): BlockPage;
+}
+
+declare module "virtual:theme" {
+  import type { Theme } from "@lead-gen/schema";
+  /** The niche theme with this site's color overrides applied. */
+  const theme: Theme;
+  export default theme;
 }
 
 declare module "virtual:copy" {

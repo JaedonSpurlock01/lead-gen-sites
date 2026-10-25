@@ -36,6 +36,8 @@ export function defineNicheConfig(nicheConfigUrl: string): AstroUserConfig {
     srcDir: ".",
     publicDir: "./public",
     outDir,
+    // One cache per site: parallel builds in a niche otherwise race on node_modules/.astro/data-store.json.
+    cacheDir: join(loaded.root, ".cache", "astro", loaded.site.id),
     output: "static",
     adapter: cloudflare({
       imageService: "compile",
@@ -43,7 +45,10 @@ export function defineNicheConfig(nicheConfigUrl: string): AstroUserConfig {
     integrations: [
       leadGenIntegration(),
       sitemap({
-        filter: (page) => !page.endsWith("/robots.txt"),
+        filter: (page) => {
+          const path = new URL(page).pathname;
+          return !path.endsWith("/robots.txt") && !loaded.niche.sitemapExclude.includes(path);
+        },
       }),
     ],
     compressHTML: true,

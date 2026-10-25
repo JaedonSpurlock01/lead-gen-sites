@@ -7,13 +7,8 @@ export const tracerSubmissionSchema = z.strictObject({
   site: z.string().regex(/^[a-z0-9.-]+$/),
   submissionId: z.uuid(),
   page: z.string().startsWith("/"),
-  fields: z.strictObject({
-    Name: z.string().min(2),
-    Phone: z.string().min(10),
-    Email: z.email(),
-    Service: z.string().min(1),
-    "Approx. size": z.string().regex(/^[\d,]+ sq ft$/),
-  }),
+  /** Field labels come from the niche's form config; every site sends at least a name. */
+  fields: z.record(z.string().min(1), z.string()).refine((fields) => Boolean(fields.Name), "fields.Name is required"),
 });
 
 export type TracerSubmission = z.output<typeof tracerSubmissionSchema>;
