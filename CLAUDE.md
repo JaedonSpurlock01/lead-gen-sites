@@ -29,4 +29,6 @@ Placement test: would a roofing niche use it unchanged? Then it belongs in `pack
 
 ## Verify
 
-`pnpm check`, `pnpm test`, `pnpm typecheck`. `pnpm build <site>` writes `dist/<site>/`.
+`pnpm check`, `pnpm test`, `pnpm typecheck`. `pnpm build <site>` writes `dist/<site>/`. `pnpm verify-local <site>` runs the site under `wrangler dev` against a mock Tracer.
+
+New sites go through the `new-site` skill (`.claude/skills/new-site/`). CI decides what to deploy with `pnpm affected` (`packages/cli/src/affected.ts`); change the path rules there, not in the workflows.

@@ -1,0 +1,81 @@
+# main: deploy whatever the pushed commits affect, always through `pnpm deploy`.
+#   packages/**, config/**, lockfile   -> every site
+#   niches/X/** outside sites/          -> every site in niche X
+#   niches/X/sites/Y/**                 -> site Y
+# The mapping lives in packages/cli/src/affected.ts (tested), not here.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Site, niche, comma-separated list, or all (paste the failed list from a previous run to retry)"
+        required: true
+        default: all
+
+permissions:
+  contents: read
+
+# One deploy at a time; a newer push waits instead of racing the older one.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    environment: production
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Work out the deploy target
+        id: affected
+        env:
+          INPUT_TARGET: ${{ inputs.target }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "$INPUT_TARGET" ]; then
+            target="$INPUT_TARGET"
+          elif [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            target="all"
+          else
+            target="$(pnpm -s affected --base "$BEFORE" --head HEAD)"
+          fi
+          echo "target=$target" >> "$GITHUB_OUTPUT"
+          echo "Deploy target: ${target:-nothing}" >> "$GITHUB_STEP_SUMMARY"
+
+      # Restores dist/ and the input hashes so unchanged sites skip the Astro build.
+      - uses: actions/cache@v6
+        if: steps.affected.outputs.target != ''
+        with:
+          path: |
+            dist
+            .cache/build
+          key: site-builds-${{ github.sha }}
+          restore-keys: site-builds-
+
+      - name: Deploy
+        if: steps.affected.outputs.target != ''
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm deploy "${{ steps.affected.outputs.target }}" --apply
+
+      - name: Keep the failure list
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: deploy-failures
+          path: .cache/deploy/failed.json
+          if-no-files-found: ignore

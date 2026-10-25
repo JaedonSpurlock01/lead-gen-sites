@@ -1,0 +1,25 @@
+---
+import { services } from "virtual:content";
+import niche from "virtual:niche";
+import site from "virtual:site";
+
+interface Props {
+  currentService?: string;
+}
+
+const { business } = site;
+const { currentService } = Astro.props;
+const related = services.filter((service) => service.slug !== currentService);
+---
+
+<section class="bg-surface-alt py-16 md:py-24" aria-labelledby="related-heading">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 id="related-heading" class="text-2xl font-bold">More {niche.name.toLowerCase()} services in {business.city}</h2>
+    <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+      {related.map((service) => (
+        <li><a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href={`/services/${service.slug}`}>{service.title}</a></li>
+      ))}
+      <li><a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href="/contact">Request a free estimate</a></li>
+    </ul>
+  </div>
+</section>

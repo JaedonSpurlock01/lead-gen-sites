@@ -1,0 +1,93 @@
+{
+  "id": "niche-id",
+  "name": "Niche Name",
+  "schemaOrgType": "HomeAndConstructionBusiness",
+  "services": [
+    {
+      "slug": "service-one",
+      "nav": "Service One",
+      "formValue": "Service One",
+      "imageSlot": "serviceOne"
+    },
+    {
+      "slug": "service-two",
+      "nav": "Service Two",
+      "formValue": "Service Two",
+      "imageSlot": "serviceTwo"
+    }
+  ],
+  "imageSlots": [
+    {
+      "name": "logoLight",
+      "description": "Logo on light backgrounds (header)"
+    },
+    {
+      "name": "logoDark",
+      "description": "Logo on dark backgrounds (footer); also the favicon source"
+    },
+    {
+      "name": "favicon",
+      "required": false,
+      "description": "Optional square favicon source"
+    },
+    {
+      "name": "hero",
+      "description": "Home hero background"
+    },
+    {
+      "name": "serviceOne",
+      "description": "Photo for service-one"
+    },
+    {
+      "name": "serviceTwo",
+      "description": "Photo for service-two"
+    }
+  ],
+  "marketFields": [
+    {
+      "name": "climateLabel",
+      "description": "Short noun phrase about local conditions that matter to this trade"
+    },
+    {
+      "name": "climateSummary",
+      "description": "One sentence on how local conditions affect the work"
+    }
+  ],
+  "extraServiceOptions": [
+    "Other"
+  ],
+  "theme": {
+    "colors": {
+      "surface": "#f4f4f2",
+      "surfaceAlt": "#dfe3e6",
+      "accent": "#e0a526",
+      "ink": "#1d2329",
+      "inkSoft": "#3a434b"
+    },
+    "themeColor": "#1d2329"
+  },
+  "layout": {
+    "heroVariants": [
+      "default"
+    ],
+    "sections": [
+      "services",
+      "why",
+      "process",
+      "faq",
+      "related"
+    ],
+    "optionalSections": []
+  },
+  "placeholderPatterns": [
+    "\\bTEMPLATE\\b",
+    "example\\.com",
+    "000-0000",
+    "Replace this",
+    "\"city-name\"",
+    "\"City, Region\"",
+    "Niche Name",
+    "Service One",
+    "Service Two"
+  ]
+}

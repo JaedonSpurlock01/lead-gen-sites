@@ -1,0 +1,19 @@
+---
+import BaseLayout from "@lead-gen/engine/BaseLayout.astro";
+import { faqPageSchema } from "@lead-gen/engine/schema";
+import copy from "virtual:copy";
+import niche from "virtual:niche";
+import site from "virtual:site";
+import Hero from "../components/home/Hero.astro";
+import Sections from "../components/home/Sections.astro";
+
+const { business } = site;
+const order = site.layout?.sections ?? niche.layout.sections;
+const title = `${business.city} ${niche.name} | Free Estimates`;
+const description = `${niche.name} in ${business.serviceAreaLabel}. Free on-site estimates. Call ${business.phoneDisplay}.`;
+---
+
+<BaseLayout title={title} description={description} extraSchemas={[faqPageSchema(copy.faqs ?? [])]}>
+  <Hero />
+  {order.map((name) => <Sections name={name} />)}
+</BaseLayout>

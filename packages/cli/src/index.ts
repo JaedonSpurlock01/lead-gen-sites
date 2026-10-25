@@ -1,4 +1,4 @@
-export const COMMANDS = ["new-site", "check", "build", "deploy", "domains", "secrets", "verify-local"] as const;
+export const COMMANDS = ["new-site", "check", "build", "deploy", "domains", "secrets", "verify-local", "affected"] as const;
 export type Command = (typeof COMMANDS)[number];
 
 export { runBatched, type BatchOptions, type BatchResult, type TaskOutcome } from "./batch";
@@ -19,3 +19,4 @@ export { startMockTracer, tracerSubmissionSchema, type MockTracer } from "./loca
 export { createCloudflareApi, credentialsFromEnv, throttled, CloudflareApiError, type CloudflareApi } from "./domains/api";
 export { runDomainsProvision, wwwRedirectRule, type SiteProvision, type Step } from "./domains/provision";
 export { runDomainsCheck, apiChecks, checkOne } from "./domains/check";
+export { affectedTargets, changedFiles, type Affected } from "./affected";

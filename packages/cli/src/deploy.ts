@@ -151,7 +151,11 @@ function summarize(logger: Logger, results: DeployResult[], notAttempted: SiteRe
   for (const result of ok) logger.log(`  ok    ${refKey(result.ref)}${result.attempts > 1 ? ` (after ${result.attempts} attempts)` : ""}`);
   for (const result of failed) logger.log(`  FAIL  ${refKey(result.ref)}: ${result.message ?? "unknown error"}`);
   for (const ref of notAttempted) logger.log(`  skip  ${refKey(ref)} (not attempted)`);
-  if (failed.length > 0 || notAttempted.length > 0) logger.log("Re-run only the failures with: pnpm deploy --retry-failed --apply");
+  if (failed.length > 0 || notAttempted.length > 0) {
+    const retry = [...failed.map((result) => result.ref), ...notAttempted].map(refKey).join(",");
+    logger.log("Re-run only the failures with: pnpm deploy --retry-failed --apply");
+    logger.log(`  (or, from CI: pnpm deploy "${retry}" --apply)`);
+  }
 }
 
 /** `domains check` on the canaries: API checks when credentials are present, HTTP checks always. */

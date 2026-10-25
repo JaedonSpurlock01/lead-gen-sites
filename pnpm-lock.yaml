@@ -188,6 +188,27 @@ importers:
         specifier: ^4.152.0
         version: 4.152.0(@types/node@22.20.5)
 
+  niches/_template:
+    dependencies:
+      '@astrojs/cloudflare':
+        specifier: 12.6.13
+        version: 12.6.13(@types/node@22.20.5)(astro@5.18.2(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.65.0)(supports-color@10.2.2)(tsx@4.23.15)(typescript@5.9.3)(yaml@2.9.1))(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.15)(yaml@2.9.1)
+      '@lead-gen/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@lead-gen/leads':
+        specifier: workspace:*
+        version: link:../../packages/leads
+      '@lead-gen/schema':
+        specifier: workspace:*
+        version: link:../../packages/schema
+      '@lead-gen/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      astro:
+        specifier: 5.18.2
+        version: 5.18.2(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.65.0)(supports-color@10.2.2)(tsx@4.23.15)(typescript@5.9.3)(yaml@2.9.1)
+
   niches/asphalt-paving:
     dependencies:
       '@astrojs/cloudflare':

@@ -1,0 +1,52 @@
+{
+  "id": "city-name",
+  "domain": "example.com",
+  "cloudflareProject": "niche-id-city-name",
+  "canary": false,
+  "market": {
+    "climateLabel": "local conditions",
+    "climateSummary": "Replace this with one sentence on how local conditions affect the work."
+  },
+  "assets": {
+    "logoLight": "../../assets/logo-light.png",
+    "logoDark": "../../assets/logo-dark.png",
+    "hero": "../../assets/hero.jpg",
+    "serviceOne": "../../assets/service.jpg",
+    "serviceTwo": "../../assets/service.jpg"
+  },
+  "business": {
+    "name": "City Niche Name",
+    "phoneDisplay": "(208) 000-0000",
+    "phoneTel": "+12080000000",
+    "email": "info@example.com",
+    "city": "City",
+    "region": "ID",
+    "regionName": "Idaho",
+    "country": "US",
+    "latitude": "0",
+    "longitude": "0",
+    "priceRange": "$$",
+    "serviceAreaLabel": "City, Region"
+  },
+  "socials": [],
+  "hours": [
+    {
+      "days": "Monday–Friday",
+      "time": "8 AM–5 PM"
+    },
+    {
+      "days": "Saturday",
+      "time": "Closed"
+    },
+    {
+      "days": "Sunday",
+      "time": "Closed"
+    }
+  ],
+  "serviceOptions": [
+    "Service One",
+    "Service Two",
+    "Other"
+  ],
+  "outboundLinks": []
+}

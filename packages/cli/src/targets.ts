@@ -23,10 +23,18 @@ export function listAllSites(root: string): SiteRef[] {
 }
 
 /**
- * Resolves `all`, a niche id, a site id, or `niche/site` to the sites it names.
+ * Resolves `all`, a niche id, a site id, `niche/site`, or a comma-separated list of those.
  * Site ids are expected to be unique across niches (`check` enforces it); an ambiguous id is an error.
  */
 export function resolveTargets(root: string, target: string | undefined): SiteRef[] {
+  // A comma-separated list ("roofing,asphalt-paving/pocatello") is the union of its parts.
+  if (target?.includes(",")) {
+    const seen = new Map<string, SiteRef>();
+    for (const part of target.split(",").map((item) => item.trim()).filter(Boolean)) {
+      for (const ref of resolveTargets(root, part)) seen.set(refKey(ref), ref);
+    }
+    return [...seen.values()];
+  }
   const all = listAllSites(root);
   const wanted = (target ?? "all").trim();
   if (wanted === "all" || wanted === "") return all;

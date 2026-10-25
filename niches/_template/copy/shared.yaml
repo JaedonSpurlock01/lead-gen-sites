@@ -1,0 +1,34 @@
+# Shared copy for every site in this niche. Tokens like {{city}}, {{serviceAreaLabel}},
+# {{climateLabel}} and {{climateSummary}} come from each site.json. Replace every TEMPLATE line.
+footerBlurb: "TEMPLATE: one sentence listing the services this niche offers."
+form:
+  sizeLabel: "TEMPLATE: what to measure, e.g. Approximate size (Sq Ft) of Project"
+  submitLabel: Request a Free Estimate
+  note: Quotes are free. We reply during posted hours.
+values:
+  - title: Integrity
+    text: "TEMPLATE: what honest pricing means in this trade."
+  - title: Quality
+    text: "TEMPLATE: the craft standard customers can check."
+reasons:
+  - title: Licensed and Insured
+    text: "TEMPLATE: why coverage matters for this kind of work."
+    icon: shield
+  - title: Free On-Site Estimates
+    text: "TEMPLATE: what the visit looks at before a price."
+    icon: pin
+  - title: Local Experience
+    text: "{{climateSummary}} TEMPLATE: how that shapes the work."
+    icon: sun
+steps:
+  - title: Free Estimate
+    text: "TEMPLATE: first contact and site visit."
+  - title: The Work
+    text: "TEMPLATE: what happens on job day."
+  - title: Cleanup and Care
+    text: "TEMPLATE: what the customer is told before the crew leaves."
+faqs:
+  - question: "How much does this cost in {{city}}?"
+    answer: "TEMPLATE: what drives price, and that the estimate is free."
+  - question: "Where do you work?"
+    answer: "We work in {{serviceAreaLabel}}. TEMPLATE: what to share so we can confirm access."

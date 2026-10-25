@@ -8,6 +8,7 @@ import { CliError, consoleLogger } from "./log";
 import { runNewSite } from "./new-site";
 import { runSecretsRotate } from "./secrets";
 import { runVerifyLocal } from "./local/verify";
+import { affectedTargets, changedFiles } from "./affected";
 import { createCloudflareApi, credentialsFromEnv, throttled } from "./domains/api";
 import { runDomainsCheck } from "./domains/check";
 import { runDomainsProvision } from "./domains/provision";
@@ -20,6 +21,7 @@ const usage = `Usage:
   pnpm deploy <target> [--apply] [--concurrency N] [--retry-failed] [--skip-build] [--env NAME]
   pnpm secrets rotate <NAME> [--apply] [--target T] [--concurrency N] [--retry-failed]   (value on stdin)
   pnpm domains provision|check [target] [--apply] [--with-lead]
+  pnpm affected --base <ref> [--head <ref>]   (prints the deploy target for a diff; used by CI)
   pnpm verify-local [target] [--port 8801] [--skip-build]   (wrangler dev + mock Tracer; local only)
 
 Targets: a site id, a niche id, niche/site, or "all". Commands that write to Cloudflare are dry-run without --apply.`;
@@ -145,6 +147,17 @@ async function main(argv: string[]): Promise<number> {
         skipBuild: values["skip-build"],
       });
       return results.every((result) => result.ok) ? 0 : 1;
+    }
+    case "affected": {
+      const { values } = parseArgs({ args: rest, options: { base: { type: "string" }, head: { type: "string" }, json: { type: "boolean" } } });
+      if (!values.base) throw new CliError("affected needs --base <git ref>");
+      const result = affectedTargets(root, changedFiles(root, values.base, values.head ?? "HEAD"));
+      if (values.json) console.log(JSON.stringify(result));
+      else {
+        for (const reason of result.reasons) console.error(reason);
+        console.log(result.target);
+      }
+      return 0;
     }
     case "domains": {
       const { values, positionals } = parseArgs({

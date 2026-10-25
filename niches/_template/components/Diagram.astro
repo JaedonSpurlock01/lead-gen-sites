@@ -1,0 +1,25 @@
+---
+import { Image } from "astro:assets";
+import siteAssets from "virtual:site-assets";
+
+interface Props {
+  name: string;
+  label: string;
+  loading?: "lazy" | "eager";
+}
+
+const { name, label, loading = "lazy" } = Astro.props;
+const src = siteAssets[name];
+if (!src) throw new Error(`Diagram: no image slot "${name}" for this site`);
+---
+
+<figure>
+  <Image
+    src={src}
+    alt={label}
+    width={src.width}
+    height={src.height}
+    loading={loading}
+    class="block h-auto w-full"
+  />
+</figure>

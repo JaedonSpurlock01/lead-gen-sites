@@ -1,0 +1,24 @@
+---
+import Diagram from "./Diagram.astro";
+import { services } from "virtual:content";
+import niche from "virtual:niche";
+
+const slotFor = (slug: string) => niche.services.find((service) => service.slug === slug)?.imageSlot ?? "hero";
+---
+
+<ul class="mt-10 space-y-10">
+  {
+    services.map((service, index) => (
+      <li class="grid items-center gap-6 md:grid-cols-2 md:gap-10">
+        <div class:list={[index % 2 === 1 && "md:order-2"]}>
+          <h3 class="text-2xl font-bold">{service.h1}</h3>
+          <p class="mt-3 text-ink-soft">{service.description}</p>
+          <a class="mt-5 inline-block font-semibold underline decoration-accent decoration-2 underline-offset-4" href={`/services/${service.slug}`}>{service.nav}</a>
+        </div>
+        <div class:list={[index % 2 === 1 && "md:order-1"]}>
+          <Diagram name={slotFor(service.slug)} label={service.title} />
+        </div>
+      </li>
+    ))
+  }
+</ul>

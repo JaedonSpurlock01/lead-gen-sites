@@ -1,0 +1,21 @@
+{
+  "name": "@niche/template",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Starting point for a new niche. Copy to niches/<niche-id>, rename, and fill in niche.json, copy/ and prompts/.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "12.6.13",
+    "@lead-gen/engine": "workspace:*",
+    "@lead-gen/leads": "workspace:*",
+    "@lead-gen/schema": "workspace:*",
+    "@lead-gen/ui": "workspace:*",
+    "astro": "5.18.2"
+  }
+}

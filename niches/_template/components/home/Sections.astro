@@ -1,0 +1,30 @@
+---
+// The home-page sections a site can order through site.json `layout.sections`.
+import FaqList from "@lead-gen/ui/FaqList.astro";
+import site from "virtual:site";
+import InternalLinks from "../InternalLinks.astro";
+import Process from "../Process.astro";
+import ServicesGrid from "../ServicesGrid.astro";
+import WhyChoose from "../WhyChoose.astro";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+const { business } = site;
+---
+
+{name === "services" && (
+  <section class="bg-surface py-16 md:py-24"><div class="mx-auto max-w-6xl px-5"><h2 class="text-3xl font-bold">Services in {business.city}</h2><ServicesGrid /></div></section>
+)}
+{name === "why" && (
+  <section class="bg-white py-16 md:py-24"><div class="mx-auto max-w-6xl px-5"><h2 class="text-3xl font-bold">Why property owners call us</h2><div class="mt-10"><WhyChoose /></div></div></section>
+)}
+{name === "process" && (
+  <section class="bg-surface py-16 md:py-24"><div class="mx-auto max-w-6xl px-5"><h2 class="text-3xl font-bold">How a project moves</h2><div class="mt-10"><Process /></div></div></section>
+)}
+{name === "faq" && (
+  <section class="bg-white py-16 md:py-24"><div class="mx-auto max-w-3xl px-5"><h2 class="text-3xl font-bold">Questions from local property owners</h2><div class="mt-8"><FaqList /></div></div></section>
+)}
+{name === "related" && <InternalLinks />}
