@@ -18,7 +18,7 @@ const usage = `Usage:
   pnpm new-site <niche> <id> --domain <apex> [--name ..] [--city ..] [--region ID --region-name Idaho] [--phone +1...] [--canary]
   pnpm check [target]
   pnpm build [target] [--force] [--concurrency N] [--env NAME]
-  pnpm deploy <target> [--apply] [--concurrency N] [--retry-failed] [--skip-build] [--env NAME]
+  pnpm run deploy <target> [--apply] [--concurrency N] [--retry-failed] [--skip-build] [--env NAME]
   pnpm secrets rotate <NAME> [--apply] [--target T] [--concurrency N] [--retry-failed]   (value on stdin)
   pnpm domains provision|check [target] [--apply] [--with-lead]
   pnpm affected --base <ref> [--head <ref>]   (prints the deploy target for a diff; used by CI)

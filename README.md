@@ -19,12 +19,12 @@ A target is a site id, a niche id, `niche/site`, a comma-separated list, or `all
 | `pnpm check [target]` | Checks data, content, images, domains and links |
 | `pnpm build [target]` | Builds into `dist/<id>/` and skips sites that did not change |
 | `pnpm verify-local [target]` | Runs the site under `wrangler dev` with a fake Tracer |
-| `pnpm deploy <target>` | Shows the deploy plan. Add `--apply` to deploy |
+| `pnpm run deploy <target>` | Shows the deploy plan. Add `--apply` to deploy |
 | `pnpm domains provision [target]` | Shows the Cloudflare setup plan. Add `--apply` to make the changes |
 | `pnpm domains check [target]` | Checks the zone, certificate, Worker, home page and www redirect |
 | `pnpm secrets rotate <NAME>` | Sets a Worker secret on every site (the backup plan). Add `--apply` |
 
-Nothing writes to Cloudflare without `--apply`. The `domains` commands need `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in your shell.
+Nothing writes to Cloudflare without `--apply`. Always type `pnpm run deploy`. With a flag, plain `pnpm deploy` runs pnpm's own built-in deploy command instead of ours. The `domains` commands need `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in your shell.
 
 ## Add a site
 
@@ -35,7 +35,7 @@ Nothing writes to Cloudflare without `--apply`. The `domains` commands need `CLO
    ```
 3. **Write the content.** Fill in `site.json`. Use the niche's `prompts/` to research the city and write each page in `content/services/`. Add photos to `assets/`. Run `pnpm check twin-falls` until it passes.
 4. **Set up Cloudflare.** Run `pnpm domains provision twin-falls`, read the plan, then run it again with `--apply`. Set the nameservers it prints at the registrar.
-5. **Deploy.** Merge the pull request and CI deploys the site. You can also run `pnpm deploy twin-falls --apply`.
+5. **Deploy.** Merge the pull request and CI deploys the site. You can also run `pnpm run deploy twin-falls --apply`.
 6. **Check it.** Run `pnpm domains check twin-falls`. A new zone can take a while to go active, so re-run until it passes. Then send one test lead from the contact form.
 
 ## Add a niche
@@ -94,10 +94,10 @@ Run these steps from your machine, not from CI. If the repo is already on GitHub
 2. **Pick a canary.** Set `"canary": true` in one site's `site.json`, for example Pocatello. Commit the change.
 3. **Plan.** Run `pnpm domains provision all` and read the plan. It lists the settings it will change and the redirect rule it will add. It also reports how `www` is attached today.
 4. **Apply the zone changes.** Run `pnpm domains provision all --apply`. Then run `curl -I https://www.<domain>/` on each site. It should return `301` to the apex. If it still returns `200`, stop. The redirect rule does not override a `www` custom domain, so detach `www` from each Worker in the dashboard, then re-run provision with `--apply`.
-5. **Deploy the canary.** Run `pnpm deploy pocatello --apply`. In the new version the key comes from the binding, the old variable is gone, and leads go to production Tracer. It all lands in one step, so there is no gap.
+5. **Deploy the canary.** Run `pnpm run deploy pocatello --apply`. In the new version the key comes from the binding, the old variable is gone, and leads go to production Tracer. It all lands in one step, so there is no gap.
 6. **Test the canary form.** Submit the contact form once by hand and check that the lead arrives.
 7. **Re-run provision.** Run `pnpm domains provision pocatello --apply`. If the deploy removed the `www` custom domain, this adds the `www` DNS record the redirect needs.
-8. **Deploy the rest.** Run `pnpm deploy all --apply`, then `pnpm domains provision all --apply`, then `pnpm domains check all`.
+8. **Deploy the rest.** Run `pnpm run deploy all --apply`, then `pnpm domains provision all --apply`, then `pnpm domains check all`.
 
 To undo a bad deploy, run `pnpm wrangler rollback --name <worker>`. The old version still has the staging URL and the old key variable.
 
@@ -108,7 +108,7 @@ Add these as GitHub repository secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_READ
 | Workflow | When it runs | What it does |
 | --- | --- | --- |
 | CI | Pull requests | Check, typecheck, tests, and a build of the sites the PR changes |
-| Deploy | Pushes to `main`, or by hand | `pnpm deploy <changed sites> --apply` |
+| Deploy | Pushes to `main`, or by hand | `pnpm run deploy <changed sites> --apply` |
 | Nightly | Every day | `pnpm domains check all`. It is read-only |
 
 The deploy rules are:
@@ -149,7 +149,7 @@ These were not tested against the real Cloudflare account. Check each one during
 
 - **Key gap length.** It depends on how fast a new Secrets Store value reaches the Workers. See the next item.
 
-- **Secret updates.** Docs do not say whether a new Secrets Store value reaches running Workers without a redeploy. After rotating, send a test lead. If the old key is still used, run `pnpm deploy all --apply`. A redeploy is safe.
+- **Secret updates.** Docs do not say whether a new Secrets Store value reaches running Workers without a redeploy. After rotating, send a test lead. If the old key is still used, run `pnpm run deploy all --apply`. A redeploy is safe.
 - **How www is attached.** I could not see this without a token. Provision reports it.
 - **Redirect order.** Redirect Rules run first among Cloudflare's rule types. The docs do not say whether they also run before a Worker on a custom-domain hostname. Step 4 of the cutover checks this.
 - **Wrangler in CI.** Wrangler now shows differences between your config and the dashboard before deploying. I did not confirm that CI deploys go through without a prompt. Watch the first CI deploy.

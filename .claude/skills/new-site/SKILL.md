@@ -7,7 +7,7 @@ description: Create a new lead-gen site in an existing niche, from `pnpm new-sit
 
 Turns "a `<niche>` site for `<city>`" into a pull request with a site that passes every check and reads as original, locally researched work. The site is data only: `site.json`, Markdown content, images, research notes. Code changes belong in a separate task.
 
-You prepare everything up to the PR. The owner buys the domain, applies provisioning, deploys and merges. Every Cloudflare command you run stays in dry-run: run `pnpm domains provision` and `pnpm deploy` without `--apply`, and leave `wrangler deploy`, `secrets` and DNS to the owner.
+You prepare everything up to the PR. The owner buys the domain, applies provisioning, deploys and merges. Every Cloudflare command you run stays in dry-run: run `pnpm domains provision` and `pnpm run deploy` without `--apply`, and leave `wrangler deploy`, `secrets` and DNS to the owner.
 
 ## 1. Pin down the inputs
 
@@ -60,7 +60,7 @@ pnpm check <id>
 pnpm build <id>
 pnpm verify-local <id>
 pnpm domains provision <id>      # dry-run; needs CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID
-pnpm deploy <id>                 # dry-run plan only
+pnpm run deploy <id>                 # dry-run plan only
 ```
 
 If the Cloudflare credentials are absent, note in the PR that the provision plan still needs a run. Then walk `prompts/review-checklist.md` line by line.

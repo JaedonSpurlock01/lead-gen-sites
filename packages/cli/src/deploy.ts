@@ -153,8 +153,8 @@ function summarize(logger: Logger, results: DeployResult[], notAttempted: SiteRe
   for (const ref of notAttempted) logger.log(`  skip  ${refKey(ref)} (not attempted)`);
   if (failed.length > 0 || notAttempted.length > 0) {
     const retry = [...failed.map((result) => result.ref), ...notAttempted].map(refKey).join(",");
-    logger.log("Re-run only the failures with: pnpm deploy --retry-failed --apply");
-    logger.log(`  (or, from CI: pnpm deploy "${retry}" --apply)`);
+    logger.log("Re-run only the failures with: pnpm run deploy --retry-failed --apply");
+    logger.log(`  (or, from CI: pnpm run deploy "${retry}" --apply)`);
   }
 }
 

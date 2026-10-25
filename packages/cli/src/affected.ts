@@ -3,7 +3,7 @@ import { listNiches } from "@lead-gen/engine/load";
 import { listAllSites } from "./targets";
 
 export type Affected = {
-  /** Deploy target for `pnpm deploy`: "all", a comma-separated list of niches/sites, or "" for nothing. */
+  /** Deploy target for `pnpm run deploy`: "all", a comma-separated list of niches/sites, or "" for nothing. */
   target: string;
   reasons: string[];
 };

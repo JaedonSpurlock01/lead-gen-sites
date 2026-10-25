@@ -82,6 +82,6 @@ export function runNewSite(root: string, niche: string, id: string, options: New
   logger.log(`  3. Add site photos under sites/${id}/assets/ and point site.json assets at them`);
   logger.log(`  4. pnpm check ${id}`);
   logger.log(`  5. pnpm domains provision ${id}   (dry-run; add --apply when ready)`);
-  logger.log(`  6. pnpm deploy ${id}   (dry-run; add --apply when ready)`);
+  logger.log(`  6. pnpm run deploy ${id}   (dry-run; add --apply when ready)`);
   return siteDir;
 }
