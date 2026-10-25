@@ -12,6 +12,10 @@ export function makeFixtureRepo(): { root: string; cleanup(): void } {
   mkdirSync(join(root, "packages"), { recursive: true });
   writeFileSync(join(root, "packages", "marker.txt"), "packages\n");
   cpSync(join(realRoot, "config"), join(root, "config"), { recursive: true });
+  // Tests start from the unconfigured state; deploy tests set their own store id.
+  const cloudflare = JSON.parse(readFileSync(join(root, "config", "cloudflare.json"), "utf8"));
+  cloudflare.secretsStore.storeId = "TODO_SECRETS_STORE_ID";
+  writeFileSync(join(root, "config", "cloudflare.json"), `${JSON.stringify(cloudflare, null, 2)}\n`);
   const niche = join(root, "niches", "asphalt-paving");
   mkdirSync(niche, { recursive: true });
   for (const name of ["niche.json", "copy", "assets", "sites"]) {

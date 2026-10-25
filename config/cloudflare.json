@@ -5,8 +5,8 @@
     "nodejs_compat"
   ],
   "secretsStore": {
-    "$comment": "TODO: set storeId to the account's Secrets Store ID (`wrangler secrets-store store list --remote`). Every site Worker binds TRACER_FORM_KEY to this one account-level secret.",
-    "storeId": "TODO_SECRETS_STORE_ID",
+    "$comment": "The account's Secrets Store (one per account). Every site Worker binds TRACER_FORM_KEY to this one account-level secret.",
+    "storeId": "79aa7ef8ab094a0fb6836a91c0df365c",
     "secretName": "TRACER_FORM_KEY",
     "binding": "TRACER_FORM_KEY"
   },
