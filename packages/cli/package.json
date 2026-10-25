@@ -1,0 +1,16 @@
+{
+  "name": "@lead-gen/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "new-site, check, build, deploy, domains, secrets. Every command that would write to Cloudflare or Tracer defaults to dry-run.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lead-gen/schema": "workspace:*"
+  }
+}

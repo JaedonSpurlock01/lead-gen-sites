@@ -1,0 +1,5 @@
+{
+  "$comment": "TODO (Tracer follow-up): DNS records every site zone needs so Tracer can send from info@<domain>. Fill in once Tracer's sending provider is known (SPF include, DKIM selector + public key, DMARC policy). `pnpm domains provision` applies these; an empty list means the step is skipped with a visible TODO.",
+  "provider": null,
+  "records": []
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@lead-gen/schema",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "zod schemas for niche.json, site.json, service content, niche copy and config files, plus the Markdown content parser. Every file shape is defined here and nowhere else.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "tldts": "^7.4.19",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  }
+}
