@@ -22,10 +22,9 @@ describe("runCheck", () => {
     expect(report.ok).toBe(true);
     expect(messages(report, "warning")).toEqual([
       "-: config/cloudflare.json secretsStore.storeId is still a TODO; deploy --apply will refuse until it is set",
-      '-: no site has "canary": true; deploy will roll out without the canary gate',
     ]);
     expect(logger.lines).toContain("ok      asphalt-paving/blackfoot");
-    expect(logger.lines.at(-1)).toBe("checked 3 sites (3 total): 0 errors, 2 warnings");
+    expect(logger.lines.at(-1)).toBe("checked 3 sites (3 total): 0 errors, 1 warning");
   });
 
   it("fails on schema problems, www domains and duplicate domains or Worker names", () => {

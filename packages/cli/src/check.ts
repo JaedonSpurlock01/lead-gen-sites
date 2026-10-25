@@ -131,9 +131,6 @@ export function runCheck(root: string, target: string | undefined, logger: Logge
   if (/TODO/i.test(cloudflare.secretsStore.storeId)) {
     issues.push({ level: "warning", message: "config/cloudflare.json secretsStore.storeId is still a TODO; deploy --apply will refuse until it is set" });
   }
-  if (all.length > 0 && ![...loaded.values()].some((site) => site.site.canary)) {
-    issues.push({ level: "warning", message: 'no site has "canary": true; deploy will roll out without the canary gate' });
-  }
 
   for (const niche of new Set(all.map((ref) => ref.niche))) {
     try {

@@ -73,33 +73,27 @@ pbpaste | pnpm secrets rotate TRACER_FORM_KEY --apply
 
 It reads the key from stdin only and never prints it. It works in batches and waits when Cloudflare rate-limits it. Run it again with `--retry-failed` to redo only the sites that failed. The lead handler accepts either form of the key, so you can switch between the two plans.
 
-## Switch the three live sites over
+## First deploy of the three live sites
 
-The live sites keep their Worker names, so deploys replace the current Workers in place. Two things change at runtime:
+The sites keep their Worker names, so a deploy replaces each live Worker in place. That is the same as starting fresh, without any downtime for the apex.
 
-- The key moves from a plain variable to the Secrets Store binding.
-- `www` stops showing the site and redirects to the apex instead.
-
-The sites also move from the staging Tracer to production (`https://tracer.spurlocklabs.com/api/forms`). The new URL and the new key arrive in the same deploy, so each site switches cleanly.
-
-Today, `www` on all three sites serves the same pages as the apex. It is probably attached to each Worker as a second custom domain. The first deploy will remove it, because Wrangler makes a Worker's domains match its config. The order below covers that.
-
-Run these steps from your machine, not from CI. If the repo is already on GitHub, disable the Deploy workflow until step 8. Steps 1 and 2 change files that would otherwise start a deploy.
-
-1. **Create the token and secret.** Make the deploy token below. Create the secret with the **production** Forms key:
+1. **Create the secret** with your Forms key. Wrangler asks for the value:
    ```
+   pnpm wrangler secrets-store store list --remote
    pnpm wrangler secrets-store secret create <STORE_ID> --name TRACER_FORM_KEY --scopes workers --remote
    ```
-   Put the store id in `config/cloudflare.json` as `secretsStore.storeId`. The live sites keep using the staging key until they are deployed.
-2. **Pick a canary.** Set `"canary": true` in one site's `site.json`, for example Pocatello. Commit the change.
-3. **Plan.** Run `pnpm domains provision all` and read the plan. It lists the settings it will change and the redirect rule it will add. It also reports how `www` is attached today.
-4. **Apply the zone changes.** Run `pnpm domains provision all --apply`. Then run `curl -I https://www.<domain>/` on each site. It should return `301` to the apex. If it still returns `200`, stop. The redirect rule does not override a `www` custom domain, so detach `www` from each Worker in the dashboard, then re-run provision with `--apply`.
-5. **Deploy the canary.** Run `pnpm run deploy pocatello --apply`. In the new version the key comes from the binding, the old variable is gone, and leads go to production Tracer. It all lands in one step, so there is no gap.
-6. **Test the canary form.** Submit the contact form once by hand and check that the lead arrives.
-7. **Re-run provision.** Run `pnpm domains provision pocatello --apply`. If the deploy removed the `www` custom domain, this adds the `www` DNS record the redirect needs.
-8. **Deploy the rest.** Run `pnpm run deploy all --apply`, then `pnpm domains provision all --apply`, then `pnpm domains check all`.
+2. **Add the GitHub secrets** listed under [CI setup](#ci-setup).
+3. **Set the store id.** Put it in `config/cloudflare.json` as `secretsStore.storeId`, then commit and push. CI deploys every site.
+4. **Set up the zones.** From your machine, run:
+   ```
+   pnpm domains provision all --apply
+   ```
+   This turns on HTTPS-only, sets TLS and SSL, and makes `www` redirect to the apex.
+5. **Check.** Run `pnpm domains check all`, then submit one contact form by hand.
 
-To undo a bad deploy, run `pnpm wrangler rollback --name <worker>`. The old version still has the staging URL and the old key variable.
+Today, `www` is attached to each Worker. The deploy in step 3 removes it, so `www` is down until step 4 runs. Run step 4 right after CI finishes. Forms switch to the new key and URL in a single step, so they never break.
+
+To undo a bad deploy, run `pnpm wrangler rollback --name <worker>`.
 
 ## CI setup
 
