@@ -48,7 +48,7 @@ export const nicheLayoutSchema = z.strictObject({
   optionalSections: z.array(z.string().min(1)).default([]),
 });
 
-const defaultPlaceholderPatterns = ["\\bTEMPLATE\\b", "example\\.com", "000-0000", "Replace this", "city-name", "City Name"];
+const defaultPlaceholderPatterns = ["\\bTEMPLATE\\b", "example\\.com", "000-0000", "Replace this", "\"city-name\""];
 
 /** `niches/<niche>/niche.json`: what every site in the niche shares. */
 export const nicheSchema = z.strictObject({
