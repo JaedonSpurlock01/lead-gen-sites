@@ -1,0 +1,124 @@
+---
+import copy from "virtual:copy";
+import site from "virtual:site";
+
+const { serviceOptions } = site;
+const form = {
+  sizeLabel: "Approximate size (Sq Ft) of Project",
+  serviceLabel: "Services needed",
+  submitLabel: "Request a Free Estimate",
+  note: "Quotes are free. We reply during posted hours.",
+  ...copy.form,
+};
+---
+
+<form class="space-y-4" action="/api/lead" method="POST">
+  {/* Hash fragments (e.g. /contact/#error-send) show these without JS — works on prerendered static HTML. */}
+  <p
+    id="error-fields"
+    class="lead-form-error border border-ink bg-accent/40 px-3 py-2 text-sm font-semibold text-ink"
+    role="alert"
+    tabindex="-1"
+  >
+    Check every field. Use a real email, a phone number, a size in square feet, and one of the listed services.
+  </p>
+  <p
+    id="error-config"
+    class="lead-form-error border border-ink bg-accent/40 px-3 py-2 text-sm font-semibold text-ink"
+    role="alert"
+    tabindex="-1"
+  >
+    Request delivery is not configured yet. Please call us instead.
+  </p>
+  <p
+    id="error-bind"
+    class="lead-form-error border border-ink bg-accent/40 px-3 py-2 text-sm font-semibold text-ink"
+    role="alert"
+    tabindex="-1"
+  >
+    Request delivery is not wired on the server yet. Please call us instead.
+  </p>
+  <p
+    id="error-send"
+    class="lead-form-error border border-ink bg-accent/40 px-3 py-2 text-sm font-semibold text-ink"
+    role="alert"
+    tabindex="-1"
+  >
+    We could not send that request. Try again in a few minutes or call us.
+  </p>
+  <p id="lead-form-error" class="lead-form-error border border-ink bg-accent/40 px-3 py-2 text-sm font-semibold text-ink" role="alert" hidden></p>
+  <div class="absolute left-[-9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+    <label>
+      Company website
+      <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+  <div>
+    <label class="mb-1 block cursor-pointer text-sm font-semibold" for="size">{form.sizeLabel}</label>
+    <input
+      class="w-full border border-ink/20 bg-white px-3 py-3 text-base"
+      id="size"
+      name="size"
+      type="number"
+      inputmode="numeric"
+      min="1"
+      step="1"
+      required
+      autocomplete="off"
+    />
+  </div>
+  <div>
+    <label class="mb-1 block cursor-pointer text-sm font-semibold" for="service">{form.serviceLabel}</label>
+    <select class="w-full cursor-pointer border border-ink/20 bg-white px-3 py-3 text-base" id="service" name="service" required>
+      <option value="" disabled selected>Select a service</option>
+      {serviceOptions.map((option) => <option value={option}>{option}</option>)}
+    </select>
+  </div>
+  <div>
+    <label class="mb-1 block cursor-pointer text-sm font-semibold" for="name">Name</label>
+    <input class="w-full border border-ink/20 bg-white px-3 py-3 text-base" id="name" name="name" type="text" required autocomplete="name" maxlength="80" />
+  </div>
+  <div>
+    <label class="mb-1 block cursor-pointer text-sm font-semibold" for="phone">Phone</label>
+    <input class="w-full border border-ink/20 bg-white px-3 py-3 text-base" id="phone" name="phone" type="tel" required autocomplete="tel" maxlength="30" />
+  </div>
+  <div>
+    <label class="mb-1 block cursor-pointer text-sm font-semibold" for="email">Email</label>
+    <input class="w-full border border-ink/20 bg-white px-3 py-3 text-base" id="email" name="email" type="email" required autocomplete="email" maxlength="120" />
+  </div>
+  <button class="w-full cursor-pointer bg-accent px-4 py-3 text-base font-bold text-ink" type="submit">{form.submitLabel}</button>
+  <p class="text-sm text-ink-soft">{form.note}</p>
+</form>
+<style is:global>
+  .lead-form-error {
+    display: none;
+    scroll-margin-top: 6rem;
+  }
+  .lead-form-error:target {
+    display: block;
+  }
+</style>
+<script is:inline>
+  (function () {
+    var code = new URLSearchParams(window.location.search).get("error");
+    if (!code) return;
+    var hashMap = { "1": "error-fields", config: "error-config", bind: "error-bind", send: "error-send" };
+    var id = hashMap[code];
+    var el = id ? document.getElementById(id) : document.getElementById("lead-form-error");
+    if (!el) return;
+    if (id) {
+      el.style.display = "block";
+      el.scrollIntoView({ block: "nearest" });
+      return;
+    }
+    var messages = {
+      "1": "Check every field. Use a real email, a phone number, a size in square feet, and one of the listed services.",
+      config: "Request delivery is not configured yet. Please call us instead.",
+      bind: "Request delivery is not wired on the server yet. Please call us instead.",
+      send: "We could not send that request. Try again in a few minutes or call us.",
+    };
+    el.textContent = messages[code] || messages.send;
+    el.removeAttribute("hidden");
+    el.scrollIntoView({ block: "nearest" });
+  })();
+</script>

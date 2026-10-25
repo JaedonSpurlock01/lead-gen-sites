@@ -1,0 +1,22 @@
+---
+import ServicesGrid from "../ServicesGrid.astro";
+import site from "virtual:site";
+
+const { business, outboundLinks } = site;
+---
+
+<section class="bg-surface py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-3xl font-bold">Asphalt services</h2>
+    <p class="prose-measure mt-4">
+      Each service has its own page with the process, limits, and a way to ask for a free estimate. {business.city}{" "}
+      {outboundLinks[1] ? (
+        <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href={outboundLinks[1].href} target="_blank" rel="noopener noreferrer">{outboundLinks[1].text}</a>
+      ) : (
+        "asphalt paving"
+      )}{" "}
+      starts with the surface you have — whether you need driveway paving, parking lot paving, pothole repair, crack sealing, or sealcoating.
+    </p>
+    <ServicesGrid />
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import { services } from "virtual:content";
+import site from "virtual:site";
+
+interface Props {
+  currentService?: string;
+}
+
+const { business } = site;
+const { currentService } = Astro.props;
+const relatedServices = services.filter((service) => service.slug !== currentService);
+---
+
+<section class="bg-surface-alt py-16 md:py-24" aria-labelledby="related-heading">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 id="related-heading" class="text-2xl font-bold">Related paving services in {business.city}</h2>
+    <p class="mt-2 text-sm text-ink-soft">
+      Browse asphalt contractor services — from asphalt driveway paving and commercial parking lots to pothole repair, crack sealing, and seal coat maintenance.
+    </p>
+    <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+      {
+        relatedServices.map((service) => (
+          <li>
+            <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href={`/services/${service.slug}`}>
+              {service.title}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href="/">{business.city} asphalt paving contractor</a>
+      </li>
+      <li>
+        <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href="/contact">Request a free paving estimate</a>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import siteAssets from "virtual:site-assets";
+
+interface Props {
+  variant?: "light" | "dark";
+  class?: string;
+  loading?: "eager" | "lazy";
+}
+
+const { variant = "light", class: className = "h-12 w-auto", loading = "eager" } = Astro.props;
+const logo = (variant === "dark" ? siteAssets.logoDark : siteAssets.logoLight)!;
+---
+
+<Image
+  src={logo}
+  alt=""
+  width={logo.width}
+  height={logo.height}
+  densities={[1, 2]}
+  loading={loading}
+  decoding={loading === "eager" ? "sync" : "async"}
+  class={`${className} rounded-full`}
+/>

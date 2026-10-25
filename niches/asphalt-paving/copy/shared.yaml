@@ -1,0 +1,64 @@
+# Shared asphalt copy. {{city}}, {{climateLabel}}, {{climateSummary}}, {{pavingSeason}} and {{serviceAreaLabel}} come from each site.json.
+values:
+  - title: Integrity
+    text: You get a written plan with a clear price and a schedule you can plan around. If the base needs more work than a photo showed, we stop and talk before we add cost.
+  - title: Quality
+    text: Hot-mix asphalt, clean aggregate, and compaction while the mat is still hot. That is the craft. We do not stretch a thin lift over a soft base and call it finished.
+  - title: Excellence
+    text: Drainage, edges, and joints get the same attention as the surface you see from the curb. The job is done when water leaves the pavement and the edges stay tied in.
+  - title: Safety
+    text: Crews work with cones, clear staging, and a plan for how you and your neighbors get in and out. We leave the site swept, with no loose rock in the driving path.
+reasons:
+  - title: Licensed and Insured
+    text: Paving equipment is heavy and the work sits on your property. We carry the coverage a homeowner or property manager should expect before a crew arrives.
+    icon: shield
+  - title: Top-Tier Materials
+    text: We pave with plant-mixed hot-mix asphalt and compacted base rock suited to {{climateLabel}}, not a cold patch spread thin and left to ravel.
+    icon: layers
+  - title: Free On-Site Consultations
+    text: Square footage, access, drainage, and the condition of the soil decide the price. We look at the ground with you before you commit to a number — a free asphalt estimate for driveway paving, parking lot work, or repair.
+    icon: pin
+  - title: Drainage-First Planning
+    text: Water trapped against a garage, a storefront, or a building pad is how pavements fail here. Grade and slope are part of the estimate, not an afterthought.
+    icon: drop
+  - title: Clear Timelines
+    text: You hear when we can pave, how long the lane stays closed, and when passenger cars can return. Weather holds are explained before the truck is on the way.
+    icon: clock
+  - title: Local Climate Experience
+    text: "{{climateSummary}} We build sections for local conditions instead of treating climate as an afterthought."
+    icon: sun
+steps:
+  - title: Free Estimate
+    text: Tell us the approximate size in square feet and the service you need. We schedule a look at the site, confirm access for trucks, and send a written scope with the price.
+  - title: Site Prep
+    text: We mark limits, protect edges you want to keep, and remove failed asphalt, vegetation, or soft spots. The aggregate base is placed and compacted so the mat has something solid under it.
+  - title: Asphalt Paving
+    text: Hot-mix arrives and is placed in a continuous operation, then rolled while it is still workable. Joints, edges, and drainage paths are checked before we call the surface complete.
+  - title: Cleanup and Care
+    text: We clear debris, walk the finished pavement with you, and tell you when to drive on it. New asphalt usually needs a full cure before sealcoating, and we put that timing in writing.
+faqs:
+  - question: How much does asphalt paving cost in {{city}}?
+    answer: Price follows square footage, thickness, access, and how much old pavement or soft soil has to come out. An overlay on a sound base costs less than full-depth replacement. Send the approximate size for your {{city}} project and we will price the work after seeing the ground. The visit and written estimate are free.
+  - question: When is the best time to pave in {{city}}?
+    answer: Hot-mix needs a dry, firm base and temperatures that support placement and compaction. In {{city}}, workable conditions cover {{pavingSeason}}. We postpone for rain, unsafe heat, or temperatures that prevent proper compaction and curing.
+  - question: Is asphalt cheaper than concrete for a {{city}} driveway?
+    answer: Asphalt usually costs less to install than concrete of the same size, and it can be milled and resurfaced later without replacing the whole section. We explain which surface fits your traffic, drainage, sun exposure, and maintenance plan.
+  - question: How long does an asphalt driveway last in {{city}}?
+    answer: A well-built driveway with a compacted base and timely crack care commonly serves 15 to 25 years. {{climateSummary}} Drainage, crack filling, and sealcoating after the mat has cured help extend its service life.
+  - question: How soon can we drive on new asphalt?
+    answer: Passenger cars often return after the mat has cooled, commonly the next day. Heavy trucks, trailer jacks, and sharp power-steering turns can scar tender asphalt. We give you a project-specific return-to-traffic time before leaving.
+  - question: Do you sealcoat new asphalt the same week?
+    answer: No. Fresh asphalt needs time to cure and release light oils. Sealcoating too soon can trap those oils and leave a surface that tracks and wears off. We typically wait through a full season, often about 6 to 12 months, then sealcoat. Older pavement that is already cured can be sealed once cracks are filled and the surface is clean.
+  - question: Where do you provide asphalt paving?
+    answer: We build and repair pavement in {{serviceAreaLabel}}. Share the project address so we can confirm access and include site conditions in the written estimate.
+  - question: Do you repair potholes and seal cracks in {{city}}?
+    answer: Yes. We saw-cut patches for potholes and utility cuts, rebuild soft base, and compact hot-mix to meet the surrounding pavement. Open cracks in sound asphalt can be filled before sealcoating. Widespread alligator cracking usually calls for replacement instead of more patches.
+  - question: Can you repave an old blacktop driveway or pave over gravel?
+    answer: Often, yes. A mill-and-overlay or new mat over gravel works when drainage is good and the base compacts. We remove failed blacktop, soft soil, and vegetation first when the edges or subgrade will not support another lift. The free site visit decides whether you need overlay, full-depth paving, or repair only.
+  - question: What should I look for in a {{city}} paving contractor?
+    answer: Look for a written scope that lists square footage, base prep, thickness, and drainage — not just a single price per square foot. The crew should explain when an overlay is a mistake, carry insurance, and give a return-to-traffic time after paving. We provide free on-site estimates so you can compare those details before you hire.
+  - question: Do you handle residential and commercial paving in {{city}}?
+    answer: Yes. Residential paving covers asphalt driveways, blacktop replacement, and long approaches. Commercial paving covers parking lot paving, parking lot repair, and private lanes at shops, churches, apartments, and small yards. The prep and thickness change with traffic; the free site visit sets that before we quote.
+  - question: What is the difference between sealcoating and asphalt paving?
+    answer: Asphalt paving and hot-mix placement build or replace the structural mat. Sealcoating — also called a seal coat — is a maintenance layer on cured pavement after crack sealing and patching. New asphalt needs months to cure before sealcoating; tired pavement may need pothole repair or replacement instead of sealer alone.
+footerBlurb: "Paving contractor services: asphalt paving, driveway paving, parking lot paving, private road paving, pothole repair, crack fill, and sealcoating."

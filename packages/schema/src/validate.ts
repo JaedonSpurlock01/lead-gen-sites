@@ -29,34 +29,24 @@ export function validateSiteForNiche(site: Site, niche: Niche): string[] {
   if (site.layout?.hero && !niche.layout.heroVariants.includes(site.layout.hero)) {
     issues.push(`layout.hero "${site.layout.hero}" is not one of ${niche.layout.heroVariants.join(", ")}`);
   }
+  const allowedSections = new Set([...niche.layout.sections, ...niche.layout.optionalSections]);
   for (const section of site.layout?.sections ?? []) {
-    if (!niche.layout.sections.includes(section)) issues.push(`layout.sections entry "${section}" is not declared by the niche`);
+    if (!allowedSections.has(section)) issues.push(`layout.sections entry "${section}" is not declared by the niche`);
   }
 
   return issues;
 }
 
-/** Service pages must cover exactly the niche's services, with matching nav labels and form values. */
-export function validateServicePages(
-  pages: { slug: string; nav: string; formValue: string }[],
-  niche: Niche,
-): string[] {
+/** Every niche service needs a content file, and no content file may name a service the niche lacks. */
+export function validateServicePages(slugs: string[], niche: Niche): string[] {
   const issues: string[] = [];
-  const bySlug = new Map(pages.map((page) => [page.slug, page]));
+  const present = new Set(slugs);
   for (const service of niche.services) {
-    const page = bySlug.get(service.slug);
-    if (!page) {
-      issues.push(`content/services/${service.slug}.md is missing`);
-      continue;
-    }
-    if (page.nav !== service.nav) issues.push(`${service.slug}: nav "${page.nav}" should be "${service.nav}"`);
-    if (page.formValue !== service.formValue) {
-      issues.push(`${service.slug}: formValue "${page.formValue}" should be "${service.formValue}"`);
-    }
+    if (!present.has(service.slug)) issues.push(`content/services/${service.slug}.md is missing`);
   }
   const known = new Set(niche.services.map((service) => service.slug));
-  for (const page of pages) {
-    if (!known.has(page.slug)) issues.push(`content/services/${page.slug}.md is not a service in niche.json`);
+  for (const slug of slugs) {
+    if (!known.has(slug)) issues.push(`content/services/${slug}.md is not a service in niche.json`);
   }
   return issues;
 }

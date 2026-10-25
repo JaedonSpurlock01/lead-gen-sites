@@ -1,0 +1,66 @@
+---
+import Logo from "./Logo.astro";
+import { services } from "virtual:content";
+import niche from "virtual:niche";
+import site from "virtual:site";
+
+const { business } = site;
+const path = Astro.url.pathname;
+const serviceActive = path.startsWith("/services");
+---
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="sticky top-0 z-50 border-b border-ink/10 bg-surface">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4">
+    <a href="/" class="flex items-center gap-3 leading-tight">
+      <Logo class="h-12 w-auto" />
+      <span>
+        <span class="block text-xs font-semibold tracking-[0.18em] text-ink-soft uppercase">{business.city}</span>
+        <span class="block text-lg font-bold text-ink">{niche.name}</span>
+      </span>
+    </a>
+    <a class="tracking-phone hidden items-center gap-1.5 text-sm font-semibold text-ink sm:inline-flex" href={`tel:${business.phoneTel}`}>
+      <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.3 12 12 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.5.6 3.6a1 1 0 01-.3 1L6.6 10.8z"></path>
+      </svg>
+      {business.phoneDisplay}
+    </a>
+    <a class="hidden items-center gap-1.5 text-sm font-semibold text-ink sm:inline-flex" href={`https://maps.google.com/?q=${encodeURIComponent(`${business.city}, ${business.region}`)}`} target="_blank" rel="noopener noreferrer">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+      </svg>
+      Location: {business.city}, {business.region}
+    </a>
+    <input id="nav-toggle" type="checkbox" />
+    <label for="nav-toggle" class="cursor-pointer border border-ink px-3 py-2 text-sm font-semibold md:hidden">Menu</label>
+    <nav class="site-nav w-full flex-col gap-1 pb-2 md:w-auto md:flex-row md:items-center md:gap-6 md:pb-0" aria-label="Primary">
+      <a class:list={["px-1 py-2 text-sm font-semibold", path === "/" && "underline decoration-accent decoration-2 underline-offset-4"]} href="/">Home</a>
+      <div class="nav-drop" tabindex="0">
+        <input id="services-toggle" class="nav-check" type="checkbox" />
+        <label for="services-toggle" class:list={["nav-drop-label", serviceActive && "underline decoration-accent decoration-2 underline-offset-4"]}>
+          Services
+          <svg class="nav-arrow" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill="currentColor" d="M5.2 7.5 10 12.3l4.8-4.8 1.2 1.2L10 14.7 4 8.7z"></path>
+          </svg>
+        </label>
+        <div class="nav-drop-panel">
+          {
+            services.map((service) => (
+              <a class="px-2 py-2 text-sm hover:bg-surface" href={`/services/${service.slug}`}>
+                {service.nav}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <a class:list={["px-1 py-2 text-sm font-semibold", path === "/about" && "underline decoration-accent decoration-2 underline-offset-4"]} href="/about">About</a>
+      <a class:list={["px-1 py-2 text-sm font-semibold", path === "/contact" && "underline decoration-accent decoration-2 underline-offset-4"]} href="/contact">Contact</a>
+      <a class="tracking-phone mt-2 inline-flex items-center justify-center gap-2 bg-ink px-4 py-3 text-center text-sm font-semibold text-accent md:mt-0" href={`tel:${business.phoneTel}`}>
+        <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.3 12 12 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.5.6 3.6a1 1 0 01-.3 1L6.6 10.8z"></path>
+        </svg>
+        {business.phoneDisplay}
+      </a>
+    </nav>
+  </div>
+</header>

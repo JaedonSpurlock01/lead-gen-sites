@@ -1,0 +1,37 @@
+---
+import { Image } from "astro:assets";
+import siteAssets from "virtual:site-assets";
+import site from "virtual:site";
+
+const { business } = site;
+const heroBackground = siteAssets.hero!;
+---
+
+<section class="relative isolate overflow-hidden text-surface">
+  <Image
+    src={heroBackground}
+    alt=""
+    width={heroBackground.width}
+    height={heroBackground.height}
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+    aria-hidden="true"
+  />
+  <div class="absolute inset-0 -z-10 bg-ink/50 backdrop-blur-sm" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-4xl px-5 py-20 text-center md:py-32">
+    <p class="text-sm font-semibold tracking-[0.16em] text-accent uppercase">{business.name}</p>
+    <h1 class="mt-3 text-4xl font-bold leading-tight text-white md:text-6xl">
+      Asphalt paving in {business.city} with a written scope and a free on-site estimate
+    </h1>
+    <p class="mx-auto mt-5 max-w-2xl text-lg text-surface-alt">
+      Driveways, parking lots, private roads, repair, and sealcoating in {business.serviceAreaLabel}. We look at the ground before we give you a price.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a class="tracking-phone inline-block bg-accent px-5 py-3 font-bold text-ink" href={`tel:${business.phoneTel}`}>
+        Call {business.phoneDisplay}
+      </a>
+      <a class="inline-block border border-surface px-5 py-3 font-semibold text-surface" href="#estimate">Request a free estimate</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,56 @@
+{
+  "id": "city-name",
+  "domain": "example.com",
+  "cloudflareProject": "asphalt-paving-city-name",
+  "canary": false,
+  "market": {
+    "climateLabel": "local weather",
+    "climateSummary": "Local temperatures, precipitation, and traffic patterns affect pavement performance.",
+    "pavingSeason": "the dry months when temperatures support proper placement and curing"
+  },
+  "assets": {
+    "logoLight": "../../assets/logo-light.png",
+    "logoDark": "../../assets/logo-dark.png",
+    "hero": "../../assets/hero-pocatello-paving.jpg",
+    "driveway": "../../assets/photos/asphalt-paving-driveaway.webp",
+    "lot": "../../assets/photos/asphalt-parking-lot.webp",
+    "road": "../../assets/photos/asphalt-paving.jpg",
+    "repair": "../../assets/photos/asphalt-repair.webp",
+    "seal": "../../assets/photos/asphalt-sealcoating.webp",
+    "process": "../../assets/photos/asphalt-paving-header.jpg"
+  },
+  "business": {
+    "name": "City Asphalt Paving",
+    "phoneDisplay": "(208) 000-0000",
+    "phoneTel": "+12080000000",
+    "email": "info@example.com",
+    "city": "City",
+    "region": "ID",
+    "regionName": "Idaho",
+    "country": "US",
+    "latitude": "0",
+    "longitude": "0",
+    "priceRange": "$$",
+    "serviceAreaLabel": "City, Idaho"
+  },
+  "socials": [
+    { "name": "Facebook", "href": "https://www.facebook.com" },
+    { "name": "Instagram", "href": "https://www.instagram.com" },
+    { "name": "Twitter", "href": "https://twitter.com" },
+    { "name": "YouTube", "href": "https://www.youtube.com" }
+  ],
+  "hours": [
+    { "days": "Monday–Friday", "time": "9 AM–6 PM" },
+    { "days": "Saturday", "time": "9 AM–4 PM" },
+    { "days": "Sunday", "time": "Closed" }
+  ],
+  "serviceOptions": [
+    "Asphalt Driveway Paving",
+    "Asphalt Parking Lot",
+    "Asphalt Roads",
+    "Asphalt Repair",
+    "Asphalt Sealcoating",
+    "Other"
+  ],
+  "outboundLinks": []
+}

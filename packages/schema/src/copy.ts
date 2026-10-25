@@ -12,6 +12,17 @@ export const copySchema = z.strictObject({
     .optional(),
   steps: z.array(z.strictObject({ title: z.string().min(1), text: z.string().min(1) })).optional(),
   faqs: z.array(z.strictObject({ question: z.string().min(1), answer: z.string().min(1) })).optional(),
+  /** Footer paragraph listing what the business does. */
+  footerBlurb: z.string().min(1).optional(),
+  /** Lead form labels; each falls back to the shared default in LeadForm.astro. */
+  form: z
+    .strictObject({
+      sizeLabel: z.string().min(1).optional(),
+      serviceLabel: z.string().min(1).optional(),
+      submitLabel: z.string().min(1).optional(),
+      note: z.string().min(1).optional(),
+    })
+    .optional(),
 });
 
 export type Copy = z.output<typeof copySchema>;

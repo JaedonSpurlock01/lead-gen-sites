@@ -1,0 +1,89 @@
+---
+import Diagram from "./Diagram.astro";
+import { services } from "virtual:content";
+import niche from "virtual:niche";
+import site from "virtual:site";
+
+const { business, market } = site;
+
+const blurbs: Record<string, { heading: string; paragraphs: string[]; link: string }> = {
+  "asphalt-driveway-paving": {
+    heading: "Asphalt Driveway Paving",
+    paragraphs: [
+      `A ${business.city} driveway carries repeated wheel loads while ${market.climateLabel} works on the surface. Asphalt driveway paving replaces gravel, broken concrete, or tired blacktop with a smooth, durable entrance.`,
+      "We build new drives, full replacements, and overlays when the existing mat is stable. Residential paving includes slope and the garage joint because standing water weakens the apron and base.",
+    ],
+    link: `Asphalt driveway paving in ${business.city}`,
+  },
+  "asphalt-parking-lot": {
+    heading: "Asphalt Parking Lot Paving",
+    paragraphs: [
+      "A parking lot fails in the drive aisle and the dumpster pad, not in the empty stalls. Commercial parking lot paving covers shops, offices, churches, and apartments that need drainage, parking lot repair, and a surface you can stripe.",
+      "We separate a cosmetic sealcoat from sections that need milling or a new base. The estimate names which areas are full depth and which can take an overlay, so the lot can stay open for customers.",
+    ],
+    link: `Asphalt parking lot paving in ${business.city}`,
+  },
+  "asphalt-roads": {
+    heading: "Asphalt Roads",
+    paragraphs: [
+      "Private asphalt roads and shared lanes need a compacted base sized for the trucks that use them. A thin mat on soft soil prints cracks through the surface under traffic.",
+      `Private road paving covers approaches, shared lanes, and gravel conversions in ${business.city}. The quote includes truck access, a closure window, and traffic-appropriate thickness.`,
+    ],
+    link: `Asphalt roads in ${business.city}`,
+  },
+  "asphalt-repair": {
+    heading: "Asphalt Repair",
+    paragraphs: [
+      "Asphalt repair fits a pothole, utility cut, or settled patch in pavement that still has life. Widespread alligator cracking usually means replacement, and we say that instead of selling a short-lived patch.",
+      "We saw-cut clean limits, rebuild the base under the patch, and roll hot-mix so the joint does not ravel. Pothole repair, asphalt patching, and crack sealing come before any sealcoat.",
+    ],
+    link: `Asphalt repair in ${business.city}`,
+  },
+  "asphalt-sealcoating": {
+    heading: "Asphalt Sealcoating",
+    paragraphs: [
+      "Sealcoating protects cured asphalt from UV, oxidation, and water. It is maintenance, not a structural fix, and it does not belong on fresh mix.",
+      `Sealcoating is especially relevant under ${market.climateLabel}. We fill cracks and patch broken areas first, then keep traffic off the coating until it cures.`,
+    ],
+    link: `Asphalt sealcoating in ${business.city}`,
+  },
+};
+
+const labels: Record<string, string> = {
+  "asphalt-driveway-paving": `Driveway paving in a ${business.city} residential setting`,
+  "asphalt-parking-lot": "Parking lot paving with a marked drive aisle",
+  "asphalt-roads": "Private asphalt road with a compacted section",
+  "asphalt-repair": "Saw-cut asphalt repair inside sound pavement",
+  "asphalt-sealcoating": "Sealcoat over cured asphalt and compacted base",
+};
+
+const slotFor = (slug: string) => niche.services.find((service) => service.slug === slug)?.imageSlot ?? "hero";
+---
+
+<ul class="mt-10 space-y-10">
+  {
+    services.map((service, index) => {
+      const copy = blurbs[service.slug]!;
+      const imageFirst = index % 2 === 1;
+      return (
+        <li class="grid items-center gap-6 md:grid-cols-2 md:gap-10">
+          <div class:list={[imageFirst && "md:order-2"]}>
+            <h3 class="text-2xl font-bold">{copy.heading}</h3>
+            {copy.paragraphs.map((paragraph) => (
+              <p class="mt-3 text-ink-soft">{paragraph}</p>
+            ))}
+            <a
+              class="mt-5 inline-block font-semibold underline decoration-accent decoration-2 underline-offset-4"
+              href={`/services/${service.slug}`}
+            >
+              {copy.link}
+            </a>
+          </div>
+          <div class:list={[imageFirst && "md:order-1"]}>
+            <Diagram name={slotFor(service.slug)} label={labels[service.slug]!} />
+          </div>
+        </li>
+      );
+    })
+  }
+</ul>

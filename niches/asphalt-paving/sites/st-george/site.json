@@ -1,0 +1,82 @@
+{
+  "id": "st-george",
+  "domain": "asphaltpavingstgeorge.com",
+  "cloudflareProject": "asphalt-paving-st-george",
+  "canary": false,
+  "market": {
+    "climateLabel": "southern Utah desert heat",
+    "climateSummary": "Extreme UV, triple-digit summer heat, dust, and short high-intensity storms make compaction, drainage, and timely sealing critical.",
+    "pavingSeason": "most of the year when the surface is dry and temperatures support proper placement and curing"
+  },
+  "assets": {
+    "logoLight": "assets/logo-light.png",
+    "logoDark": "assets/logo-dark.png",
+    "hero": "assets/hero.jpg",
+    "driveway": "assets/driveway.jpg",
+    "lot": "assets/parking-lot.jpg",
+    "road": "../../assets/photos/asphalt-paving.jpg",
+    "repair": "../../assets/photos/asphalt-repair.webp",
+    "seal": "../../assets/photos/asphalt-sealcoating.webp",
+    "process": "assets/hero.jpg"
+  },
+  "business": {
+    "name": "Asphalt Paving St George",
+    "phoneDisplay": "(435) 429-2963",
+    "phoneTel": "+14354292963",
+    "email": "info@asphaltpavingstgeorge.com",
+    "city": "St. George",
+    "region": "UT",
+    "regionName": "Utah",
+    "country": "US",
+    "latitude": "37.0965",
+    "longitude": "-113.5684",
+    "priceRange": "$$",
+    "serviceAreaLabel": "St. George, Utah"
+  },
+  "socials": [
+    {
+      "name": "Facebook",
+      "href": "https://www.facebook.com"
+    },
+    {
+      "name": "Instagram",
+      "href": "https://www.instagram.com"
+    },
+    {
+      "name": "Twitter",
+      "href": "https://twitter.com"
+    },
+    {
+      "name": "YouTube",
+      "href": "https://www.youtube.com"
+    }
+  ],
+  "hours": [
+    {
+      "days": "Monday–Friday",
+      "time": "8 AM–5 PM"
+    },
+    {
+      "days": "Saturday",
+      "time": "Closed"
+    },
+    {
+      "days": "Sunday",
+      "time": "Closed"
+    }
+  ],
+  "serviceOptions": [
+    "Asphalt Driveway Paving",
+    "Asphalt Parking Lot",
+    "Asphalt Roads",
+    "Asphalt Repair",
+    "Asphalt Sealcoating",
+    "Other"
+  ],
+  "outboundLinks": [
+    {
+      "href": "https://pocatelloasphaltpaving.com",
+      "text": "asphalt paving"
+    }
+  ]
+}

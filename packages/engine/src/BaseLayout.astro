@@ -1,0 +1,29 @@
+---
+import "./styles/base.css";
+import Footer from "@lead-gen/ui/Footer.astro";
+import Header from "@lead-gen/ui/Header.astro";
+import BaseHead from "./BaseHead.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  extraSchemas?: Record<string, unknown>[];
+}
+
+const { title, description, noindex = false, extraSchemas = [] } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} noindex={noindex} extraSchemas={extraSchemas} />
+  </head>
+  <body class="min-h-screen antialiased">
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

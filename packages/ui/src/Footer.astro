@@ -1,0 +1,83 @@
+---
+import Logo from "./Logo.astro";
+import { services } from "virtual:content";
+import copy from "virtual:copy";
+import site from "virtual:site";
+import type { Social } from "@lead-gen/schema";
+
+const { business, hours, socials } = site;
+
+const icons: Record<Social["name"], string> = {
+  Facebook: "M14 8h3V4h-3c-2.8 0-5 2.2-5 5v2H6v4h3v7h4v-7h3.2l.8-4H13V9c0-.6.4-1 1-1z",
+  Instagram:
+    "M8 3h8a5 5 0 015 5v8a5 5 0 01-5 5H8a5 5 0 01-5-5V8a5 5 0 015-5zm8 2H8a3 3 0 00-3 3v8a3 3 0 003 3h8a3 3 0 003-3V8a3 3 0 00-3-3zm-4 3.2A3.8 3.8 0 1112 16a3.8 3.8 0 010-7.6zm0 2A1.8 1.8 0 1012 14a1.8 1.8 0 000-3.6zM17.2 6.4a1 1 0 110 2 1 1 0 010-2z",
+  Twitter: "M4 4.5h3.2l4.1 5.5L15.8 4.5H20l-6.3 7.2L20.2 19.5h-3.2l-4.5-6-4.6 6H4.2l6.7-7.7L4 4.5z",
+  YouTube:
+    "M22 12.2s0-3.2-.4-4.6c-.2-.9-.9-1.6-1.8-1.8C18.2 5.4 12 5.4 12 5.4s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 9 2 12.2 2 12.2s0 3.2.4 4.6c.2.9.9 1.6 1.8 1.8 1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.4.4-4.6.4-4.6zM10 15.5v-6.6l5.2 3.3-5.2 3.3z",
+};
+---
+
+<footer class="bg-ink text-surface">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-4">
+    <div>
+      <a href="/" class="inline-flex items-center gap-3">
+        <Logo variant="dark" class="h-12 w-auto" loading="lazy" />
+        <span class="text-lg font-bold text-white">{business.name}</span>
+      </a>
+      <p class="mt-3 text-sm">Service area: {business.serviceAreaLabel}</p>
+      {copy.footerBlurb && <p class="mt-2 text-sm text-surface-alt">{copy.footerBlurb}</p>}
+      <a class="mt-3 block text-sm underline decoration-accent underline-offset-4" href={`mailto:${business.email}`}>{business.email}</a>
+      <ul class="mt-5 flex gap-3">
+        {
+          socials.map((social) => (
+            <li>
+              <a
+                class="inline-flex h-10 w-10 items-center justify-center border border-white/20 text-surface transition-colors duration-200 hover:border-accent hover:text-accent"
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="sr-only">{social.name}</span>
+                <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d={icons[social.name]} />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="tracking-phone mt-5 inline-flex items-center gap-2 bg-accent px-4 py-3 text-sm font-bold text-ink" href={`tel:${business.phoneTel}`}>
+        Call {business.phoneDisplay}
+      </a>
+    </div>
+    <div>
+      <h2 class="text-sm font-bold tracking-wide text-accent uppercase">Hours</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        {hours.map((row) => (
+          <li class="flex justify-between gap-4">
+            <span>{row.days}</span>
+            <span>{row.time}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-sm font-bold tracking-wide text-accent uppercase">Services</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        {services.map((service) => (
+          <li><a class="underline decoration-white/30 underline-offset-4" href={`/services/${service.slug}`}>{service.nav}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-sm font-bold tracking-wide text-accent uppercase">Company</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><a class="underline decoration-white/30 underline-offset-4" href="/about">About</a></li>
+        <li><a class="underline decoration-white/30 underline-offset-4" href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <p class="mx-auto max-w-6xl px-5 py-4 text-xs text-surface-alt">© {new Date().getFullYear()} {business.name}. Serving {business.serviceAreaLabel}.</p>
+  </div>
+</footer>

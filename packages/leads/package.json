@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "The only implementation of /api/lead: validation, honeypot, POST to Tracer.",
+  "description": "The only implementation of /api/lead: validation, honeypot, POST to Tracer with the key from the Secrets Store binding.",
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*"
@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@lead-gen/schema": "workspace:*"
+    "@lead-gen/schema": "workspace:*",
+    "astro": "5.18.2"
   }
 }

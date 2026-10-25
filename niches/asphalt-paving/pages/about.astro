@@ -1,0 +1,72 @@
+---
+import BaseLayout from "@lead-gen/engine/BaseLayout.astro";
+import copy from "virtual:copy";
+import site from "virtual:site";
+import InternalLinks from "../components/InternalLinks.astro";
+
+const { business, market } = site;
+const values = copy.values ?? [];
+
+const title = `About ${business.name}`;
+const description =
+  `${business.city} paving contractor for driveway paving, parking lots, pothole repair, crack sealing, and sealcoating in ${business.serviceAreaLabel}.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="bg-white py-16 md:py-24">
+    <div class="mx-auto max-w-3xl px-5">
+      <h1 class="text-4xl font-bold">About {business.name}</h1>
+      <p class="mt-6">
+        We are a {business.city} paving company and asphalt contractor for people who live and work in the city. The company exists to replace guesswork with a written plan: what comes out, what goes down, how water leaves the surface, and when you can drive on it.
+      </p>
+      <p class="mt-4">
+        {market.climateSummary} We would rather explain base repair on the estimate than pave over a soft spot and return to the same crack. The crew, mix, and schedule exist to support a durable pavement section.
+      </p>
+      <p class="mt-4">
+        Homeowners call about asphalt driveway paving and blacktop that has gone to gravel at the apron. Property managers call about commercial parking lot paving and parking lot repair when aisles pond in front of the door. Lane owners call for private road paving when a lane can no longer be graded into shape. Each of those jobs starts with a free on-site visit and a square-foot count you can check.
+      </p>
+      <p class="mt-4">
+        We do not invent a longer history than we have, and we do not publish reviews we did not earn. Judge the work by the scope, edges, and whether the site is clean when we leave. If you want the service list first, return to the <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href="/">{business.city} asphalt paving</a> homepage.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-surface py-16 md:py-24">
+    <div class="mx-auto max-w-6xl px-5">
+      <h2 class="text-3xl font-bold">Core values</h2>
+      <div class="mt-10 grid gap-5 md:grid-cols-2">
+        {
+          values.map((value) => (
+            <article class="bg-white p-6">
+              <h3 class="text-xl font-bold">{value.title}</h3>
+              <p class="mt-3 text-ink-soft">{value.text}</p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="prose-measure mt-10 space-y-4">
+        <h2 class="text-2xl font-bold">Integrity on the invoice</h2>
+        <p>
+          Honest pricing starts before the truck is loaded. You see the square footage, the service, and the assumptions. If we open the ground and find a condition the surface hid, we stop and price the change. Timelines are tied to weather and plant hours, and we say so when a cold morning moves the job.
+        </p>
+        <h2 class="text-2xl font-bold">Quality you can stand on</h2>
+        <p>
+          Superior craftsmanship here is ordinary discipline: straight cuts, compacted lifts, hot-mix placed while it can still be densified, and joints that meet concrete without a lip. We would rather leave a smaller finished area done right than stretch the mix thin to chase a lower number.
+        </p>
+        <h2 class="text-2xl font-bold">Excellence against a hard climate</h2>
+        <p>
+          Local weather is the standard. Pavement can fail in {business.city} when it holds water or lacks edge support. We treat drainage and a realistic maintenance schedule as part of doing the job well, beyond “cover it in black.”
+        </p>
+        <h2 class="text-2xl font-bold">Safety for the crew and the property</h2>
+        <p>
+          Protocols are simple and strict. Work areas are marked. Staging stays off the parts of the lot you still need. Equipment is operated with a spotter where backing is tight. We protect adjacent concrete, garage floors, and landscaping, and we haul debris away instead of sweeping it into the gutter and calling that clean.
+        </p>
+        <p>
+          Call <a class="tracking-phone font-semibold underline decoration-accent decoration-2 underline-offset-4" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+          or <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href="/contact">request a free estimate</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+  <InternalLinks />
+</BaseLayout>

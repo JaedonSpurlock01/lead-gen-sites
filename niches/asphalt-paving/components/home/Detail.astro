@@ -1,0 +1,78 @@
+---
+import Diagram from "../Diagram.astro";
+import site from "virtual:site";
+
+const { business, hours, market } = site;
+---
+
+<section class="bg-surface-alt py-16 md:py-24">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[1.2fr_0.8fr]">
+    <div class="space-y-4">
+      <h2 class="text-3xl font-bold">Paving built for {market.climateLabel}</h2>
+      <p>
+        {market.climateSummary} Asphalt paving in {business.city} must account for local exposure, traffic, and the way water moves across each property.
+      </p>
+      <p>
+        Water is the real enemy. A driveway that slopes toward the garage, a lot that ponds at the storefront, or a lane with no shoulder will fail in the same place. We look at drainage before thickness. A thicker mat on a bad slope still traps water.
+      </p>
+      <p>
+        The base is the structure you do not see. Soft, wet soil pumps under traffic and prints a web of cracks through whatever we pave on top. That is why some estimates include removal and aggregate, and some are overlays. An overlay is the right tool only when the existing pavement is stable, drained, and thick enough at the edges to accept another lift.
+      </p>
+      <h3 class="pt-4 text-2xl font-bold">What we need from you to price the work</h3>
+      <p>
+        Start with the approximate size in square feet. A 12-by-50 drive is 600 square feet. A small shop lot may be several thousand. Measure the flared apron too, because it takes turning traffic and meets the city street.
+      </p>
+      <p>
+        Tell us the service: asphalt driveway paving, blacktop replacement, parking lot repair, private road paving, pothole repair, crack fill, asphalt sealcoating (seal coat), or a mix you can describe as Other. Add a phone number and an email. We use those to schedule the free walkthrough, not to send a generic blast.
+      </p>
+      <ul class="list-disc space-y-2 pl-5">
+        <li>Square footage, including aprons and turnarounds</li>
+        <li>What uses the pavement: cars, delivery trucks, trailers, or foot traffic</li>
+        <li>Whether water sits on the surface after a storm or during melt</li>
+        <li>Access limits: alley width, overhead lines, or a hill the paver must climb</li>
+      </ul>
+      <h3 class="pt-4 text-2xl font-bold">New pavement, repair, or sealcoat</h3>
+      <p>
+        New asphalt paving is the right call when the surface has alligator cracking, when the edges have crumbled, or when you are covering a gravel driveway with asphalt for the first time. We remove what will not support a mat, compact base rock, and place hot-mix asphalt in a continuous operation so the joints stay tight. Driveway resurfacing and parking lot resurfacing follow the same prep when the base is still sound.
+      </p>
+      <p>
+        Asphalt repair fits isolated damage. A utility cut, settled patch, or single pothole can be saw-cut and rebuilt without replacing the whole drive. Crack sealing and patching help when the surrounding pavement is still strong. If cracks map the entire surface, we price replacement instead of selling a short-lived patch.
+      </p>
+      <p>
+        Sealcoating is maintenance for cured asphalt, not a structural fix. New pavement needs time to cure before sealer. Older pavement can be sealed after cracks are filled, oil spots are treated, and broken areas are patched. We block the surface until the coating can take tires.
+      </p>
+      <div class="grid gap-5 pt-4 sm:grid-cols-2">
+        <Diagram name="repair" label="Saw-cut asphalt repair inside sound pavement" />
+        <Diagram name="seal" label="Sealcoat over cured asphalt and compacted base" />
+      </div>
+      <h3 class="pt-4 text-2xl font-bold">Timing, traffic, and care</h3>
+      <p>
+        Hot-mix needs a dry base and temperatures that support placement and compaction. In {business.city}, workable paving conditions cover {market.pavingSeason}. We move a pave day rather than place a mat that cannot be compacted correctly.
+      </p>
+      <p>
+        Passenger cars often return after the mat has cooled, commonly the next day. Trailer jacks, tight power-steering turns, and heavy trucks can scar tender asphalt, so we give you a return time for your project and that day’s weather.
+      </p>
+      <p>
+        Parking lots need a plan for customers. When the site allows it, we phase the work and leave a path open. Private roads need a detour or a clear closure window. Both decisions are in the estimate, so nobody discovers a blocked driveway on the morning the trucks arrive.
+      </p>
+      <h3 class="pt-4 text-2xl font-bold">Where we work</h3>
+      <p>
+        The home base is {business.serviceAreaLabel}. Share the project address when you call or write so we can confirm truck access and plant delivery before quoting the job.
+      </p>
+      <p>
+        Hours are {hours.map((row) => `${row.days} ${row.time}`).join(" · ")}. Estimators return calls during posted hours.
+      </p>
+      <p>
+        Ready for a number you can use? Call <a class="tracking-phone font-semibold underline decoration-ink underline-offset-4" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+        or send the form with your square footage. The visit is free. The recommendation will match the pavement you have, whether that is a driveway, a lot, a private road, a repair, or a sealcoat.
+      </p>
+    </div>
+    <aside class="h-fit border border-ink/10 bg-white p-6 lg:sticky lg:top-20">
+      <h2 class="text-xl font-bold">Talk with an estimator</h2>
+      <p class="mt-3 text-sm text-ink-soft">Service area: {business.serviceAreaLabel}. Local paving company for asphalt contractor work in the city limits.</p>
+      <a class="tracking-phone mt-4 block bg-ink px-4 py-3 text-center font-bold text-accent" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+      <a class="mt-3 block border border-ink px-4 py-3 text-center font-semibold" href="/contact">Go to the contact form</a>
+      <p class="mt-4 text-sm text-ink-soft">{hours.map((row) => `${row.days} ${row.time}`).join(" · ")}</p>
+    </aside>
+  </div>
+</section>

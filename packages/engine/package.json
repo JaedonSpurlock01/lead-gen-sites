@@ -3,15 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Astro integration shared by every niche: virtual modules, layouts, BaseHead, JSON-LD, sitemap, robots, the /api/lead route.",
+  "description": "Astro integration shared by every niche: site loading, virtual modules, per-site outDir, BaseHead, BaseLayout, JSON-LD, sitemap, robots, the injected /api/lead route.",
   "exports": {
     ".": "./src/index.ts",
+    "./load": "./src/load.ts",
+    "./schema": "./src/schema.ts",
     "./*": "./src/*"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@lead-gen/schema": "workspace:*"
+    "@astrojs/cloudflare": "12.6.13",
+    "@astrojs/sitemap": "^3.7.4",
+    "@lead-gen/leads": "workspace:*",
+    "@lead-gen/schema": "workspace:*",
+    "@lead-gen/ui": "workspace:*",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "5.18.2",
+    "tailwindcss": "^4.3.3",
+    "vite": "^6.4.5",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
   }
 }

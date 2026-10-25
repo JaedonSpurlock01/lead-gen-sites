@@ -1,0 +1,28 @@
+---
+import Diagram from "../Diagram.astro";
+import site from "virtual:site";
+
+const { business } = site;
+---
+
+<section class="bg-surface py-16 md:py-24">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 md:grid-cols-[1fr_1fr]">
+    <div>
+      <h2 class="text-3xl font-bold">A paving crew that says what the job includes</h2>
+      <p class="prose-measure mt-4">
+        <strong>{business.name}</strong> serves homeowners, property managers, and private-road owners. We pave with hot-mix asphalt, compacted base, and drainage planned for {business.serviceAreaLabel}.
+      </p>
+      <p class="prose-measure mt-4">
+        We use professional paving equipment and proven placement and compaction practices. As a local asphalt contractor in {business.city}, we handle residential and commercial paving under one crew.
+      </p>
+      <p class="prose-measure mt-4">
+      Our team understands that you have many options when choosing a paving contractor, so we want to assure you we are the best choice for your project. We will work diligently to complete your project on time and within budget. And we guarantee your complete satisfaction with our work.
+      </p>
+      <p class="prose-measure mt-4">
+        <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href="/about">Read how we work</a>
+        or call <a class="tracking-phone font-semibold underline decoration-accent decoration-2 underline-offset-4" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>.
+      </p>
+    </div>
+    <Diagram name="process" label="Four-step paving process from estimate to cleanup" />
+  </div>
+</section>

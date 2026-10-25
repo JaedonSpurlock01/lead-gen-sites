@@ -1,0 +1,86 @@
+{
+  "id": "blackfoot",
+  "domain": "asphaltpavingblackfoot.com",
+  "cloudflareProject": "asphalt-paving-blackfoot",
+  "canary": false,
+  "market": {
+    "climateLabel": "Snake River Plain freeze-thaw",
+    "climateSummary": "Freezing winters, warm dry summers, irrigation moisture, and spring thaw make drainage and a compacted base critical.",
+    "pavingSeason": "late spring through early fall"
+  },
+  "assets": {
+    "logoLight": "assets/logo-light.png",
+    "logoDark": "assets/logo-dark.png",
+    "hero": "assets/hero.jpg",
+    "driveway": "assets/driveway.jpg",
+    "lot": "assets/parking-lot.jpg",
+    "road": "assets/private-road.jpg",
+    "repair": "assets/repair.jpg",
+    "seal": "assets/sealcoating.jpg",
+    "process": "assets/hero.jpg"
+  },
+  "business": {
+    "name": "Asphalt Paving Blackfoot",
+    "phoneDisplay": "(208) 782-7152",
+    "phoneTel": "+12087827152",
+    "email": "info@asphaltpavingblackfoot.com",
+    "city": "Blackfoot",
+    "region": "ID",
+    "regionName": "Idaho",
+    "country": "US",
+    "latitude": "43.1905",
+    "longitude": "-112.3450",
+    "priceRange": "$$",
+    "serviceAreaLabel": "Blackfoot, Idaho"
+  },
+  "socials": [
+    {
+      "name": "Facebook",
+      "href": "https://www.facebook.com"
+    },
+    {
+      "name": "Instagram",
+      "href": "https://www.instagram.com"
+    },
+    {
+      "name": "Twitter",
+      "href": "https://twitter.com"
+    },
+    {
+      "name": "YouTube",
+      "href": "https://www.youtube.com"
+    }
+  ],
+  "hours": [
+    {
+      "days": "Monday–Friday",
+      "time": "8 AM–5 PM"
+    },
+    {
+      "days": "Saturday",
+      "time": "Closed"
+    },
+    {
+      "days": "Sunday",
+      "time": "Closed"
+    }
+  ],
+  "serviceOptions": [
+    "Asphalt Driveway Paving",
+    "Asphalt Parking Lot",
+    "Asphalt Roads",
+    "Asphalt Repair",
+    "Asphalt Sealcoating",
+    "Other"
+  ],
+  "outboundLinks": [
+    {
+      "href": "https://pocatelloasphaltpaving.com/",
+      "text": "asphalt paving"
+    },
+    {
+      "href": "https://asphaltpavingstgeorge.com/",
+      "text": "asphalt paving"
+    }
+  ]
+}

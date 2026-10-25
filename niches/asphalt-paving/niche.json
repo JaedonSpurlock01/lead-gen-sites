@@ -1,0 +1,44 @@
+{
+  "id": "asphalt-paving",
+  "name": "Asphalt Paving",
+  "schemaOrgType": "PavingContractor",
+  "services": [
+    { "slug": "asphalt-driveway-paving", "nav": "Driveway Paving", "formValue": "Asphalt Driveway Paving", "imageSlot": "driveway" },
+    { "slug": "asphalt-parking-lot", "nav": "Parking Lots", "formValue": "Asphalt Parking Lot", "imageSlot": "lot" },
+    { "slug": "asphalt-roads", "nav": "Asphalt Roads", "formValue": "Asphalt Roads", "imageSlot": "road" },
+    { "slug": "asphalt-repair", "nav": "Asphalt Repair", "formValue": "Asphalt Repair", "imageSlot": "repair" },
+    { "slug": "asphalt-sealcoating", "nav": "Sealcoating", "formValue": "Asphalt Sealcoating", "imageSlot": "seal" }
+  ],
+  "imageSlots": [
+    { "name": "logoLight", "description": "Logo on light backgrounds (header)" },
+    { "name": "logoDark", "description": "Logo on dark backgrounds (footer); also the favicon source" },
+    { "name": "favicon", "required": false, "description": "Optional square favicon source" },
+    { "name": "hero", "description": "Home hero background" },
+    { "name": "driveway", "description": "Driveway paving photo" },
+    { "name": "lot", "description": "Parking lot photo" },
+    { "name": "road", "description": "Private road photo" },
+    { "name": "repair", "description": "Asphalt repair photo" },
+    { "name": "seal", "description": "Sealcoating photo" },
+    { "name": "process", "description": "Photo beside the intro section" }
+  ],
+  "marketFields": [
+    { "name": "climateLabel", "description": "Short noun phrase, e.g. \"Snake River Plain freeze-thaw\"" },
+    { "name": "climateSummary", "description": "One sentence on how local weather affects pavement" },
+    { "name": "pavingSeason", "description": "When hot-mix can be placed, e.g. \"late spring through early fall\"" }
+  ],
+  "theme": {
+    "colors": {
+      "surface": "#e8eddf",
+      "surfaceAlt": "#cfdbd5",
+      "accent": "#f5cb5c",
+      "ink": "#242423",
+      "inkSoft": "#333533"
+    },
+    "themeColor": "#242423"
+  },
+  "layout": {
+    "heroVariants": ["default", "centered"],
+    "sections": ["trust", "intro", "why", "services", "process", "detail", "faq", "related"],
+    "optionalSections": ["form"]
+  }
+}

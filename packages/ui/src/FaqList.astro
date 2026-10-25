@@ -1,0 +1,23 @@
+---
+import copy from "virtual:copy";
+
+const faqs = copy.faqs ?? [];
+---
+
+<div class="border-t border-ink/15">
+  {
+    faqs.map((faq) => (
+      <details class="border-b border-ink/15 py-4">
+        <summary class="flex cursor-pointer items-start justify-between gap-4 text-lg font-semibold">
+          {faq.question}
+          <span class="faq-plus mt-1 inline-block text-2xl leading-none" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq-body">
+          <div>
+            <p class="prose-measure pt-3 text-ink-soft">{faq.answer}</p>
+          </div>
+        </div>
+      </details>
+    ))
+  }
+</div>

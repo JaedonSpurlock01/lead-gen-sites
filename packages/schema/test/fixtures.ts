@@ -19,10 +19,10 @@ export const nicheFixture: NicheInput = {
   ],
   marketFields: [{ name: "climateLabel" }, { name: "climateSummary" }, { name: "pavingSeason" }],
   theme: {
-    colors: { linen: "#e8eddf", carbon: "#242423" },
+    colors: { surface: "#e8eddf", surfaceAlt: "#cfdbd5", accent: "#f5cb5c", ink: "#242423", inkSoft: "#333533" },
     themeColor: "#242423",
   },
-  layout: { heroVariants: ["default", "split"], sections: ["intro", "services", "faq"] },
+  layout: { heroVariants: ["default", "split"], sections: ["intro", "services", "faq"], optionalSections: ["form"] },
 };
 
 export const siteFixture: SiteInput = {

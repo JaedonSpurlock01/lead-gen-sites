@@ -1,0 +1,55 @@
+---
+import BaseLayout from "@lead-gen/engine/BaseLayout.astro";
+import { faqPageSchema } from "@lead-gen/engine/schema";
+import copy from "virtual:copy";
+import niche from "virtual:niche";
+import site from "virtual:site";
+import InternalLinks from "../components/InternalLinks.astro";
+import Detail from "../components/home/Detail.astro";
+import EstimateForm from "../components/home/EstimateForm.astro";
+import Faq from "../components/home/Faq.astro";
+import Hero from "../components/home/Hero.astro";
+import HeroCentered from "../components/home/HeroCentered.astro";
+import Intro from "../components/home/Intro.astro";
+import ProcessSection from "../components/home/ProcessSection.astro";
+import Services from "../components/home/Services.astro";
+import TrustBar from "../components/home/TrustBar.astro";
+import WhyUs from "../components/home/WhyUs.astro";
+
+const { business } = site;
+
+// Layout variation per site: site.json `layout.hero` picks the hero, `layout.sections` the order.
+const heroes = { default: Hero, centered: HeroCentered };
+const sections = {
+  trust: TrustBar,
+  intro: Intro,
+  why: WhyUs,
+  services: Services,
+  process: ProcessSection,
+  detail: Detail,
+  faq: Faq,
+  related: InternalLinks,
+  form: EstimateForm,
+};
+const HeroVariant = heroes[(site.layout?.hero ?? "default") as keyof typeof heroes];
+const order = (site.layout?.sections ?? niche.layout.sections) as (keyof typeof sections)[];
+for (const name of order) {
+  if (!(name in sections)) throw new Error(`index.astro: unknown section "${name}"`);
+}
+
+const extraSchemas = [faqPageSchema(copy.faqs ?? [])];
+
+const title = `${business.city} Paving Contractor | Driveways, Lots, Repair & Sealcoating`;
+const description =
+  `Local ${business.city} paving contractor for asphalt driveways, blacktop repair, pothole patching, parking lots, private roads, and sealcoating. Free estimates. Call ${business.phoneDisplay}.`;
+---
+
+<BaseLayout title={title} description={description} extraSchemas={extraSchemas}>
+  <HeroVariant />
+  {
+    order.map((name) => {
+      const Section = sections[name];
+      return <Section />;
+    })
+  }
+</BaseLayout>

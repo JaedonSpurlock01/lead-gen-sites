@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import siteAssets from "virtual:site-assets";
+import LeadForm from "@lead-gen/ui/LeadForm.astro";
+import site from "virtual:site";
+
+const { business } = site;
+const heroBackground = siteAssets.hero!;
+---
+
+<section class="relative isolate overflow-hidden text-surface">
+  <Image
+    src={heroBackground}
+    alt=""
+    width={heroBackground.width}
+    height={heroBackground.height}
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+    aria-hidden="true"
+  />
+  <div class="absolute inset-0 -z-10 bg-ink/30 backdrop-blur-sm" aria-hidden="true"></div>
+  <div class="relative mx-auto grid max-w-6xl items-start gap-10 px-5 py-16 md:grid-cols-[1.2fr_0.8fr] md:py-24">
+    <div>
+      <p class="text-sm font-semibold tracking-[0.16em] text-accent uppercase">{business.name}</p>
+      <h1 class="mt-3 max-w-3xl text-4xl font-bold leading-tight text-white md:text-5xl">
+        {business.city} paving contractor for asphalt driveways, parking lots, and private roads
+      </h1>
+      <p class="prose-measure mt-5 text-lg text-surface-alt">
+        {business.name} handles residential driveways, commercial parking lots, and private lanes in {business.serviceAreaLabel}. We build new blacktop, resurface stable pavement, and repair potholes and failed sections.
+      </p>
+      <p class="prose-measure mt-5 text-lg text-surface-alt">
+        Get a free on-site estimate for hot-mix paving, crack sealing, patch repair, or sealcoating. Tell us the square footage and the service. We look at the ground before we give you a price.
+      </p>
+      <a class="tracking-phone mt-6 inline-block bg-accent px-5 py-3 font-bold text-ink" href={`tel:${business.phoneTel}`}>
+        Call {business.phoneDisplay}
+      </a>
+    </div>
+    <div class="bg-surface p-5 text-ink md:p-6" id="estimate">
+      <h2 class="text-2xl font-bold">Request a free estimate</h2>
+      <p class="mt-2 text-sm text-ink-soft">Share the project size and how to reach you. Quotes are free.</p>
+      <div class="mt-4">
+        <LeadForm />
+      </div>
+    </div>
+  </div>
+</section>

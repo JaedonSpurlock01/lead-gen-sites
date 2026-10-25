@@ -1,0 +1,181 @@
+@import "tailwindcss";
+@source "../../../ui/src";
+@source "../";
+
+/* Slots filled per niche by BaseHead from niche.json theme (--theme-*). */
+@theme {
+  --color-surface: var(--theme-surface);
+  --color-surface-alt: var(--theme-surface-alt);
+  --color-accent: var(--theme-accent);
+  --color-ink: var(--theme-ink);
+  --color-ink-soft: var(--theme-ink-soft);
+  --font-sans: var(--theme-font-sans);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 50;
+  background: var(--color-accent);
+  color: var(--color-ink);
+  padding: 0.5rem 0.75rem;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+#nav-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.site-nav {
+  display: none;
+}
+
+#nav-toggle:checked ~ .site-nav {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .site-nav {
+    display: flex;
+  }
+}
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav-check {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.nav-drop-label {
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.nav-arrow {
+  width: 0.85rem;
+  height: 0.85rem;
+  transition: transform 180ms ease;
+}
+
+.nav-drop-panel {
+  display: none;
+  flex-direction: column;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 10%, transparent);
+  background: #fff;
+  padding: 0.5rem;
+}
+
+.nav-check:checked ~ .nav-drop-panel {
+  display: flex;
+}
+
+.nav-check:checked ~ .nav-drop-label .nav-arrow {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 768px) {
+  .nav-drop {
+    position: relative;
+  }
+
+  .nav-drop-label {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .nav-drop-panel {
+    position: absolute;
+    top: calc(100% - 0.15rem);
+    right: 0;
+    z-index: 40;
+    display: flex;
+    min-width: 14rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    pointer-events: none;
+    box-shadow: 0 8px 24px color-mix(in oklab, var(--color-ink) 8%, transparent);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease,
+      visibility 180ms ease;
+  }
+
+  .nav-drop:hover .nav-drop-panel,
+  .nav-drop:focus-within .nav-drop-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .nav-drop:hover .nav-arrow,
+  .nav-drop:focus-within .nav-arrow {
+    transform: rotate(180deg);
+  }
+}
+
+.faq-plus {
+  transition: transform 180ms ease;
+}
+
+details[open] .faq-plus {
+  transform: rotate(45deg);
+}
+
+.faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms ease;
+}
+
+details[open] > .faq-body {
+  grid-template-rows: 1fr;
+}
+
+.faq-body > div {
+  overflow: hidden;
+}
+
+.prose-measure {
+  max-width: 68ch;
+}

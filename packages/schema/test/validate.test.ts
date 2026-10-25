@@ -19,7 +19,7 @@ describe("validateSiteForNiche", () => {
       market: { ...market, bogus: "x" },
       assets: { ...assets, extra: "assets/x.jpg" },
       serviceOptions: ["Other"],
-      layout: { hero: "wide", sections: ["intro", "nope"] },
+      layout: { hero: "wide", sections: ["intro", "form", "nope"] },
     });
     expect(validateSiteForNiche(site, niche)).toEqual([
       "market.pavingSeason is required by niche asphalt-paving",
@@ -35,15 +35,11 @@ describe("validateSiteForNiche", () => {
 });
 
 describe("validateServicePages", () => {
-  it("requires one page per niche service with matching labels", () => {
-    const pages = [
-      { slug: "asphalt-driveway-paving", nav: "Driveways", formValue: "Asphalt Driveway Paving" },
-      { slug: "asphalt-sealcoating", nav: "Sealcoating", formValue: "Asphalt Sealcoating" },
-    ];
-    expect(validateServicePages(pages, niche)).toEqual([
-      'asphalt-driveway-paving: nav "Driveways" should be "Driveway Paving"',
+  it("requires one content file per niche service and no extras", () => {
+    expect(validateServicePages(["asphalt-driveway-paving", "asphalt-sealcoating"], niche)).toEqual([
       "content/services/asphalt-repair.md is missing",
       "content/services/asphalt-sealcoating.md is not a service in niche.json",
     ]);
+    expect(validateServicePages(["asphalt-driveway-paving", "asphalt-repair"], niche)).toEqual([]);
   });
 });

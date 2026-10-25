@@ -23,9 +23,18 @@ export const marketFieldSchema = z.strictObject({
   description: z.string().optional(),
 });
 
+/** Semantic color slots every shared component is written against (bg-surface, text-ink, decoration-accent...). */
+export const themeColorsSchema = z.strictObject({
+  surface: hexColor,
+  surfaceAlt: hexColor,
+  accent: hexColor,
+  ink: hexColor,
+  inkSoft: hexColor,
+});
+
 export const themeSchema = z.strictObject({
-  /** Tailwind theme color tokens: name -> hex. Exposed as --color-<name> CSS variables. */
-  colors: z.record(identifier, hexColor),
+  /** Exposed as --theme-<slot> CSS variables that the engine's @theme block maps to Tailwind colors. */
+  colors: themeColorsSchema,
   fontSans: z.string().min(1).optional(),
   /** <meta name="theme-color">. */
   themeColor: hexColor,
@@ -33,7 +42,10 @@ export const themeSchema = z.strictObject({
 
 export const nicheLayoutSchema = z.strictObject({
   heroVariants: z.array(z.string().min(1)).min(1).default(["default"]),
+  /** Default home-page section order. */
   sections: z.array(z.string().min(1)).default([]),
+  /** Sections a site may add to its own order (e.g. a standalone form when the hero has none). */
+  optionalSections: z.array(z.string().min(1)).default([]),
 });
 
 const defaultPlaceholderPatterns = ["\\bTEMPLATE\\b", "example\\.com", "000-0000", "Replace this", "city-name", "City Name"];
@@ -51,7 +63,7 @@ export const nicheSchema = z.strictObject({
   /** Extra values appended to the lead form select after the services, e.g. "Other". */
   extraServiceOptions: z.array(z.string().min(1)).default(["Other"]),
   theme: themeSchema,
-  layout: nicheLayoutSchema.default({ heroVariants: ["default"], sections: [] }),
+  layout: nicheLayoutSchema.default({ heroVariants: ["default"], sections: [], optionalSections: [] }),
   /** Regex sources; `pnpm check` fails a site whose data or content matches any of them. */
   placeholderPatterns: z.array(z.string().min(1)).default(defaultPlaceholderPatterns),
 });

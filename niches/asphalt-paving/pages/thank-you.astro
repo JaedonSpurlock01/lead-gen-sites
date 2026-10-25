@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@lead-gen/engine/BaseLayout.astro";
+import site from "virtual:site";
+
+const { business, hours } = site;
+
+const title = `Thank You | ${business.name}`;
+const description = "Your paving estimate request is in. We will follow up during business hours.";
+---
+
+<BaseLayout title={title} description={description} noindex={true}>
+  <section class="bg-white py-16 md:py-24">
+    <div class="mx-auto max-w-3xl px-5">
+      <h1 class="text-4xl font-bold">Thank you. Your estimate request is in.</h1>
+      <p class="mt-5 text-lg">
+        We have your name, phone, email, service, and project size. An estimator will reach out during business hours: {hours.map((row) => `${row.days} ${row.time}`).join(" · ")}.
+      </p>
+      <p class="mt-4">
+        If the job is time-sensitive, call <a class="tracking-phone font-bold underline decoration-accent decoration-2 underline-offset-4" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a> now.
+      </p>
+      <a class="mt-8 inline-block bg-ink px-5 py-3 font-bold text-accent" href="/">Back to {business.city} asphalt paving</a>
+    </div>
+  </section>
+</BaseLayout>

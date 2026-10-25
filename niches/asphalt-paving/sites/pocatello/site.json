@@ -1,0 +1,82 @@
+{
+  "id": "pocatello",
+  "domain": "pocatelloasphaltpaving.com",
+  "cloudflareProject": "asphalt-paving-pocatello",
+  "canary": false,
+  "market": {
+    "climateLabel": "Portneuf Valley freeze-thaw",
+    "climateSummary": "Cold winters, plow traffic, and spring thaw make drainage and a compacted base critical.",
+    "pavingSeason": "late spring through early fall"
+  },
+  "assets": {
+    "logoLight": "../../assets/logo-light.png",
+    "logoDark": "../../assets/logo-dark.png",
+    "hero": "../../assets/hero-pocatello-paving.jpg",
+    "driveway": "../../assets/photos/asphalt-paving-driveaway.webp",
+    "lot": "../../assets/photos/asphalt-parking-lot.webp",
+    "road": "../../assets/photos/asphalt-paving.jpg",
+    "repair": "../../assets/photos/asphalt-repair.webp",
+    "seal": "../../assets/photos/asphalt-sealcoating.webp",
+    "process": "../../assets/photos/asphalt-paving-header.jpg"
+  },
+  "business": {
+    "name": "Pocatello Asphalt Paving",
+    "phoneDisplay": "(208) 775-8900",
+    "phoneTel": "+12087758900",
+    "email": "info@pocatelloasphaltpaving.com",
+    "city": "Pocatello",
+    "region": "ID",
+    "regionName": "Idaho",
+    "country": "US",
+    "latitude": "42.8713",
+    "longitude": "-112.4455",
+    "priceRange": "$$",
+    "serviceAreaLabel": "Pocatello, Idaho"
+  },
+  "socials": [
+    {
+      "name": "Facebook",
+      "href": "https://www.facebook.com"
+    },
+    {
+      "name": "Instagram",
+      "href": "https://www.instagram.com"
+    },
+    {
+      "name": "Twitter",
+      "href": "https://twitter.com"
+    },
+    {
+      "name": "YouTube",
+      "href": "https://www.youtube.com"
+    }
+  ],
+  "hours": [
+    {
+      "days": "Monday–Friday",
+      "time": "9 AM–6 PM"
+    },
+    {
+      "days": "Saturday",
+      "time": "9 AM–4 PM"
+    },
+    {
+      "days": "Sunday",
+      "time": "Closed"
+    }
+  ],
+  "serviceOptions": [
+    "Asphalt Driveway Paving",
+    "Asphalt Parking Lot",
+    "Asphalt Roads",
+    "Asphalt Repair",
+    "Asphalt Sealcoating",
+    "Other"
+  ],
+  "outboundLinks": [
+    {
+      "href": "http://lasvegasasphaltservices.com",
+      "text": "asphalt paving"
+    }
+  ]
+}

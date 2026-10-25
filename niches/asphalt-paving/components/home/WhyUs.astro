@@ -1,0 +1,24 @@
+---
+import WhyChoose from "../WhyChoose.astro";
+import site from "virtual:site";
+
+const { business, outboundLinks } = site;
+---
+
+<section class="bg-white py-16 md:py-24">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-3xl font-bold">Why property owners call us</h2>
+    <p class="prose-measure mt-4 text-ink-soft">
+      The right paving contractor will tell you when an overlay is a mistake. These are the standards we hold on every {business.city}{" "}
+      {outboundLinks[0] ? (
+        <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href={outboundLinks[0].href} target="_blank" rel="noopener noreferrer">{outboundLinks[0].text}</a>
+      ) : (
+        "asphalt paving"
+      )}{" "}
+      project — residential, commercial, and private-road work.
+    </p>
+    <div class="mt-10">
+      <WhyChoose />
+    </div>
+  </div>
+</section>
