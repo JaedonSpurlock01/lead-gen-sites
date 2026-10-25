@@ -37,7 +37,7 @@ describe("loadSite with block pages", () => {
     expect(loaded.services).toEqual([]);
     expect(loaded.pages.index!.blocks.map((block) => block.type)).toContain("faq");
     // {{url}} tokens in JSON-LD resolve to the site URL.
-    expect(JSON.stringify(loaded.pages["services/commercial-dumpster-rental"]!.jsonLd)).toContain("https://dumpsterrentalshainescity.com/services/commercial-dumpster-rental/");
+    expect(JSON.stringify(loaded.pages["services/commercial-dumpster-rental"]!.jsonLd)).toContain("https://dumpsterrentalhainescity.com/services/commercial-dumpster-rental/");
   });
 
   it("rejects a block type the niche does not render", () => {
