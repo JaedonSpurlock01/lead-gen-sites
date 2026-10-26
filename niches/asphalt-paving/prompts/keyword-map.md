@@ -4,12 +4,13 @@ Goal: one keyword map per site, in the same shape as `sites/blackfoot/keyword-ma
 
 ## Inputs
 
-- `sites/{{id}}/research.md` (competitor SERP notes and local context).
+- `keywords.md` in this niche: every keyword, its page, US volume and CPC, and its verdict (from the `keyword-research` skill).
+- `sites/{{id}}/research.md` (competitor SERP notes, local context, and the "Keyword checks" section for this city).
 - The niche services in `niche.json`: driveway paving, parking lots, asphalt roads, repair, sealcoating.
 
 ## Rules
 
-- No keyword-volume tool is connected. Say so in the intro and rank by local SERP presence and commercial intent, exactly like the existing maps. Never invent search volumes.
+- Take keywords from `keywords.md`: its `match` terms, plus `varies` terms marked `match` for this city in research.md. Rank them by the US volume and CPC that file records. Use city-level volume only where research.md cites it.
 - One primary keyword per page; secondaries are real variants people search (blacktop, resurfacing, overlay, pothole repair, seal coat), not the city name repeated.
 - Use the city's real spellings (for example both "St. George" and "St George" when the business name drops the period).
 - List services competitors rank for that we do not offer, under the page they relate to, with "do not claim unless offered".

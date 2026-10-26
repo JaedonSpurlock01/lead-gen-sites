@@ -39,7 +39,7 @@ Done when every `market` value and every local-context bullet cites a source.
 
 ## 4. Keyword map
 
-Run `prompts/keyword-map.md`. Write `sites/<id>/keyword-map.md`.
+Do the `keyword-research` site run for the city (it also does the niche run if `niches/<niche>/keywords.md` is missing). Then run `prompts/keyword-map.md` and write `sites/<id>/keyword-map.md`.
 
 Done when every page has a primary keyword.
 
