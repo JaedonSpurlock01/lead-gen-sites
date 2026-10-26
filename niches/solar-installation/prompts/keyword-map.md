@@ -1,24 +1,23 @@
-# Keyword map: {{city}} <niche name>
+# Keyword map: {{city}} solar installation
 
-> TEMPLATE: adapt this prompt to the trade. Replace every asphalt-specific example (climate, soil, materials, services, reference sites) with this niche's, then delete this line.
-
-Goal: one keyword map per site, in the same shape as `sites/blackfoot/keyword-map.md` and `sites/st-george/keyword-map.md`. Read both before writing; they are the reference for structure and tone.
+Goal: one keyword map per site, in the same shape as `sites/carson-city/keyword-map.md` and `sites/idaho-falls/keyword-map.md`. Read both before writing; they are the reference for structure and tone.
 
 ## Inputs
 
 - `keywords.md` in this niche: every keyword, its page, US volume and CPC, and its verdict (from the `keyword-research` skill).
 - `sites/{{id}}/research.md` (competitor SERP notes, local context, and the "Keyword checks" section for this city).
-- The niche services in `niche.json`: driveway paving, parking lots, asphalt roads, repair, sealcoating.
+- The pages in `niche.json`: `/`, the three service pages (solar panel installation, repair and cleaning), `/about/` and `/contact/`.
 
 ## Rules
 
 - Take keywords from `keywords.md`: its `match` terms, plus `varies` terms marked `match` for this city in research.md. Rank them by the US volume and CPC that file records. Use city-level volume only where research.md cites it.
-- One primary keyword per page; secondaries are real variants people search (blacktop, resurfacing, overlay, pothole repair, seal coat), not the city name repeated.
-- Use the city's real spellings (for example both "St. George" and "St George" when the business name drops the period).
-- List services competitors rank for that we do not offer, under the page they relate to, with "do not claim unless offered".
+- One primary keyword per page; secondaries are real variants people search (solar installer, solar company, solar contractor, solar inverter repair, solar panel washing), not the city name repeated. Word-order variants share one page.
+- Use the city's real spellings and the state both spelled out and abbreviated ("Nevada" and "NV").
+- Cost and incentive questions follow research.md's incentive status; never map a page to a credit or rebate that has ended.
+- List terms competitors rank for that we do not offer (batteries, EV chargers, roofing, financing, leases) under "Competitor terminology and gaps", with "do not claim unless offered".
 
 ## Output
 
-`niches/<niche-id>/sites/{{id}}/keyword-map.md` with: title, research date, intro paragraph, one section per page (`/` and each `/services/<slug>`), "FAQ and conversational coverage" (6–8 questions), and "Local context to preserve".
+`niches/solar-installation/sites/{{id}}/keyword-map.md` with: title, research date, "Data note" (naming `keywords.md` and the DataForSEO checks as the sources), "Page map" with one section per page, the question sections (cost and estimate; local process, utility and permit; climate and property; conversational and AI searches), "Near-me and map intent", "Competitor terminology and gaps", "Priority sequence" and "Research sources".
 
 Done when every page in the site has a primary keyword and the file follows the reference maps' headings.
