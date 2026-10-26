@@ -35,6 +35,18 @@ describe("affectedTargets", () => {
     expect(affected("niches/asphalt-paving/sites/deleted-site/site.json")).toBe("");
   });
 
+  it("deploys nothing for research notes and prompts the build never reads", () => {
+    expect(affected("niches/asphalt-paving/prompts/keyword-map.md", "niches/asphalt-paving/keywords.md", "niches/asphalt-paving/README.md")).toBe("");
+    expect(
+      affected(
+        "niches/asphalt-paving/sites/pocatello/keyword-map.md",
+        "niches/asphalt-paving/sites/pocatello/research.md",
+        "niches/asphalt-paving/sites/pocatello/research/pocatello/location.brief.md",
+      ),
+    ).toBe("");
+    expect(affected("niches/asphalt-paving/keywords.md", "niches/asphalt-paving/sites/pocatello/site.json")).toBe("asphalt-paving/pocatello");
+  });
+
   it("produces targets that resolveTargets accepts", () => {
     expect(resolveTargets(fixture.root, "asphalt-paving/pocatello,asphalt-paving,st-george").map(refKey)).toEqual([
       "asphalt-paving/pocatello",

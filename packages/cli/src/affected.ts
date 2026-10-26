@@ -9,13 +9,18 @@ export type Affected = {
 };
 
 const everything = [/^packages\//, /^config\//, /^pnpm-lock\.yaml$/, /^pnpm-workspace\.yaml$/, /^package\.json$/, /^\.node-version$/];
+// Research notes and prompts inside niches/ that the build never reads.
+const notes = [
+  /^niches\/[^/]+\/(?:prompts\/|keywords\.md$|README\.md$)/,
+  /^niches\/[^/]+\/sites\/[^/]+\/(?:research\/|research\.md$|keyword-map\.md$)/,
+];
 
 /**
  * Maps changed paths to what must redeploy:
  * - packages/**, config/**, the lockfile or root manifests -> every site
  * - niches/X/** outside sites/ -> every site in niche X
  * - niches/X/sites/Y/** -> site Y
- * Underscore folders (_template) never deploy. Anything else (docs, workflows, .claude) deploys nothing.
+ * Underscore folders (_template), niche prompts and research notes never deploy. Anything else (docs, workflows, .claude) deploys nothing.
  */
 export function affectedTargets(root: string, changed: string[]): Affected {
   const niches = new Set(listNiches(root));
@@ -28,6 +33,7 @@ export function affectedTargets(root: string, changed: string[]): Affected {
     if (everything.some((pattern) => pattern.test(path))) {
       return { target: "all", reasons: [`${path} is shared by every site`] };
     }
+    if (notes.some((pattern) => pattern.test(path))) continue;
     const match = path.match(/^niches\/([^/]+)\/(?:sites\/([^/]+)\/)?/);
     if (!match) continue;
     const [, niche, site] = match as unknown as [string, string, string | undefined];
