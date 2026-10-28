@@ -40,4 +40,24 @@ describe("httpChecks", () => {
     expect(result.checks.map((check) => `${check.name}:${check.ok}`)).toEqual(["root:false", "www:false", "lead:true"]);
     expect(posted).toEqual(["lead"]);
   });
+
+  it("passes a Cloudflare bot challenge on / but fails any other 403", async () => {
+    const www = () => new Response(null, { status: 301, headers: { location: "https://pocatelloasphaltpaving.com/" } });
+    const challenged = await httpChecks(ref, "pocatelloasphaltpaving.com", {
+      fetch: fakeFetch({
+        "https://pocatelloasphaltpaving.com/": () => new Response("challenge", { status: 403, headers: { "cf-mitigated": "challenge" } }),
+        "https://www.pocatelloasphaltpaving.com/": www,
+      }),
+    });
+    expect(challenged.ok).toBe(true);
+    expect(challenged.checks[0]?.detail).toBe("GET https://pocatelloasphaltpaving.com/ -> 403 (cf-mitigated: challenge)");
+
+    const forbidden = await httpChecks(ref, "pocatelloasphaltpaving.com", {
+      fetch: fakeFetch({
+        "https://pocatelloasphaltpaving.com/": () => new Response("forbidden", { status: 403 }),
+        "https://www.pocatelloasphaltpaving.com/": www,
+      }),
+    });
+    expect(forbidden.ok).toBe(false);
+  });
 });

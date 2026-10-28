@@ -13,6 +13,8 @@ permissions:
 jobs:
   domains-check:
     runs-on: ubuntu-latest
+    # The Cloudflare secrets are environment secrets on `production`, not repo secrets.
+    environment: production
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
