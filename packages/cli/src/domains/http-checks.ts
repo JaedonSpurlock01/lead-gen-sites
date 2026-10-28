@@ -25,7 +25,12 @@ export async function httpChecks(ref: SiteRef, domain: string, options: HttpChec
 
   try {
     const response = await get(fetchImpl, `https://${domain}/`, timeoutMs);
-    checks.push({ name: "root", ok: response.status === 200, detail: `GET https://${domain}/ -> ${response.status}` });
+    // Cloudflare sets cf-mitigated when a security feature answered instead of the Worker. CI runs from
+    // datacenter IPs, which bot protection challenges; a challenge still proves DNS, TLS and the zone work.
+    const mitigated = response.headers.get("cf-mitigated");
+    const challenged = response.status === 403 && mitigated === "challenge";
+    const note = mitigated ? ` (cf-mitigated: ${mitigated})` : "";
+    checks.push({ name: "root", ok: response.status === 200 || challenged, detail: `GET https://${domain}/ -> ${response.status}${note}` });
   } catch (error) {
     checks.push({ name: "root", ok: false, detail: `GET https://${domain}/ failed: ${(error as Error).message}` });
   }
