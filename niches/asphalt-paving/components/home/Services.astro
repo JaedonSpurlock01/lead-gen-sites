@@ -15,7 +15,12 @@ const { business, outboundLinks } = site;
       ) : (
         "asphalt paving"
       )}{" "}
-      starts with the surface you have — whether you need driveway paving, parking lot paving, pothole repair, crack sealing, or sealcoating.
+      starts with the surface you have — whether you need driveway paving,
+      {outboundLinks[2] ? (
+        <a class="font-semibold underline decoration-accent decoration-2 underline-offset-4" href={outboundLinks[2].href} target="_blank" rel="noopener noreferrer">{outboundLinks[2].text}</a>
+      ) : (
+        "parking lot paving"
+      )}, pothole repair, crack sealing, or sealcoating.
     </p>
     <ServicesGrid />
   </div>
